@@ -1,7 +1,7 @@
 import SnapKit
 import UIKit
 
-class ViewController: UIViewController {
+class HomeViewController: UIViewController {
     private let kLogoWidth: CGFloat = 250
     private let kLogoHeight: CGFloat = 250
     private let kSideMargin: CGFloat = 10
