@@ -12,6 +12,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     private let hoursStringArray: [String] = ["10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00","19:00", "20:00", "21:00"]
     private let temperatureArray: [Int] = [20, 21, 25, 18, 22, 24, 19, 25, 27, 30, 31, 32]
     private let pressureArray: [Int] = [1024, 1010, 1012, 1030, 1008, 1015, 1019, 1017, 1014, 1009, 1011, 1012]
+    private let windSpeedArray: [Int] = [12, 11, 10, 21, 22, 23, 25, 34, 32, 14, 15, 16]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,7 +29,7 @@ class MainViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
       let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = "\(hoursStringArray[indexPath.row])   \(temperatureArray[indexPath.row])C   \(pressureArray[indexPath.row])hPa"
+        cell.textLabel?.text = "\(hoursStringArray[indexPath.row])   \(temperatureArray[indexPath.row])C   \(pressureArray[indexPath.row])hPa   \(windSpeedArray[indexPath.row])km/h"
       return cell
     }
     
