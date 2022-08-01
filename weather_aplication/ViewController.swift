@@ -21,7 +21,14 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
         setupView()
         setupConstraints()
+        
+        proceedButton.addTarget(self, action: #selector(proceedButtonPressed), for: .touchUpInside)
     }
+    @objc func proceedButtonPressed(){
+        let mainViewController = MainViewControler()
+        navigationController?.pushViewController(mainViewController, animated: true)
+    }
+    
     func setupView(){
         view.backgroundColor = .blue
         
@@ -72,7 +79,7 @@ class ViewController: UIViewController {
             make.top.equalTo(backgroundView.snp.bottom).offset(kTopMargin).priority(.low)
             make.left.equalTo(view.snp.leftMargin).offset(kLeftMargin)
             make.right.equalTo(view.snp.rightMargin).offset(-kRightMargin)
-            make.bottom.equalTo(view.snp.bottomMargin).offset(-kBottomMargin)
+            make.bottom.equalTo(view.snp.bottomMargin).offset(-kBottomMargin).priority(.required)
         }
         
     }
