@@ -12,30 +12,29 @@ class HourlyWeatherViewController: UIViewController{
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
     private let kBottomMargin: CGFloat = 15
+    
     private let cityLabel = UILabel()
     private let weatherTableView = UITableView()
+    
     private let cityString: String = "Warszawa"
     private let cellReuseIdentifier = "cell"
-    private var dataArray: [CellData] = []
-    
-    func createDataArray() {
-        dataArray.append(CellData(hour: "10:00", temperature: 20, pressure: 1024, windSpeed: 12))   //1
-        dataArray.append(CellData(hour: "11:00", temperature: 21, pressure: 1010, windSpeed: 11))   //2
-        dataArray.append(CellData(hour: "12:00", temperature: 25, pressure: 1012, windSpeed: 10))   //3
-        dataArray.append(CellData(hour: "13:00", temperature: 18, pressure: 1030, windSpeed: 21))   //4
-        dataArray.append(CellData(hour: "14:00", temperature: 22, pressure: 1008, windSpeed: 22))   //5
-        dataArray.append(CellData(hour: "15:00", temperature: 24, pressure: 1015, windSpeed: 23))   //6
-        dataArray.append(CellData(hour: "16:00", temperature: 19, pressure: 1019, windSpeed: 25))   //7
-        dataArray.append(CellData(hour: "17:00", temperature: 25, pressure: 1017, windSpeed: 34))   //8
-        dataArray.append(CellData(hour: "18:00", temperature: 27, pressure: 1014, windSpeed: 32))   //9
-        dataArray.append(CellData(hour: "19:00", temperature: 30, pressure: 1009, windSpeed: 14))   //10
-        dataArray.append(CellData(hour: "20:00", temperature: 31, pressure: 1011, windSpeed: 15))   //11
-        dataArray.append(CellData(hour: "21:00", temperature: 32, pressure: 1012, windSpeed: 16))   //12
-    }
+    private let dataArray: [CellData] = [
+        CellData(hour: "10:00", temperature: 20, pressure: 1024, windSpeed: 12),   //1
+        CellData(hour: "11:00", temperature: 21, pressure: 1010, windSpeed: 11),   //2
+        CellData(hour: "12:00", temperature: 25, pressure: 1012, windSpeed: 10),   //3
+        CellData(hour: "13:00", temperature: 18, pressure: 1030, windSpeed: 21),   //4
+        CellData(hour: "14:00", temperature: 22, pressure: 1008, windSpeed: 22),   //5
+        CellData(hour: "15:00", temperature: 24, pressure: 1015, windSpeed: 23),   //6
+        CellData(hour: "16:00", temperature: 19, pressure: 1019, windSpeed: 25),   //7
+        CellData(hour: "17:00", temperature: 25, pressure: 1017, windSpeed: 34),   //8
+        CellData(hour: "18:00", temperature: 27, pressure: 1014, windSpeed: 32),   //9
+        CellData(hour: "19:00", temperature: 30, pressure: 1009, windSpeed: 14),   //10
+        CellData(hour: "20:00", temperature: 31, pressure: 1011, windSpeed: 15),   //11
+        CellData(hour: "21:00", temperature: 32, pressure: 1012, windSpeed: 16)    //12
+    ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        createDataArray()
         setupView()
         setupConstraints()
         
@@ -59,8 +58,8 @@ class HourlyWeatherViewController: UIViewController{
         
         cityLabel.snp.makeConstraints { make in
             make.top.equalTo(view.snp.topMargin)
-            make.leftMargin.equalToSuperview().offset(kSideMargin)
-            make.rightMargin.equalToSuperview().offset(-kSideMargin)
+            make.left.equalToSuperview().offset(kSideMargin)
+            make.right.equalToSuperview().offset(-kSideMargin)
             make.centerX.equalTo(view.snp.centerX)
         }
         
