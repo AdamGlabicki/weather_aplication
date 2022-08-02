@@ -1,6 +1,5 @@
 import SnapKit
 import UIKit
-import GooglePlaces
 
 class SearchViewController: UIViewController {
     
