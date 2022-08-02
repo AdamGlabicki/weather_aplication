@@ -2,10 +2,10 @@ import SnapKit
 import UIKit
 
 struct CellData {
-    lazy var hour = String()
-    lazy var temperature = Int()
-    lazy var pressure = Int()
-    lazy var windSpeed = Int()
+    let hour: String
+    let temperature: Int
+    let pressure: Int
+    let windSpeed: Int
 }
 
 class HourlyWeatherViewController: UIViewController{
@@ -78,10 +78,7 @@ extension HourlyWeatherViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? CustomTableViewCell else {fatalError("Unble to create cell")}
-        cell.hourLabel.text = dataArray[indexPath.row].hour
-        cell.temperatureLabel.text = "\(dataArray[indexPath.row].temperature)C"
-        cell.pressureLabel.text = "\(dataArray[indexPath.row].pressure)hPa"
-        cell.windSpeedLabel.text = "\(dataArray[indexPath.row].windSpeed)km/h"
+        cell.setupData(cellData: dataArray[indexPath.row])
         return cell
     }
 }

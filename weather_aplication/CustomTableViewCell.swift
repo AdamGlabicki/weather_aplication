@@ -45,4 +45,11 @@ class CustomTableViewCell: UITableViewCell {
             make.left.lessThanOrEqualTo(pressureLabel.snp.right).offset(kSideMargin)
         }
     }
+    
+    func setupData(cellData: CellData) {
+        self.hourLabel.text = cellData.hour
+        self.temperatureLabel.text = "\(cellData.temperature)C"
+        self.pressureLabel.text = "\(cellData.pressure)hPa"
+        self.windSpeedLabel.text = "\(cellData.windSpeed)km/h"
+    }
 }
