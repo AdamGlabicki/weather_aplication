@@ -11,27 +11,30 @@ class CustomTableViewCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+        contentView.backgroundColor = UIColor.clear
+        backgroundColor = UIColor.clear
         addSubview(hourLabel)
         addSubview(temperatureLabel)
         addSubview(pressureLabel)
         addSubview(windSpeedLabel)
     }
-    override func layoutSubviews() {
-        contentView.backgroundColor = UIColor.clear
-        backgroundColor = UIColor.clear
-        hourLabel.clipsToBounds = true
+    override func layoutIfNeeded() {
+        setupConstraints()
+    }
+    
+    func setupConstraints() {
         hourLabel.snp.makeConstraints { make in
             make.leftMargin.equalToSuperview()
         }
-        temperatureLabel.clipsToBounds = true
+
         temperatureLabel.snp.makeConstraints { make in
             make.left.lessThanOrEqualTo(hourLabel.snp.right).offset(kSideMargin)
         }
-        pressureLabel.clipsToBounds = true
+
         pressureLabel.snp.makeConstraints { make in
             make.left.lessThanOrEqualTo(temperatureLabel.snp.right).offset(kSideMargin)
         }
-        windSpeedLabel.clipsToBounds = true
+        
         windSpeedLabel.snp.makeConstraints { make in
             make.left.lessThanOrEqualTo(pressureLabel.snp.right).offset(kSideMargin)
         }
