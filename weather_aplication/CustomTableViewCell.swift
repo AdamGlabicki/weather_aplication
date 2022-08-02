@@ -4,19 +4,20 @@ import UIKit
 
 class CustomTableViewCell: UITableViewCell {
     private let kSideMargin: CGFloat = 20
-    lazy var hourLabel = UILabel()
-    lazy var temperatureLabel = UILabel()
-    lazy var pressureLabel = UILabel()
-    lazy var windSpeedLabel = UILabel()
+    private let hourLabel = UILabel()
+    private let temperatureLabel = UILabel()
+    private let pressureLabel = UILabel()
+    private let windSpeedLabel = UILabel()
     
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-    }
-    
-    override func layoutIfNeeded() {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
         setupConstraints()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+
     }
     
     func setupView() {
