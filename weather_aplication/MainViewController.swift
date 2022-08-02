@@ -1,6 +1,13 @@
 import SnapKit
 import UIKit
 
+struct CellData {
+    lazy var hour = String()
+    lazy var temperature = Int()
+    lazy var pressure = Int()
+    lazy var windSpeed = Int()
+}
+
 class HourlyWeatherViewController: UIViewController{
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
@@ -76,48 +83,5 @@ extension HourlyWeatherViewController: UITableViewDelegate, UITableViewDataSourc
         cell.pressureLabel.text = "\(dataArray[indexPath.row].pressure)hPa"
         cell.windSpeedLabel.text = "\(dataArray[indexPath.row].windSpeed)km/h"
         return cell
-    }
-}
-
-struct CellData {
-    lazy var hour = String()
-    lazy var temperature = Int()
-    lazy var pressure = Int()
-    lazy var windSpeed = Int()
-}
-
-class CustomTableViewCell: UITableViewCell {
-    private let kSideMargin: CGFloat = 20
-    lazy var hourLabel = UILabel()
-    lazy var temperatureLabel = UILabel()
-    lazy var pressureLabel = UILabel()
-    lazy var windSpeedLabel = UILabel()
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        addSubview(hourLabel)
-        addSubview(temperatureLabel)
-        addSubview(pressureLabel)
-        addSubview(windSpeedLabel)
-    }
-    override func layoutSubviews() {
-        contentView.backgroundColor = UIColor.clear
-        backgroundColor = UIColor.clear
-        hourLabel.clipsToBounds = true
-        hourLabel.snp.makeConstraints { make in
-            make.leftMargin.equalToSuperview()
-        }
-        temperatureLabel.clipsToBounds = true
-        temperatureLabel.snp.makeConstraints { make in
-            make.left.lessThanOrEqualTo(hourLabel.snp.right).offset(kSideMargin)
-        }
-        pressureLabel.clipsToBounds = true
-        pressureLabel.snp.makeConstraints { make in
-            make.left.lessThanOrEqualTo(temperatureLabel.snp.right).offset(kSideMargin)
-        }
-        windSpeedLabel.clipsToBounds = true
-        windSpeedLabel.snp.makeConstraints { make in
-            make.left.lessThanOrEqualTo(pressureLabel.snp.right).offset(kSideMargin)
-        }
     }
 }
