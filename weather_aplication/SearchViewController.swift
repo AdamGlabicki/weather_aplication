@@ -7,7 +7,7 @@ class SearchViewController: UIViewController {
     private let kBottomMargin: CGFloat = 15
     
     private let url = "https://nominatim.openstreetmap.org/search?city="
-    
+
     private let cityNameTextfield = UITextField()
     private let cityNamesTableView = UITableView()
     
@@ -20,7 +20,6 @@ class SearchViewController: UIViewController {
     }
     
     @objc func loadCityNames() {
-        
     }
     
     func setupView() {
@@ -57,7 +56,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = "temporary string"
+        cell.textLabel?.text = ""
         return cell
     }
 }
