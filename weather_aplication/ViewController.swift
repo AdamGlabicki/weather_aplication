@@ -23,7 +23,7 @@ class HomeViewController: UIViewController {
         proceedButton.addTarget(self, action: #selector(proceedButtonPressed), for: .touchUpInside)
     }
     @objc func proceedButtonPressed() {
-        let mainViewController = MainViewControler()
+        let mainViewController = HourlyWeatherViewController()
         navigationController?.pushViewController(mainViewController, animated: true)
     }
     
