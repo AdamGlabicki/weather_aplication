@@ -34,7 +34,7 @@ class SearchViewController: UIViewController {
     }
     
     func getCityName(fromCity cityName: String, completion: @escaping (_ result: Location?) -> Void) {
-        let queryURL =  URL(string:"https://nominatim.openstreetmap.org/search/?city=" + cityName + "&format=json&addressdetails=1&limit=1")!
+        guard let queryURL =  URL(string:"https://nominatim.openstreetmap.org/search/?city=" + cityName + "&format=json&addressdetails=1&limit=1") else {completion(nil); return}
         let session = URLSession.shared
         
         session.dataTask(with: queryURL, completionHandler: { data, response, error -> Void in
