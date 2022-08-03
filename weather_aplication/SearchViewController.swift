@@ -6,7 +6,7 @@ class SearchViewController: UIViewController {
     private let kTopMargin: CGFloat = 20
     private let kBottomMargin: CGFloat = 15
     
-    private let url = "https://nominatim.openstreetmap.org/search?city="
+    private let urlString = "https://nominatim.openstreetmap.org/search?city="
 
     private let cityNameTextfield = UITextField()
     private let cityNamesTableView = UITableView()
@@ -20,6 +20,25 @@ class SearchViewController: UIViewController {
     }
     
     @objc func loadCityNames() {
+        callAPI()
+    }
+    
+    func callAPI() {
+        guard let cityName = cityNameTextfield.text else {
+            return
+        }
+            guard let url = URL(string: "\(urlString)\(cityName)") else {
+                return
+            }
+        
+            let task = URLSession.shared.dataTask(with: url) {
+                data, response, error in
+            
+                if let data = data, let string = String(data: data, encoding: .utf8) {
+                    print(string)
+                }
+            }
+            task.resume()
     }
     
     func setupView() {
