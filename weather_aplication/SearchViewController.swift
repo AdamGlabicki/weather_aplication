@@ -1,6 +1,10 @@
 import SnapKit
 import UIKit
 
+struct Location: Codable {
+    public var city: String
+}
+
 class SearchViewController: UIViewController {
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
@@ -21,24 +25,52 @@ class SearchViewController: UIViewController {
     
     @objc func loadCityNames() {
         callAPI()
+        decodeAPI()
     }
     
     func callAPI() {
         guard let cityName = cityNameTextfield.text else {
             return
         }
-            guard let url = URL(string: "\(urlString)\(cityName)") else {
-                return
-            }
+        guard let url = URL(string: "\(urlString)\(cityName)") else {
+            return
+        }
         
-            let task = URLSession.shared.dataTask(with: url) {
-                data, response, error in
+        let task = URLSession.shared.dataTask(with: url) {
+            data, response, error in
             
-                if let data = data, let string = String(data: data, encoding: .utf8) {
-                    print(string)
+            if let data = data, let string = String(data: data, encoding: .utf8) {
+                print(string)
+            }
+        }
+        task.resume()
+    }
+    
+    func decodeAPI() {
+        guard let cityName = cityNameTextfield.text else {
+            return
+        }
+        guard let url = URL(string: "\(urlString)\(cityName)") else {
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: url) {
+            data, response, error in
+            
+            let decoder = JSONDecoder()
+            
+            if let data = data {
+                do{
+                    let task = try decoder.decode([Location].self, from: data)
+                    task.forEach { i in
+                        print(i.city)
+                    }
+                }catch{
+                    print(error)
                 }
             }
-            task.resume()
+        }
+        task.resume()
     }
     
     func setupView() {
