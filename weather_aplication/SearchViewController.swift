@@ -9,7 +9,8 @@ class SearchViewController: UIViewController {
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
     private let kBottomMargin: CGFloat = 15
-
+    private let kMaxResults: Int = 10 //can be any int from 1 to 50
+    
     private let cityNameTextfield = UITextField()
     private let cityNamesTableView = UITableView()
     var cityNameString = String()
@@ -20,11 +21,12 @@ class SearchViewController: UIViewController {
         setupView()
         setupConstraints()
         cityNameTextfield.addTarget(self, action: #selector(loadCityNames), for: .editingChanged)
+        
     }
     
     @objc func loadCityNames() {
         guard let cityName = cityNameTextfield.text else {return}
-        getCityName(fromCity: cityName, completion: {(location) -> Void in
+        getCityName(fromCity: cityName,numberOfResults: kMaxResults, completion: {(location) -> Void in
             print("Sugested city name:")//for control
             guard let city = location?.city else {return}
             print(city)//for control
@@ -33,8 +35,8 @@ class SearchViewController: UIViewController {
         cityNamesTableView.reloadData()
     }
     
-    func getCityName(fromCity cityName: String, completion: @escaping (_ result: Location?) -> Void) {
-        guard let queryURL =  URL(string:"https://nominatim.openstreetmap.org/search/?city=" + cityName + "&format=json&addressdetails=1&limit=1") else {completion(nil); return}
+    func getCityName(fromCity cityName: String,numberOfResults maxResults: Int, completion: @escaping (_ result: Location?) -> Void) {
+        guard let queryURL =  URL(string:"https://nominatim.openstreetmap.org/search/?city=" + cityName + "&format=json&addressdetails=1&limit=" + String(maxResults)) else {completion(nil); return}
         let session = URLSession.shared
         
         session.dataTask(with: queryURL, completionHandler: { data, response, error -> Void in
@@ -115,5 +117,11 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
         cell.textLabel?.text = cityNameString
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
+        let mainViewController = HourlyWeatherViewController()
+        navigationController?.pushViewController(mainViewController, animated: true)
     }
 }
