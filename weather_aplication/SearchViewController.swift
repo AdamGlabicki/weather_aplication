@@ -12,6 +12,7 @@ class SearchViewController: UIViewController {
 
     private let cityNameTextfield = UITextField()
     private let cityNamesTableView = UITableView()
+    var cityNameString = String()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,10 +25,12 @@ class SearchViewController: UIViewController {
     @objc func loadCityNames() {
         guard let cityName = cityNameTextfield.text else {return}
         getCityName(fromCity: cityName, completion: {(location) -> Void in
-            print("Sugested city name:")
+            print("Sugested city name:")//for control
             guard let city = location?.city else {return}
-            print(city)
+            print(city)//for control
+            self.cityNameString = city
           })
+        cityNamesTableView.reloadData()
     }
     
     func getCityName(fromCity cityName: String, completion: @escaping (_ result: Location?) -> Void) {
@@ -110,7 +113,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = ""
+        cell.textLabel?.text = cityNameString
         return cell
     }
 }
