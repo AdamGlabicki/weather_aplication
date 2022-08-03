@@ -1,16 +1,14 @@
 import SnapKit
 import UIKit
 
-struct Location: Codable {
-    public var city: String
+struct Location {
+    public var city: String?
 }
 
 class SearchViewController: UIViewController {
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
     private let kBottomMargin: CGFloat = 15
-    
-    private let urlString = "https://nominatim.openstreetmap.org/search?city="
 
     private let cityNameTextfield = UITextField()
     private let cityNamesTableView = UITableView()
@@ -24,55 +22,60 @@ class SearchViewController: UIViewController {
     }
     
     @objc func loadCityNames() {
-        callAPI()
-        decodeAPI()
+        guard let cityName = cityNameTextfield.text else {return}
+        getCityName(fromCity: cityName, completion: {(location) -> Void in
+            print("Sugested city name:")
+            guard let city = location?.city else {return}
+            print(city)
+          })
     }
     
-    func callAPI() {
-        guard let cityName = cityNameTextfield.text else {
-            return
-        }
-        guard let url = URL(string: "\(urlString)\(cityName)") else {
-            return
-        }
+    func getCityName(fromCity cityName: String, completion: @escaping (_ result: Location?) -> Void) {
+        let queryURL =  URL(string:"https://nominatim.openstreetmap.org/search/?city=" + cityName + "&format=json&addressdetails=1&limit=1")!
+        let session = URLSession.shared
         
-        let task = URLSession.shared.dataTask(with: url) {
-            data, response, error in
+        session.dataTask(with: queryURL, completionHandler: { data, response, error -> Void in
             
-            if let data = data, let string = String(data: data, encoding: .utf8) {
-                print(string)
+            if (error != nil) {
+                completion(nil)
             }
-        }
-        task.resume()
-    }
-    
-    func decodeAPI() {
-        guard let cityName = cityNameTextfield.text else {
-            return
-        }
-        guard let url = URL(string: "\(urlString)\(cityName)") else {
-            return
-        }
-        
-        let task = URLSession.shared.dataTask(with: url) {
-            data, response, error in
             
-            let decoder = JSONDecoder()
-            
-            if let data = data {
-                do{
-                    let task = try decoder.decode([Location].self, from: data)
-                    task.forEach { i in
-                        print(i.city)
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 200 {
+                    do {
+                        guard let data = data else { return }
+                        let jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
+                        
+                        if let array = jsonResult as? Array<Dictionary<String, Any>> {
+                            
+                            var city: String?
+                            if !array.isEmpty {
+                                if let address = array[0]["address"] as? Dictionary<String, String> {
+                                    city = address["city"]
+                                }
+                                
+                                completion(Location(city: city))
+                                
+                            } else {
+                                completion(nil)
+                            }
+                        } else {
+                            completion(nil)
+                        }
+                    } catch let e {
+                        print(e)
+                        completion(nil)
                     }
-                }catch{
-                    print(error)
+                } else {
+                    completion(nil)
                 }
+            } else {
+                completion(nil)
             }
-        }
-        task.resume()
+            
+        }).resume()
     }
-    
+
     func setupView() {
         view.backgroundColor = .white
         
