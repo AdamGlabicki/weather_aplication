@@ -8,6 +8,11 @@ struct CellData {
     let windSpeed: Int
 }
 
+protocol nameDelegate: AnyObject {
+    func changeName(name: String)
+}
+
+
 class HourlyWeatherViewController: UIViewController{
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
@@ -44,7 +49,8 @@ class HourlyWeatherViewController: UIViewController{
         view.backgroundColor = .lightGray
         
         cityLabel.textAlignment = .center
-        cityLabel.text = cityString
+        //cityLabel.text = cityString
+        SearchViewController().delegate = self
         view.addSubview(cityLabel)
         
         weatherTableView.dataSource = self
@@ -79,5 +85,12 @@ extension HourlyWeatherViewController: UITableViewDelegate, UITableViewDataSourc
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? CustomTableViewCell else {fatalError("Unble to create cell")}
         cell.setupData(cellData: dataArray[indexPath.row])
         return cell
+    }
+}
+
+extension HourlyWeatherViewController: nameDelegate{
+    func changeName(name: String) {
+        print("otrzymano" + name)
+        cityLabel.text = name
     }
 }

@@ -14,6 +14,7 @@ class SearchViewController: UIViewController {
     private let cityNameTextfield = UITextField()
     private let cityNamesTableView = UITableView()
     var cityNameString = String()
+    weak var delegate: nameDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,7 +111,7 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-      return 1 // to change
+      return 1 // to change to kMaxResults
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -120,7 +121,10 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
+        let cell = tableView.cellForRow(at: indexPath)
+        guard let text = cell?.textLabel?.text else {return}
+        print("wybrano:" + text)
+        self.delegate?.changeName(name: text)
         let mainViewController = HourlyWeatherViewController()
         navigationController?.pushViewController(mainViewController, animated: true)
     }
