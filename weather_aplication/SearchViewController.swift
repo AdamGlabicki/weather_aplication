@@ -9,7 +9,7 @@ class SearchViewController: UIViewController {
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
     private let kBottomMargin: CGFloat = 15
-    private let kMaxResults: Int = 10 //can be any int from 1 to 50
+    private let kMaxResults: Int = 10
     
     private let cityNameTextfield = UITextField()
     private let cityNamesTableView = UITableView()
@@ -68,15 +68,25 @@ class SearchViewController: UIViewController {
     }
     
     func decodeJson(jsonResult: Any,completion: @escaping (_ result: Location?) -> Void) {
-        if let array = jsonResult as? Array<Dictionary<String, Any>> {
-            
-            var city: String?
-            if !array.isEmpty {
-                if let address = array[0]["data"] as? Dictionary<String, String> {
-                    city = address["city"]
+        
+        if let dictionary = jsonResult as? Dictionary<String, Any> {
+            var cityName: String?
+            if !dictionary.isEmpty {
+                if let address = dictionary["data"] as? Array<Any> {
+                    if let details = address[0] as? Dictionary<String, Any> {
+                        if let city = details["city"] as? String {
+                            cityName = city
+                        } else {
+                            completion(nil)
+                        }
+                    } else {
+                        completion(nil)
+                    }
+                } else {
+                    completion(nil)
                 }
                 
-                completion(Location(city: city))
+                completion(Location(city: cityName))
                 
             } else {
                 completion(nil)

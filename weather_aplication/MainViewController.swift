@@ -45,12 +45,20 @@ class HourlyWeatherViewController: UIViewController{
         
     }
     
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        SearchViewController().delegate = self
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func setupView() {
         view.backgroundColor = .lightGray
         
         cityLabel.textAlignment = .center
         //cityLabel.text = cityString
-        SearchViewController().delegate = self
         view.addSubview(cityLabel)
         
         weatherTableView.dataSource = self
