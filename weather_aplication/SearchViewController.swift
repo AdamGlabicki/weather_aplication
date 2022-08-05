@@ -71,8 +71,8 @@ class SearchViewController: UIViewController {
         
         if let dictionary = jsonResult as? Dictionary<String, Any> {
             var cityName: String?
-            if !dictionary.isEmpty {
-                if let address = dictionary["data"] as? Array<Any> {
+            if let address = dictionary["data"] as? Array<Any> {
+                if !address.isEmpty {
                     if let details = address[0] as? Dictionary<String, Any> {
                         if let city = details["city"] as? String {
                             cityName = city
