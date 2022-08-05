@@ -37,10 +37,10 @@ class SearchViewController: UIViewController {
     }
     
     func getCityName(fromCity cityName: String,numberOfResults maxResults: Int, completion: @escaping (_ result: Location?) -> Void) {
-        guard let queryURL =  URL(string:"https://nominatim.openstreetmap.org/search/?city=" + cityName + "&format=json&addressdetails=1&limit=" + String(maxResults)) else {completion(nil); return}
+        guard let queryURL =  URL(string:"http://geodb-free-service.wirefreethought.com/v1/geo/cities?&namePrefix=" + cityName + "&sort=-population") else {completion(nil); return}
         let session = URLSession.shared
         
-        session.dataTask(with: queryURL, completionHandler: { data, response, error -> Void in
+        session.dataTask(with: queryURL, completionHandler: { [self] data, response, error -> Void in
             
             if (error != nil) {
                 completion(nil)
@@ -51,23 +51,8 @@ class SearchViewController: UIViewController {
                     do {
                         guard let data = data else { return }
                         let jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
-                        
-                        if let array = jsonResult as? Array<Dictionary<String, Any>> {
-                            
-                            var city: String?
-                            if !array.isEmpty {
-                                if let address = array[0]["address"] as? Dictionary<String, String> {
-                                    city = address["city"]
-                                }
-                                
-                                completion(Location(city: city))
-                                
-                            } else {
-                                completion(nil)
-                            }
-                        } else {
-                            completion(nil)
-                        }
+                        //print(jsonResult)//to check results
+                        self.decodeJson(jsonResult: jsonResult, completion: completion)
                     } catch let e {
                         print(e)
                         completion(nil)
@@ -81,6 +66,25 @@ class SearchViewController: UIViewController {
             
         }).resume()
     }
+    
+    func decodeJson(jsonResult: Any,completion: @escaping (_ result: Location?) -> Void) {
+        if let array = jsonResult as? Array<Dictionary<String, Any>> {
+            
+            var city: String?
+            if !array.isEmpty {
+                if let address = array[0]["data"] as? Dictionary<String, String> {
+                    city = address["city"]
+                }
+                
+                completion(Location(city: city))
+                
+            } else {
+                completion(nil)
+            }
+        } else {
+            completion(nil)
+        }
+    }
 
     func setupView() {
         view.backgroundColor = .white
@@ -90,7 +94,7 @@ class SearchViewController: UIViewController {
         view.addSubview(cityNameTextfield)
         
         cityNamesTableView.dataSource = self
-        cityNamesTableView.delegate  = self
+        cityNamesTableView.delegate = self
         cityNamesTableView.backgroundColor = .white
         view.addSubview(cityNamesTableView)
         cityNamesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
