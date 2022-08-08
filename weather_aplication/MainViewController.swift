@@ -8,7 +8,7 @@ struct CellData {
     let windSpeed: Int
 }
 
-class HourlyWeatherViewController: UIViewController{
+class ShowWeatherViewController: UIViewController{
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
     private let kBottomMargin: CGFloat = 15
@@ -78,7 +78,7 @@ class HourlyWeatherViewController: UIViewController{
     }
 }
 
-extension HourlyWeatherViewController: UITableViewDelegate, UITableViewDataSource {
+extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
       return dataArray.count
     }

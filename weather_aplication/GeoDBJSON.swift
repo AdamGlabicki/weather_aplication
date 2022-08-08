@@ -3,10 +3,10 @@ import SnapKit
 
 class GeoDBJSON: Decodable {
     let data: [Datas]
-    let links: [Link]
+    let links: [Link]?
     let metadata: Metadata
 
-    init(data: [Datas], links: [Link], metadata: Metadata) {
+    init(data: [Datas], links: [Link]?, metadata: Metadata) {
         self.data = data
         self.links = links
         self.metadata = metadata
@@ -14,11 +14,11 @@ class GeoDBJSON: Decodable {
 }
 
 class Datas: Decodable {
-    let id: Int
-    let wikiDataID, type, city, name: String
-    let country, countryCode, region, regionCode: String
-    let latitude, longitude: Double
-    let population: Int
+    let id: Int?
+    let wikiDataID, type, city, name: String?
+    let country, countryCode, region, regionCode: String?
+    let latitude, longitude: Double?
+    let population: Int?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -26,7 +26,7 @@ class Datas: Decodable {
         case type, city, name, country, countryCode, region, regionCode, latitude, longitude, population
     }
 
-    init(id: Int, wikiDataID: String, type: String, city: String, name: String, country: String, countryCode: String, region: String, regionCode: String, latitude: Double, longitude: Double, population: Int) {
+    init(id: Int?, wikiDataID: String?, type: String?, city: String?, name: String?, country: String?, countryCode: String?, region: String?, regionCode: String?, latitude: Double?, longitude: Double?, population: Int?) {
         self.id = id
         self.wikiDataID = wikiDataID
         self.type = type
@@ -43,18 +43,18 @@ class Datas: Decodable {
 }
 
 class Link: Decodable {
-    let rel, href: String
+    let rel, href: String?
 
-    init(rel: String, href: String) {
+    init(rel: String?, href: String?) {
         self.rel = rel
         self.href = href
     }
 }
 
 class Metadata: Decodable {
-    let currentOffset, totalCount: Int
+    let currentOffset, totalCount: Int?
 
-    init(currentOffset: Int, totalCount: Int) {
+    init(currentOffset: Int?, totalCount: Int?) {
         self.currentOffset = currentOffset
         self.totalCount = totalCount
     }

@@ -54,8 +54,8 @@ class SearchViewController: UIViewController {
                 if httpResponse.statusCode == 200 {
                     do {
                         guard let data = data else { return }
-                        let jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
-                        self.decodeJson(jsonResult: jsonResult, completion: completion)
+                        let jsonResult = try JSONDecoder().decode(GeoDBJSON.self, from: data)
+                        completion(self.decodeJson(jsonResult: jsonResult))
                     } catch let e {
                         print(e)
                         completion(nil)
@@ -70,38 +70,17 @@ class SearchViewController: UIViewController {
         }).resume()
     }
     
-    func decodeJson(jsonResult: Any,completion: @escaping (_ result: [Location]?) -> Void) {
-        if let dictionary = jsonResult as? Dictionary<String, Any> {
-            var cityName: String?
-            if let address = dictionary["data"] as? Array<Any> {
-                if !address.isEmpty {
-                    var locationsArray: [Location] = []
-                    for i in 0...(address.count-1) {
-                        if let details = address[i] as? Dictionary<String, Any> {
-                            if let city = details["city"] as? String {
-                                cityName = city
-                            } else {
-                                break
-                            }
-                        } else {
-                            break
-                        }
-                        locationsArray.append(Location(city: cityName))
-                    }
-                    if !locationsArray.isEmpty{
-                        completion(locationsArray)
-                    } else {
-                        completion(nil)
-                    }
-                } else {
-                    completion(nil)
-                }
-            } else {
-                completion(nil)
+    func decodeJson(jsonResult: GeoDBJSON) -> [Location]? {
+        var cityNames: [Location] = []
+        let datas = jsonResult.data
+        if !datas.isEmpty{
+            for data in datas {
+                cityNames.append(Location(city: data.city))
             }
         } else {
-            completion(nil)
+            return nil
         }
+        return cityNames
     }
 
     func setupView() {
@@ -126,7 +105,7 @@ class SearchViewController: UIViewController {
         
         cityNamesTableView.snp.makeConstraints { make in
             make.top.equalTo(cityNameTextfield.snp.bottom).offset(kTopMargin)
-            make.leftMargin.rightMargin.bottomMargin.equalToSuperview()
+            make.left.right.bottom.equalToSuperview()
         }
     }
 }
@@ -145,7 +124,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         guard let text = cell?.textLabel?.text else {return}
-        let mainViewController = HourlyWeatherViewController(city: text)
+        let mainViewController = ShowWeatherViewController(city: text)
         navigationController?.pushViewController(mainViewController, animated: true)
     }
 }
