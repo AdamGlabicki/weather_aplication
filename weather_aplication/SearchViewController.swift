@@ -13,8 +13,6 @@ class SearchViewController: UIViewController {
     private let cityNameTextfield = UITextField()
     private let cityNamesTableView = UITableView()
     var cityNameArray: [String] = []
-//    weak var delegate: nameDelegate?
-    var nameSend: ((String?) -> ())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -148,10 +146,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         guard let text = cell?.textLabel?.text else {return}
-        print("wybrano:" + text)
-//        self.delegate?.changeName(name: text)
-        self.nameSend?(text)
-        let mainViewController = HourlyWeatherViewController()
+        let mainViewController = HourlyWeatherViewController(city: text)
         navigationController?.pushViewController(mainViewController, animated: true)
     }
 }

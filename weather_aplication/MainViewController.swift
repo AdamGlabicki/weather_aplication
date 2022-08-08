@@ -8,11 +8,6 @@ struct CellData {
     let windSpeed: Int
 }
 
-//protocol nameDelegate: AnyObject {
-//    func changeName(name: String)
-//}
-
-
 class HourlyWeatherViewController: UIViewController{
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
@@ -45,11 +40,9 @@ class HourlyWeatherViewController: UIViewController{
         
     }
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        let searchViewController = SearchViewController()
-//        searchViewController.delegate = self
-        searchViewController.nameSend = {self.cityLabel.text = $0}
+    init(city: String) {
+        super.init(nibName: nil, bundle: nil)
+        self.cityLabel.text = city
     }
     
     required init?(coder: NSCoder) {
@@ -97,10 +90,3 @@ extension HourlyWeatherViewController: UITableViewDelegate, UITableViewDataSourc
         return cell
     }
 }
-
-//extension HourlyWeatherViewController: nameDelegate{
-//    func changeName(name: String) {
-//        print("otrzymano" + name)
-//        cityLabel.text = name
-//    }
-//}
