@@ -8,9 +8,9 @@ struct CellData {
     let windSpeed: Int
 }
 
-protocol nameDelegate: AnyObject {
-    func changeName(name: String)
-}
+//protocol nameDelegate: AnyObject {
+//    func changeName(name: String)
+//}
 
 
 class HourlyWeatherViewController: UIViewController{
@@ -47,7 +47,9 @@ class HourlyWeatherViewController: UIViewController{
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        SearchViewController().delegate = self
+        let searchViewController = SearchViewController()
+//        searchViewController.delegate = self
+        searchViewController.nameSend = {self.cityLabel.text = $0}
     }
     
     required init?(coder: NSCoder) {
@@ -96,9 +98,9 @@ extension HourlyWeatherViewController: UITableViewDelegate, UITableViewDataSourc
     }
 }
 
-extension HourlyWeatherViewController: nameDelegate{
-    func changeName(name: String) {
-        print("otrzymano" + name)
-        cityLabel.text = name
-    }
-}
+//extension HourlyWeatherViewController: nameDelegate{
+//    func changeName(name: String) {
+//        print("otrzymano" + name)
+//        cityLabel.text = name
+//    }
+//}

@@ -9,12 +9,12 @@ class SearchViewController: UIViewController {
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
     private let kBottomMargin: CGFloat = 15
-    private let kMaxResults: Int = 10
     
     private let cityNameTextfield = UITextField()
     private let cityNamesTableView = UITableView()
-    var cityNameString = String()
-    weak var delegate: nameDelegate?
+    var cityNameArray: [String] = []
+//    weak var delegate: nameDelegate?
+    var nameSend: ((String?) -> ())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,16 +27,23 @@ class SearchViewController: UIViewController {
     
     @objc func loadCityNames() {
         guard let cityName = cityNameTextfield.text else {return}
-        getCityName(fromCity: cityName,numberOfResults: kMaxResults, completion: {(location) -> Void in
-            print("Sugested city name:")//for control
-            guard let city = location?.city else {return}
-            print(city)//for control
-            self.cityNameString = city
+        getCityName(fromCity: cityName, completion: {(location) -> Void in
+            guard let results = location else {return}
+            if !results.isEmpty {
+                var cityArray: [String] = []
+                for i in 0...(results.count-1){
+                    guard let city = results[i].city else {break}
+                    cityArray.append(city)
+                    self.cityNameArray = cityArray
+                }
+            } else {
+                return
+            }
           })
         cityNamesTableView.reloadData()
     }
     
-    func getCityName(fromCity cityName: String,numberOfResults maxResults: Int, completion: @escaping (_ result: Location?) -> Void) {
+    func getCityName(fromCity cityName: String, completion: @escaping (_ result: [Location]?) -> Void) {
         guard let queryURL =  URL(string:"http://geodb-free-service.wirefreethought.com/v1/geo/cities?&namePrefix=" + cityName + "&sort=-population") else {completion(nil); return}
         let session = URLSession.shared
         
@@ -51,7 +58,6 @@ class SearchViewController: UIViewController {
                     do {
                         guard let data = data else { return }
                         let jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.mutableContainers)
-                        //print(jsonResult)//to check results
                         self.decodeJson(jsonResult: jsonResult, completion: completion)
                     } catch let e {
                         print(e)
@@ -67,27 +73,32 @@ class SearchViewController: UIViewController {
         }).resume()
     }
     
-    func decodeJson(jsonResult: Any,completion: @escaping (_ result: Location?) -> Void) {
-        
+    func decodeJson(jsonResult: Any,completion: @escaping (_ result: [Location]?) -> Void) {
         if let dictionary = jsonResult as? Dictionary<String, Any> {
             var cityName: String?
             if let address = dictionary["data"] as? Array<Any> {
                 if !address.isEmpty {
-                    if let details = address[0] as? Dictionary<String, Any> {
-                        if let city = details["city"] as? String {
-                            cityName = city
+                    var locationsArray: [Location] = []
+                    for i in 0...(address.count-1) {
+                        if let details = address[i] as? Dictionary<String, Any> {
+                            if let city = details["city"] as? String {
+                                cityName = city
+                            } else {
+                                break
+                            }
                         } else {
-                            completion(nil)
+                            break
                         }
+                        locationsArray.append(Location(city: cityName))
+                    }
+                    if !locationsArray.isEmpty{
+                        completion(locationsArray)
                     } else {
                         completion(nil)
                     }
                 } else {
                     completion(nil)
                 }
-                
-                completion(Location(city: cityName))
-                
             } else {
                 completion(nil)
             }
@@ -125,12 +136,12 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-      return 1 // to change to kMaxResults
+        return cityNameArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = cityNameString
+        cell.textLabel?.text = "\(cityNameArray[indexPath.row])"
         return cell
     }
     
@@ -138,7 +149,8 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.cellForRow(at: indexPath)
         guard let text = cell?.textLabel?.text else {return}
         print("wybrano:" + text)
-        self.delegate?.changeName(name: text)
+//        self.delegate?.changeName(name: text)
+        self.nameSend?(text)
         let mainViewController = HourlyWeatherViewController()
         navigationController?.pushViewController(mainViewController, animated: true)
     }
