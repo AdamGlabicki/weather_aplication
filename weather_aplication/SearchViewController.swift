@@ -16,7 +16,6 @@ class SearchViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         setupView()
         setupConstraints()
         cityNameTextfield.addTarget(self, action: #selector(loadCityNames), for: .editingChanged)
@@ -29,11 +28,11 @@ class SearchViewController: UIViewController {
             guard let results = location else {return}
             if !results.isEmpty {
                 var cityArray: [String] = []
-                for i in 0...(results.count-1){
-                    guard let city = results[i].city else {break}
+                for result in results{
+                    guard let city = result.city else {break}
                     cityArray.append(city)
-                    self.cityNameArray = cityArray
                 }
+                self.cityNameArray = cityArray
             } else {
                 return
             }
