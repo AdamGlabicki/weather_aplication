@@ -37,7 +37,9 @@ class SearchViewController: UIViewController {
                 return
             }
           })
-        cityNamesTableView.reloadData()
+        DispatchQueue.main.async {
+             self.cityNamesTableView.reloadData()
+         }
     }
     
     func getCityName(fromCity cityName: String, completion: @escaping (_ result: [Location]) -> Void) {
