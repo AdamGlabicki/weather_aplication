@@ -25,7 +25,7 @@ class SearchViewController: UIViewController {
     @objc func loadCityNames() {
         guard let cityName = cityNameTextfield.text else {return}
         getCityName(fromCity: cityName, completion: {(location) -> Void in
-            guard let results = location else {return}
+            let results = location //else {return}
             if !results.isEmpty {
                 var cityArray: [String] = []
                 for result in results{
@@ -40,45 +40,34 @@ class SearchViewController: UIViewController {
         cityNamesTableView.reloadData()
     }
     
-    func getCityName(fromCity cityName: String, completion: @escaping (_ result: [Location]?) -> Void) {
-        guard let queryURL =  URL(string:"http://geodb-free-service.wirefreethought.com/v1/geo/cities?&namePrefix=" + cityName + "&sort=-population") else {completion(nil); return}
+    func getCityName(fromCity cityName: String, completion: @escaping (_ result: [Location]) -> Void) {
+        guard let queryURL =  URL(string:"http://geodb-free-service.wirefreethought.com/v1/geo/cities?&namePrefix=" + cityName + "&sort=-population") else {return}
         let session = URLSession.shared
         
-        session.dataTask(with: queryURL, completionHandler: { [self] data, response, error -> Void in
+        session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
             
-            if (error != nil) {
-                completion(nil)
-            }
+            if (error != nil) {}
             
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
                     do {
                         guard let data = data else { return }
                         let jsonResult = try JSONDecoder().decode(GeoDBJSON.self, from: data)
-                        completion(self.decodeJson(jsonResult: jsonResult))
+                        completion(self?.decodeJson(jsonResult: jsonResult) ?? [])
                     } catch let e {
                         print(e)
-                        completion(nil)
                     }
-                } else {
-                    completion(nil)
-                }
-            } else {
-                completion(nil)
-            }
+                } else {}
+            } else {}
             
         }).resume()
     }
     
-    func decodeJson(jsonResult: GeoDBJSON) -> [Location]? {
+    func decodeJson(jsonResult: GeoDBJSON) -> [Location] {
         var cityNames: [Location] = []
         let datas = jsonResult.data
-        if !datas.isEmpty{
-            for data in datas {
-                cityNames.append(Location(city: data.city))
-            }
-        } else {
-            return nil
+        for data in datas {
+            cityNames.append(Location(city: data.city))
         }
         return cityNames
     }
@@ -100,7 +89,7 @@ class SearchViewController: UIViewController {
     func setupConstraints() {
         cityNameTextfield.snp.makeConstraints { make in
             make.top.equalTo(view.snp.topMargin)
-            make.leftMargin.rightMargin.equalToSuperview()
+            make.left.right.equalToSuperview()
         }
         
         cityNamesTableView.snp.makeConstraints { make in
