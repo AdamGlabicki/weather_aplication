@@ -25,7 +25,7 @@ class SearchViewController: UIViewController {
     @objc func loadCityNames() {
         guard let cityName = cityNameTextfield.text else {return}
         getCityName(fromCity: cityName, completion: {(location) -> Void in
-            let results = location //else {return}
+            let results = location
             if !results.isEmpty {
                 var cityArray: [String] = []
                 for result in results{
@@ -46,7 +46,11 @@ class SearchViewController: UIViewController {
         
         session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
             
-            if (error != nil) {}
+            if (error != nil) {
+                let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self?.present(alert, animated: true)
+            }
             
             if let httpResponse = response as? HTTPURLResponse {
                 if httpResponse.statusCode == 200 {
