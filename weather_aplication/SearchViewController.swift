@@ -6,13 +6,11 @@ struct Location {
 }
 
 class SearchViewController: UIViewController {
-    private let kSideMargin: CGFloat = 10
-    private let kTopMargin: CGFloat = 20
-    private let kBottomMargin: CGFloat = 15
+    private let kTopMargin = 20
     
     private let cityNameTextfield = UITextField()
     private let cityNamesTableView = UITableView()
-    var cityNameArray: [String] = []
+    private var cityNameArray: [String] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,12 +21,12 @@ class SearchViewController: UIViewController {
     }
     
     @objc func loadCityNames() {
-        guard let cityName = cityNameTextfield.text else {return}
+        guard let cityName = cityNameTextfield.text else { return }
         getCityName(fromCity: cityName, completion: {(location) -> Void in
             let results = location
             var cityArray: [String] = []
             for result in results{
-                guard let city = result.city else {break}
+                guard let city = result.city else { break }
                 cityArray.append(city)
             }
             self.cityNameArray = cityArray
@@ -56,8 +54,8 @@ class SearchViewController: UIViewController {
                         guard let data = data else { return }
                         let jsonResult = try JSONDecoder().decode(GeoDBJSON.self, from: data)
                         completion(self?.decodeJson(jsonResult: jsonResult) ?? [])
-                    } catch let eror {
-                        print(eror)
+                    } catch let error {
+                        print(error)
                     }
                 }
             }
@@ -114,7 +112,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
-        guard let text = cell?.textLabel?.text else {return}
+        guard let text = cell?.textLabel?.text else { return }
         let mainViewController = ShowWeatherViewController(city: text)
         navigationController?.pushViewController(mainViewController, animated: true)
     }
