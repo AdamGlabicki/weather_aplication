@@ -26,20 +26,16 @@ class SearchViewController: UIViewController {
         guard let cityName = cityNameTextfield.text else {return}
         getCityName(fromCity: cityName, completion: {(location) -> Void in
             let results = location
-            if !results.isEmpty {
-                var cityArray: [String] = []
-                for result in results{
-                    guard let city = result.city else {break}
-                    cityArray.append(city)
-                }
-                self.cityNameArray = cityArray
-            } else {
-                return
+            var cityArray: [String] = []
+            for result in results{
+                guard let city = result.city else {break}
+                cityArray.append(city)
+            }
+            self.cityNameArray = cityArray
+            DispatchQueue.main.async {
+                self.cityNamesTableView.reloadData()
             }
           })
-        DispatchQueue.main.async {
-             self.cityNamesTableView.reloadData()
-         }
     }
     
     func getCityName(fromCity cityName: String, completion: @escaping (_ result: [Location]) -> Void) {
@@ -60,11 +56,11 @@ class SearchViewController: UIViewController {
                         guard let data = data else { return }
                         let jsonResult = try JSONDecoder().decode(GeoDBJSON.self, from: data)
                         completion(self?.decodeJson(jsonResult: jsonResult) ?? [])
-                    } catch let e {
-                        print(e)
+                    } catch let eror {
+                        print(eror)
                     }
-                } else {}
-            } else {}
+                }
+            }
             
         }).resume()
     }
