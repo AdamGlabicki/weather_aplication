@@ -13,6 +13,7 @@ class SearchViewController: UIViewController {
     private let cityNameTextfield = UITextField()
     private let cityNamesTableView = UITableView()
     private var cityNameArray: [String] = []
+    private var locationsArray: [Location] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,8 @@ class SearchViewController: UIViewController {
     @objc func loadCityNames() {
         guard let cityName = cityNameTextfield.text else { return }
         getCityName(fromCity: cityName, completion: {(location) -> Void in
+            self.locationsArray = []
+            self.locationsArray = location
             let results = location
             var cityArray: [String] = []
             for result in results{
@@ -51,7 +54,7 @@ class SearchViewController: UIViewController {
             }
             
             if let httpResponse = response as? HTTPURLResponse {
-                if httpResponse.statusCode == 200 {
+                if 200...299 ~= httpResponse.statusCode {
                     do {
                         guard let data = data else { return }
                         let jsonResult = try JSONDecoder().decode(GeoDBJSON.self, from: data)
@@ -115,7 +118,9 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         guard let text = cell?.textLabel?.text else { return }
-        let mainViewController = ShowWeatherViewController(city: text)
+        guard let longitude = locationsArray[indexPath.row].longitude else { return }
+        guard let latitude = locationsArray[indexPath.row].latitude else { return }
+        let mainViewController = ShowWeatherViewController(city: text, longitude: longitude, latitude: latitude)
         navigationController?.pushViewController(mainViewController, animated: true)
     }
 }
