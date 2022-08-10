@@ -3,21 +3,19 @@ import UIKit
 
 struct CellData {
     let hour: String
-    let temperature: Int
-    let pressure: Int
-    let windSpeed: Int
+    let temperature: Double
+    let pressure: Double
+    let windSpeed: Double
 }
 
 class ShowWeatherViewController: UIViewController{
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
-    private let kBottomMargin: CGFloat = 15
     
     private let cityLabel = UILabel()
     private let weatherTableView = UITableView()
     
-    private let cityString: String = "Warszawa"
-    private let cellReuseIdentifier = "cell"
+    private var dataArray2: [CellData] = []
     private let dataArray: [CellData] = [
         CellData(hour: "10:00", temperature: 20, pressure: 1024, windSpeed: 12),
         CellData(hour: "11:00", temperature: 21, pressure: 1010, windSpeed: 11),
@@ -33,16 +31,54 @@ class ShowWeatherViewController: UIViewController{
         CellData(hour: "21:00", temperature: 32, pressure: 1012, windSpeed: 16)
     ]
     
+    func getCityName() {
+        guard let queryURL =  URL(string:"https://api.open-meteo.com/v1/forecast?latitude=52.52&longitude=13.41&hourly=temperature_2m,surface_pressure,windspeed_10m") else { return }
+        let session = URLSession.shared
+        
+        session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
+            
+            if (error != nil) {
+                let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self?.present(alert, animated: true)
+            }
+            
+            if let httpResponse = response as? HTTPURLResponse {
+                if httpResponse.statusCode == 200 {
+                    do {
+                        guard let data = data else { return }
+                        let jsonResult = try JSONDecoder().decode(OpenMeteoJSON.self, from: data)
+                        self?.decodeJson(jsonResult: jsonResult)
+                        DispatchQueue.main.async {
+                            self?.weatherTableView.reloadData()
+                        }
+                    } catch let error {
+                        print(error)
+                    }
+                }
+            }
+            
+        }).resume()
+    }
+    
+    func decodeJson(jsonResult: OpenMeteoJSON) {
+        let datas = jsonResult.hourly.time.count
+        for data in 0...(datas-1) {
+            dataArray2.append(CellData(hour: jsonResult.hourly.time[data], temperature: jsonResult.hourly.temperature2M[data], pressure: jsonResult.hourly.surfacePressure[data], windSpeed: jsonResult.hourly.windspeed10M[data]))
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        
+        getCityName()
     }
     
     init(city: String) {
         super.init(nibName: nil, bundle: nil)
         self.cityLabel.text = city
+        dataArray2 = []
     }
     
     required init?(coder: NSCoder) {
@@ -80,12 +116,12 @@ class ShowWeatherViewController: UIViewController{
 
 extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-      return dataArray.count
+      return dataArray2.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? CustomTableViewCell else {fatalError("Unble to create cell")}
-        cell.setupData(cellData: dataArray[indexPath.row])
+        cell.setupData(cellData: dataArray2[indexPath.row])
         return cell
     }
 }

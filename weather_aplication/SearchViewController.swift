@@ -3,6 +3,8 @@ import UIKit
 
 struct Location {
     public var city: String?
+    public var longitude: Double?
+    public var latitude: Double?
 }
 
 class SearchViewController: UIViewController {
@@ -37,7 +39,7 @@ class SearchViewController: UIViewController {
     }
     
     func getCityName(fromCity cityName: String, completion: @escaping (_ result: [Location]) -> Void) {
-        guard let queryURL =  URL(string:"http://geodb-free-service.wirefreethought.com/v1/geo/cities?&namePrefix=" + cityName + "&sort=-population") else {return}
+        guard let queryURL =  URL(string:"http://geodb-free-service.wirefreethought.com/v1/geo/cities?&namePrefix=" + cityName + "&sort=-population") else { return }
         let session = URLSession.shared
         
         session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
@@ -67,7 +69,7 @@ class SearchViewController: UIViewController {
         var cityNames: [Location] = []
         let datas = jsonResult.data
         for data in datas {
-            cityNames.append(Location(city: data.city))
+            cityNames.append(Location(city: data.city, longitude: data.longitude, latitude: data.latitude))
         }
         return cityNames
     }
