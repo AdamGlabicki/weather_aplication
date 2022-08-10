@@ -16,14 +16,13 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         setupView()
         setupConstraints()
         
         proceedButton.addTarget(self, action: #selector(proceedButtonPressed), for: .touchUpInside)
     }
     @objc func proceedButtonPressed() {
-        let mainViewController = HourlyWeatherViewController()
+        let mainViewController = SearchViewController()
         navigationController?.pushViewController(mainViewController, animated: true)
     }
     
