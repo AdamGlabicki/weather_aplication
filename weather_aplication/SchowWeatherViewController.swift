@@ -131,12 +131,42 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight))
-        let label = UILabel()
-        label.frame = CGRect.init(x: 0, y: 0, width: headerView.frame.width, height: headerView.frame.height)
-        label.text = date
-        label.textAlignment = .center
-        label.backgroundColor = .white
-        headerView.addSubview(label)
+        let hourLabel = UILabel()
+        let temperatureLabel = UILabel()
+        let pressureLabel = UILabel()
+        let windSpeedLabel = UILabel()
+        
+        headerView.backgroundColor = .white
+        
+        hourLabel.text = "hour"
+        temperatureLabel.text = "temp [C]"
+        pressureLabel.text = "pressure [hPa]"
+        windSpeedLabel.text = "wind [km/h]"
+        
+        headerView.addSubview(hourLabel)
+        headerView.addSubview(temperatureLabel)
+        headerView.addSubview(pressureLabel)
+        headerView.addSubview(windSpeedLabel)
+        
+        hourLabel.snp.makeConstraints { make in
+            make.leftMargin.equalToSuperview()
+            make.top.equalToSuperview().offset(kTopMargin)
+        }
+
+        temperatureLabel.snp.makeConstraints { make in
+            make.left.lessThanOrEqualTo(hourLabel.snp.right).offset(kSideMargin)
+            make.top.equalToSuperview().offset(kTopMargin)
+        }
+
+        pressureLabel.snp.makeConstraints { make in
+            make.left.lessThanOrEqualTo(temperatureLabel.snp.right).offset(kSideMargin)
+            make.top.equalToSuperview().offset(kTopMargin)
+        }
+        
+        windSpeedLabel.snp.makeConstraints { make in
+            make.left.lessThanOrEqualTo(pressureLabel.snp.right).offset(kSideMargin)
+            make.top.equalToSuperview().offset(kTopMargin)
+        }
         
         return headerView
     }
