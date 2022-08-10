@@ -58,7 +58,7 @@ class SearchViewController: UIViewController {
                     do {
                         guard let data = data else { return }
                         let jsonResult = try JSONDecoder().decode(GeoDBJSON.self, from: data)
-                        completion(self?.decodeJson(jsonResult: jsonResult) ?? [])
+                        completion(self?.takeDataFromJson(jsonResult: jsonResult) ?? [])
                     } catch let error {
                         print(error)
                     }
@@ -68,7 +68,7 @@ class SearchViewController: UIViewController {
         }).resume()
     }
     
-    func decodeJson(jsonResult: GeoDBJSON) -> [Location] {
+    func takeDataFromJson(jsonResult: GeoDBJSON) -> [Location] {
         var cityNames: [Location] = []
         let datas = jsonResult.data
         for data in datas {

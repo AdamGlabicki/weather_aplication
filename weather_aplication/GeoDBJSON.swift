@@ -2,18 +2,18 @@ import UIKit
 import SnapKit
 
 class GeoDBJSON: Decodable {
-    let data: [Datas]
+    let data: [CityInfo]
     let links: [Link]?
     let metadata: Metadata
 
-    init(data: [Datas], links: [Link]?, metadata: Metadata) {
+    init(data: [CityInfo], links: [Link]?, metadata: Metadata) {
         self.data = data
         self.links = links
         self.metadata = metadata
     }
 }
 
-class Datas: Decodable {
+class CityInfo: Decodable {
     let id: Int?
     let wikiDataID, type, city, name: String?
     let country, countryCode, region, regionCode: String?

@@ -7,7 +7,7 @@ class OpenMeteoJSON: Decodable {
     let timezone, timezoneAbbreviation: String
     let elevation: Int
     let hourlyUnits: HourlyUnits
-    let hourly: Hourly
+    let hourly: HourlyWeatherData
 
     enum CodingKeys: String, CodingKey {
         case latitude, longitude
@@ -20,7 +20,7 @@ class OpenMeteoJSON: Decodable {
         case hourly
     }
 
-    init(latitude: Double, longitude: Double, generationtimeMS: Double, utcOffsetSeconds: Int, timezone: String, timezoneAbbreviation: String, elevation: Int, hourlyUnits: HourlyUnits, hourly: Hourly) {
+    init(latitude: Double, longitude: Double, generationtimeMS: Double, utcOffsetSeconds: Int, timezone: String, timezoneAbbreviation: String, elevation: Int, hourlyUnits: HourlyUnits, hourly: HourlyWeatherData) {
         self.latitude = latitude
         self.longitude = longitude
         self.generationtimeMS = generationtimeMS
@@ -33,7 +33,7 @@ class OpenMeteoJSON: Decodable {
     }
 }
 
-class Hourly: Decodable {
+class HourlyWeatherData: Decodable {
     let time: [String]
     let temperature2M, surfacePressure, windspeed10M: [Double]
 
