@@ -49,8 +49,8 @@ class CustomTableViewCell: UITableViewCell {
     
     func setupData(cellData: WeatherData) {
         self.hourLabel.text = cellData.hour
-        self.temperatureLabel.text = "\(cellData.temperature)C"
-        self.pressureLabel.text = "\(cellData.pressure)hPa"
-        self.windSpeedLabel.text = "\(cellData.windSpeed)km/h"
+        self.temperatureLabel.text = "\(cellData.temperature)"
+        self.pressureLabel.text = "\(cellData.pressure)"
+        self.windSpeedLabel.text = "\(cellData.windSpeed)"
     }
 }

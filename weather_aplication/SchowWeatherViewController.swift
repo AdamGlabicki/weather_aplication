@@ -131,6 +131,7 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight))
+        let dateLabel = UILabel()
         let hourLabel = UILabel()
         let temperatureLabel = UILabel()
         let pressureLabel = UILabel()
@@ -138,15 +139,21 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
         
         headerView.backgroundColor = .white
         
+        dateLabel.text = date
         hourLabel.text = "hour"
-        temperatureLabel.text = "temp [C]"
-        pressureLabel.text = "pressure [hPa]"
-        windSpeedLabel.text = "wind [km/h]"
+        temperatureLabel.text = "        [C]"
+        pressureLabel.text = "    [hPa]"
+        windSpeedLabel.text = " [km/h]"
         
+        headerView.addSubview(dateLabel)
         headerView.addSubview(hourLabel)
         headerView.addSubview(temperatureLabel)
         headerView.addSubview(pressureLabel)
         headerView.addSubview(windSpeedLabel)
+        
+        dateLabel.snp.makeConstraints { make in
+            make.top.left.equalToSuperview()
+        }
         
         hourLabel.snp.makeConstraints { make in
             make.leftMargin.equalToSuperview()
