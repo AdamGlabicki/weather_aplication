@@ -6,6 +6,7 @@ struct WeatherData {
     let temperature: Double
     let pressure: Double
     let windSpeed: Double
+    let weatherCode: Int
 }
 
 class ShowWeatherViewController: UIViewController{
@@ -25,7 +26,7 @@ class ShowWeatherViewController: UIViewController{
     private var dataArray: [WeatherData] = []
     private var dataArray2: [WeatherData] = []
     private var urlString: String {
-       let url =  "https://api.open-meteo.com/v1/forecast?latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,surface_pressure,windspeed_10m"
+       let url =  "https://api.open-meteo.com/v1/forecast?latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,surface_pressure,weathercode,windspeed_10m"
         return url
     }
     
@@ -62,10 +63,10 @@ class ShowWeatherViewController: UIViewController{
     func takeDataFromJson(jsonResult: OpenMeteoJSON) {
         let elementsCount = kElementsToShow
         let kCharsToDrop = 11
-        if jsonResult.hourly.time.count >= kElementsToShow && jsonResult.hourly.temperature2M.count >= kElementsToShow && jsonResult.hourly.surfacePressure.count >= kElementsToShow && jsonResult.hourly.windspeed10M.count >= kElementsToShow  {
+        if jsonResult.hourly.time.count >= kElementsToShow && jsonResult.hourly.temperature2M.count >= kElementsToShow && jsonResult.hourly.surfacePressure.count >= kElementsToShow && jsonResult.hourly.windspeed10M.count >= kElementsToShow && jsonResult.hourly.weathercode.count >= kElementsToShow {
             date = String(jsonResult.hourly.time[0].prefix(kCharsToDrop-1))
             for data in 0...(elementsCount-1) {
-                dataArray.append(WeatherData(hour: String(jsonResult.hourly.time[data].dropFirst(kCharsToDrop)), temperature: jsonResult.hourly.temperature2M[data], pressure: jsonResult.hourly.surfacePressure[data], windSpeed: jsonResult.hourly.windspeed10M[data]))
+                dataArray.append(WeatherData(hour: String(jsonResult.hourly.time[data].dropFirst(kCharsToDrop)), temperature: jsonResult.hourly.temperature2M[data], pressure: jsonResult.hourly.surfacePressure[data], windSpeed: jsonResult.hourly.windspeed10M[data], weatherCode: jsonResult.hourly.weathercode[data]))
             }
             dataArray2 = dataArray
         }

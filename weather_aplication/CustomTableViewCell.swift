@@ -8,6 +8,15 @@ class CustomTableViewCell: UITableViewCell {
     private let temperatureLabel = UILabel()
     private let pressureLabel = UILabel()
     private let windSpeedLabel = UILabel()
+    private let weatherImageView = UIImageView()
+    private let sunImage = UIImage(named: "sun.max.fill.png")
+    private let cloudAndSunImage = UIImage(named: "cloud.sun.fill.png")
+    private let cloudImage = UIImage(named: "cloud.fill.png")
+    private let snowImage = UIImage(named: "cloud.snow.fill.png")
+    private let rainImage = UIImage(named: "cloud.rain.fill.png")
+    private let heavyRainImage = UIImage(named: "cloud.heavyrain.fill.png")
+    private let drizzleImage = UIImage(named: "cloud.drizzle.fill.png")
+    private let boltImage = UIImage(named: "cloud.bolt.fill.png")
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -27,23 +36,33 @@ class CustomTableViewCell: UITableViewCell {
         addSubview(temperatureLabel)
         addSubview(pressureLabel)
         addSubview(windSpeedLabel)
+        addSubview(weatherImageView)
     }
     
     func setupConstraints() {
         hourLabel.snp.makeConstraints { make in
             make.leftMargin.equalToSuperview()
+            make.centerY.equalToSuperview()
         }
 
         temperatureLabel.snp.makeConstraints { make in
             make.left.lessThanOrEqualTo(hourLabel.snp.right).offset(kSideMargin)
+            make.centerY.equalToSuperview()
         }
 
         pressureLabel.snp.makeConstraints { make in
             make.left.lessThanOrEqualTo(temperatureLabel.snp.right).offset(kSideMargin)
+            make.centerY.equalToSuperview()
         }
         
         windSpeedLabel.snp.makeConstraints { make in
             make.left.lessThanOrEqualTo(pressureLabel.snp.right).offset(kSideMargin)
+            make.centerY.equalToSuperview()
+        }
+        
+        weatherImageView.snp.makeConstraints { make in
+            make.left.lessThanOrEqualTo(windSpeedLabel.snp.right).offset(kSideMargin)
+            make.centerY.equalToSuperview()
         }
     }
     
@@ -52,5 +71,31 @@ class CustomTableViewCell: UITableViewCell {
         self.temperatureLabel.text = "\(cellData.temperature)"
         self.pressureLabel.text = "\(cellData.pressure)"
         self.windSpeedLabel.text = "\(cellData.windSpeed)"
+        self.weatherImageView.image = choseImage(weatherCode: cellData.weatherCode)
+    }
+    
+    func choseImage(weatherCode: Int) -> UIImage? {
+        switch weatherCode {
+        case 0:
+            return sunImage
+        case 1:
+            return cloudAndSunImage
+        case 2:
+            return cloudAndSunImage
+        case 3:
+            return cloudImage
+        case 51, 53, 55, 56, 57:
+            return drizzleImage
+        case 61, 63, 66:
+            return rainImage
+        case 65, 67, 80, 81, 82:
+            return heavyRainImage
+        case 71, 73, 75, 77, 85, 86:
+            return snowImage
+        case 95, 96, 99:
+            return boltImage
+        default:
+            return sunImage
+        }
     }
 }

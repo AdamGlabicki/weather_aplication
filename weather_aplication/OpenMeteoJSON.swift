@@ -35,37 +35,44 @@ class OpenMeteoJSON: Decodable {
 
 class HourlyWeatherData: Decodable {
     let time: [String]
-    let temperature2M, surfacePressure, windspeed10M: [Double]
+    let temperature2M, surfacePressure: [Double]
+    let weathercode: [Int]
+    let windspeed10M: [Double]
 
     enum CodingKeys: String, CodingKey {
         case time
         case temperature2M = "temperature_2m"
         case surfacePressure = "surface_pressure"
+        case weathercode
         case windspeed10M = "windspeed_10m"
     }
 
-    init(time: [String], temperature2M: [Double], surfacePressure: [Double], windspeed10M: [Double]) {
+    init(time: [String], temperature2M: [Double], surfacePressure: [Double], weathercode:[Int], windspeed10M: [Double]) {
         self.time = time
         self.temperature2M = temperature2M
         self.surfacePressure = surfacePressure
+        self.weathercode = weathercode
         self.windspeed10M = windspeed10M
     }
 }
 
 class HourlyUnits: Decodable {
-    let time, temperature2M, surfacePressure, windspeed10M: String
+    let time, temperature2M, surfacePressure, weathercode: String
+    let windspeed10M: String
 
     enum CodingKeys: String, CodingKey {
         case time
         case temperature2M = "temperature_2m"
         case surfacePressure = "surface_pressure"
+        case weathercode
         case windspeed10M = "windspeed_10m"
     }
 
-    init(time: String, temperature2M: String, surfacePressure: String, windspeed10M: String) {
+    init(time: String, temperature2M: String, surfacePressure: String, weathercode: String, windspeed10M: String) {
         self.time = time
         self.temperature2M = temperature2M
         self.surfacePressure = surfacePressure
+        self.weathercode = weathercode
         self.windspeed10M = windspeed10M
     }
 }
