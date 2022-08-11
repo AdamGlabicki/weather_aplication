@@ -12,6 +12,7 @@ struct WeatherData {
 class ShowWeatherViewController: UIViewController{
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
+    private let kBottomMMargin: CGFloat = 5
     private let kElementsToShow: Int = 24
     private let kHeaderHeight: CGFloat = 50
     
@@ -158,22 +159,26 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
         
         hourLabel.snp.makeConstraints { make in
             make.leftMargin.equalToSuperview()
-            make.top.equalToSuperview().offset(kTopMargin)
+            make.top.equalTo(dateLabel.snp.bottom)
+            make.bottom.equalToSuperview().offset(-kBottomMMargin)
         }
 
         temperatureLabel.snp.makeConstraints { make in
             make.left.lessThanOrEqualTo(hourLabel.snp.right).offset(kSideMargin)
-            make.top.equalToSuperview().offset(kTopMargin)
+            make.top.equalTo(dateLabel.snp.bottom)
+            make.bottom.equalToSuperview().offset(-kBottomMMargin)
         }
 
         pressureLabel.snp.makeConstraints { make in
             make.left.lessThanOrEqualTo(temperatureLabel.snp.right).offset(kSideMargin)
-            make.top.equalToSuperview().offset(kTopMargin)
+            make.top.equalTo(dateLabel.snp.bottom)
+            make.bottom.equalToSuperview().offset(-kBottomMMargin)
         }
         
         windSpeedLabel.snp.makeConstraints { make in
             make.left.lessThanOrEqualTo(pressureLabel.snp.right).offset(kSideMargin)
-            make.top.equalToSuperview().offset(kTopMargin)
+            make.top.equalTo(dateLabel.snp.bottom)
+            make.bottom.equalToSuperview().offset(-kBottomMMargin)
         }
         
         return headerView
