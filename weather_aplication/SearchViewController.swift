@@ -10,7 +10,12 @@ struct Location {
 class SearchViewController: UIViewController {
     private let kTopMargin = 20
     
-    private let cityNameTextfield = UITextField()
+    private let cityNameTextField: UITextField = {
+        let cityNameTextField = UITextField()
+        cityNameTextField.placeholder = "city name"
+        cityNameTextField.textAlignment = .center
+        return cityNameTextField
+    }()
     private let cityNamesTableView = UITableView()
     private var locationsArray: [Location] = []
     
@@ -18,11 +23,11 @@ class SearchViewController: UIViewController {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        cityNameTextfield.addTarget(self, action: #selector(loadCityNames), for: .editingChanged)
+        cityNameTextField.addTarget(self, action: #selector(loadCityNames), for: .editingChanged)
     }
     
     @objc func loadCityNames() {
-        guard let cityName = cityNameTextfield.text else { return }
+        guard let cityName = cityNameTextField.text else { return }
         getCityName(fromCity: cityName, completion: {(location) -> Void in
             self.locationsArray = []
             self.locationsArray = location
@@ -72,10 +77,7 @@ class SearchViewController: UIViewController {
 
     func setupView() {
         view.backgroundColor = .white
-        
-        cityNameTextfield.placeholder = "city name"
-        cityNameTextfield.textAlignment = .center
-        view.addSubview(cityNameTextfield)
+        view.addSubview(cityNameTextField)
         
         setupCollectionView()
     }
@@ -89,13 +91,13 @@ class SearchViewController: UIViewController {
     }
     
     func setupConstraints() {
-        cityNameTextfield.snp.makeConstraints { make in
+        cityNameTextField.snp.makeConstraints { make in
             make.top.equalTo(view.snp.topMargin)
             make.left.right.equalToSuperview()
         }
         
         cityNamesTableView.snp.makeConstraints { make in
-            make.top.equalTo(cityNameTextfield.snp.bottom).offset(kTopMargin)
+            make.top.equalTo(cityNameTextField.snp.bottom).offset(kTopMargin)
             make.left.right.bottom.equalToSuperview()
         }
     }

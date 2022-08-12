@@ -127,48 +127,8 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight))
-        let dateLabel = UILabel()
-        let hourLabel = UILabel()
-        let temperatureLabel = UILabel()
-        let pressureLabel = UILabel()
-        let windSpeedLabel = UILabel()
-        let weatherLabel = UILabel()
-        let stackView = UIStackView()
-        
-        headerView.backgroundColor = .white
-        
-        dateLabel.text = date
-        hourLabel.text = "hour"
-        temperatureLabel.text = "[C]"
-        pressureLabel.text = "[hPa]"
-        windSpeedLabel.text = "[km/h]"
-        weatherLabel.text = "weather"
-        
-        headerView.addSubview(dateLabel)
-        stackView.axis = .horizontal
-        stackView.alignment = .center
-        stackView.distribution = .equalCentering
-        stackView.addArrangedSubview(hourLabel)
-        stackView.addArrangedSubview(temperatureLabel)
-        stackView.addArrangedSubview(pressureLabel)
-        stackView.addArrangedSubview(windSpeedLabel)
-        stackView.addArrangedSubview(weatherLabel)
-        headerView.addSubview(stackView)
-        
-        dateLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.equalToSuperview().offset(kSideMargin)
-        }
-        
-        stackView.snp.makeConstraints { make in
-            make.top.equalTo(dateLabel.snp.bottom)
-            make.left.equalToSuperview().offset(kSideMargin)
-            make.right.equalToSuperview().offset(-kSideMargin)
-            make.bottom.equalToSuperview()
-        }
-        
-        return headerView
+        let header = HeaderView(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight), date: date)
+        return header
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
