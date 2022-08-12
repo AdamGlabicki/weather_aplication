@@ -33,7 +33,6 @@ class CustomTableViewCell: UITableViewCell {
     func setupView() {
         contentView.backgroundColor = UIColor.clear
         backgroundColor = UIColor.clear
-        stackView.axis = .horizontal
         stackView.alignment = .center
         stackView.distribution = .equalCentering
         stackView.addArrangedSubview(hourLabel)
