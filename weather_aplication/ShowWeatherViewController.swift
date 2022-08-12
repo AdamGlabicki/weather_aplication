@@ -2,9 +2,9 @@ import SnapKit
 import UIKit
 
 class ShowWeatherViewController: UIViewController{
-    private let kSideMargin: CGFloat = 10
-    private let kTopMargin: CGFloat = 20
-    private let kBottomMargin: CGFloat = 5
+    private let kSideMargin = 10
+    private let kTopMargin = 20
+    private let kBottomMargin = 5
     private let kElementsToShow: Int = 24
     private let kHeaderHeight: CGFloat = 50
     
