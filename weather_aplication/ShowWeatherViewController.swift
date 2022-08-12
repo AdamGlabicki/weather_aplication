@@ -53,19 +53,18 @@ class ShowWeatherViewController: UIViewController{
     }
     
     func takeDataFromJson(jsonResult: OpenMeteoJSONDecoded) {
-        let kElementsCount = kElementsToShow
         let kCharsToDrop = 11
-        var dataArray2: [WeatherData] = []
+        var dataArray: [WeatherData] = []
         if jsonResult.hourly.time.count >= kElementsToShow,
            jsonResult.hourly.temperature2M.count >= kElementsToShow,
            jsonResult.hourly.surfacePressure.count >= kElementsToShow,
            jsonResult.hourly.windspeed10M.count >= kElementsToShow,
            jsonResult.hourly.weathercode.count >= kElementsToShow {
             date = String(jsonResult.hourly.time[0].prefix(kCharsToDrop - 1))
-            for data in 0...(kElementsCount - 1) {
-                dataArray2.append(WeatherData(hour: String(jsonResult.hourly.time[data].dropFirst(kCharsToDrop)), temperature: jsonResult.hourly.temperature2M[data], pressure: jsonResult.hourly.surfacePressure[data], windSpeed: jsonResult.hourly.windspeed10M[data], weatherCode: jsonResult.hourly.weathercode[data]))
+            for index in 0...(kElementsToShow - 1) {
+                dataArray.append(WeatherData(hour: String(jsonResult.hourly.time[index].dropFirst(kCharsToDrop)), temperature: jsonResult.hourly.temperature2M[index], pressure: jsonResult.hourly.surfacePressure[index], windSpeed: jsonResult.hourly.windspeed10M[index], weatherCode: jsonResult.hourly.weathercode[index]))
             }
-            dataArray = dataArray2
+            self.dataArray = dataArray
         }
     }
     

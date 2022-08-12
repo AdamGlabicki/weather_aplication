@@ -113,7 +113,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         guard let text = cell?.textLabel?.text,
               let longitude = locationsArray[indexPath.row].longitude,
               let latitude = locationsArray[indexPath.row].latitude else { return }
-        let mainViewController = ShowWeatherViewController(city: text, longitude: longitude, latitude: latitude)
-        navigationController?.pushViewController(mainViewController, animated: true)
+        let nextViewController = ShowWeatherViewController(city: text, longitude: longitude, latitude: latitude)
+        navigationController?.pushViewController(nextViewController, animated: true)
     }
 }

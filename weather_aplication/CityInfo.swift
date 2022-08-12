@@ -14,9 +14,8 @@ struct CityInfo: Decodable {
     let population: Int?
 
     enum CodingKeys: String, CodingKey {
-        case id
         case wikiDataID = "wikiDataId"
-        case type, city, name, country, countryCode, region, regionCode, latitude, longitude, population
+        case id, type, city, name, country, countryCode, region, regionCode, latitude, longitude, population
     }
 
     init(id: Int, wikiDataID: String?, type: String?, city: String?, name: String?, country: String?, countryCode: String?, region: String?, regionCode: String?, latitude: Double?, longitude: Double?, population: Int?) {
