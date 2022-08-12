@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		87152D3B28A66BEE00C779A9 /* WeatherData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87152D3A28A66BEE00C779A9 /* WeatherData.swift */; };
 		873DCBEF2894199200660927 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873DCBEE2894199200660927 /* AppDelegate.swift */; };
 		873DCBF12894199200660927 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873DCBF02894199200660927 /* SceneDelegate.swift */; };
 		873DCBF32894199200660927 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873DCBF22894199200660927 /* ViewController.swift */; };
@@ -41,6 +42,7 @@
 
 /* Begin PBXFileReference section */
 		103B88E834D9CE3137D4A138 /* Pods-weather_aplication.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weather_aplication.release.xcconfig"; path = "Target Support Files/Pods-weather_aplication/Pods-weather_aplication.release.xcconfig"; sourceTree = "<group>"; };
+		87152D3A28A66BEE00C779A9 /* WeatherData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherData.swift; sourceTree = "<group>"; };
 		873DCBEB2894199200660927 /* weather_aplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = weather_aplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		873DCBEE2894199200660927 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		873DCBF02894199200660927 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				875E4A172899401900920D8A /* SearchViewController.swift */,
 				878C591328A1196700884866 /* GeoDBJSON.swift */,
 				87482CD728A2839200BCE15C /* OpenMeteoJSON.swift */,
+				87152D3A28A66BEE00C779A9 /* WeatherData.swift */,
 			);
 			path = weather_aplication;
 			sourceTree = "<group>";
@@ -340,6 +343,7 @@
 				87482CD828A2839200BCE15C /* OpenMeteoJSON.swift in Sources */,
 				878C591428A1196700884866 /* GeoDBJSON.swift in Sources */,
 				873DCBF12894199200660927 /* SceneDelegate.swift in Sources */,
+				87152D3B28A66BEE00C779A9 /* WeatherData.swift in Sources */,
 				87732F242897C23D001EE71D /* ShowWeatherViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

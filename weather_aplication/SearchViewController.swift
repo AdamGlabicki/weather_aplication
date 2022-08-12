@@ -19,7 +19,6 @@ class SearchViewController: UIViewController {
         setupView()
         setupConstraints()
         cityNameTextfield.addTarget(self, action: #selector(loadCityNames), for: .editingChanged)
-        
     }
     
     @objc func loadCityNames() {
@@ -49,10 +48,12 @@ class SearchViewController: UIViewController {
                 if 200...299 ~= httpResponse.statusCode {
                     do {
                         guard let data = data else { return }
-                        let jsonResult = try JSONDecoder().decode(GeoDBJSON.self, from: data)
+                        let jsonResult = try JSONDecoder().decode(GeoDBJSONDecoded.self, from: data)
                         completion(self?.takeDataFromJson(jsonResult: jsonResult) ?? [])
                     } catch let error {
-                        print(error)
+                        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+                        alert.addAction(UIAlertAction(title: "OK", style: .default))
+                        self?.present(alert, animated: true)
                     }
                 }
             }
@@ -60,7 +61,7 @@ class SearchViewController: UIViewController {
         }).resume()
     }
     
-    func takeDataFromJson(jsonResult: GeoDBJSON) -> [Location] {
+    func takeDataFromJson(jsonResult: GeoDBJSONDecoded) -> [Location] {
         var cityNames: [Location] = []
         let datas = jsonResult.data
         for data in datas {

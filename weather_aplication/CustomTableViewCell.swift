@@ -53,14 +53,14 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func setupData(cellData: WeatherData) {
-        self.hourLabel.text = cellData.hour
-        self.temperatureLabel.text = "\(cellData.temperature)"
-        self.pressureLabel.text = "\(cellData.pressure)"
-        self.windSpeedLabel.text = "\(cellData.windSpeed)"
-        self.weatherImageView.image = choseImage(weatherCode: cellData.weatherCode)
+        hourLabel.text = cellData.hour
+        temperatureLabel.text = "\(cellData.temperature)"
+        pressureLabel.text = "\(cellData.pressure)"
+        windSpeedLabel.text = "\(cellData.windSpeed)"
+        weatherImageView.image = chosenImage(weatherCode: cellData.weatherCode)
     }
     
-    func choseImage(weatherCode: Int) -> UIImage? {
+    func chosenImage(weatherCode: Int) -> UIImage? {
         switch weatherCode {
         case 0:
             return sunImage

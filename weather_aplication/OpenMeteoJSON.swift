@@ -1,10 +1,12 @@
 import UIKit
-import SnapKit
 
-class OpenMeteoJSON: Decodable {
-    let latitude, longitude, generationtimeMS: Double
+struct OpenMeteoJSON: Decodable {
+    let latitude: Double
+    let longitude: Double
+    let generationtimeMS: Double
     let utcOffsetSeconds: Int
-    let timezone, timezoneAbbreviation: String
+    let timezone: String
+    let timezoneAbbreviation: String
     let elevation: Int
     let hourlyUnits: HourlyUnits
     let hourly: HourlyWeatherData
@@ -33,9 +35,10 @@ class OpenMeteoJSON: Decodable {
     }
 }
 
-class HourlyWeatherData: Decodable {
+struct HourlyWeatherData: Decodable {
     let time: [String]
-    let temperature2M, surfacePressure: [Double]
+    let temperature2M: [Double]
+    let surfacePressure: [Double]
     let weathercode: [Int]
     let windspeed10M: [Double]
 
@@ -56,8 +59,11 @@ class HourlyWeatherData: Decodable {
     }
 }
 
-class HourlyUnits: Decodable {
-    let time, temperature2M, surfacePressure, weathercode: String
+struct HourlyUnits: Decodable {
+    let time: String
+    let temperature2M: String
+    let surfacePressure: String
+    let weathercode: String
     let windspeed10M: String
 
     enum CodingKeys: String, CodingKey {

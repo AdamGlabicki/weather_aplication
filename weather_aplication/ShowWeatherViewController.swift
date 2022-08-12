@@ -1,14 +1,6 @@
 import SnapKit
 import UIKit
 
-struct WeatherData {
-    let hour: String
-    let temperature: Double
-    let pressure: Double
-    let windSpeed: Double
-    let weatherCode: Int
-}
-
 class ShowWeatherViewController: UIViewController{
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
@@ -61,7 +53,7 @@ class ShowWeatherViewController: UIViewController{
     }
     
     func takeDataFromJson(jsonResult: OpenMeteoJSON) {
-        let elementsCount = kElementsToShow
+        let kElementsCount = kElementsToShow
         let kCharsToDrop = 11
         var dataArray2: [WeatherData] = []
         if jsonResult.hourly.time.count >= kElementsToShow,
@@ -69,8 +61,8 @@ class ShowWeatherViewController: UIViewController{
            jsonResult.hourly.surfacePressure.count >= kElementsToShow,
            jsonResult.hourly.windspeed10M.count >= kElementsToShow,
            jsonResult.hourly.weathercode.count >= kElementsToShow {
-            date = String(jsonResult.hourly.time[0].prefix(kCharsToDrop-1))
-            for data in 0...(elementsCount-1) {
+            date = String(jsonResult.hourly.time[0].prefix(kCharsToDrop - 1))
+            for data in 0...(kElementsCount - 1) {
                 dataArray2.append(WeatherData(hour: String(jsonResult.hourly.time[data].dropFirst(kCharsToDrop)), temperature: jsonResult.hourly.temperature2M[data], pressure: jsonResult.hourly.surfacePressure[data], windSpeed: jsonResult.hourly.windspeed10M[data], weatherCode: jsonResult.hourly.weathercode[data]))
             }
             dataArray = dataArray2
@@ -88,7 +80,7 @@ class ShowWeatherViewController: UIViewController{
         self.latitude = latitude
         self.longitude = longitude
         super.init(nibName: nil, bundle: nil)
-        self.cityLabel.text = city
+        cityLabel.text = city
     }
     
     required init?(coder: NSCoder) {
@@ -114,7 +106,7 @@ class ShowWeatherViewController: UIViewController{
             make.top.equalTo(view.snp.topMargin)
             make.left.equalToSuperview().offset(kSideMargin)
             make.right.equalToSuperview().offset(-kSideMargin)
-            make.centerX.equalTo(view.snp.centerX)
+            make.centerX.equalToSuperview()
         }
         
         weatherTableView.snp.makeConstraints { make in
