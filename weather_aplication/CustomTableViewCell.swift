@@ -9,6 +9,7 @@ class CustomTableViewCell: UITableViewCell {
     private let pressureLabel = UILabel()
     private let windSpeedLabel = UILabel()
     private let weatherImageView = UIImageView()
+    private let stackView = UIStackView()
     private let sunImage = UIImage(named: "sun.max.fill.png")
     private let cloudAndSunImage = UIImage(named: "cloud.sun.fill.png")
     private let cloudImage = UIImage(named: "cloud.fill.png")
@@ -32,37 +33,20 @@ class CustomTableViewCell: UITableViewCell {
     func setupView() {
         contentView.backgroundColor = UIColor.clear
         backgroundColor = UIColor.clear
-        addSubview(hourLabel)
-        addSubview(temperatureLabel)
-        addSubview(pressureLabel)
-        addSubview(windSpeedLabel)
-        addSubview(weatherImageView)
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .equalCentering
+        stackView.addArrangedSubview(hourLabel)
+        stackView.addArrangedSubview(temperatureLabel)
+        stackView.addArrangedSubview(pressureLabel)
+        stackView.addArrangedSubview(windSpeedLabel)
+        stackView.addArrangedSubview(weatherImageView)
+        addSubview(stackView)
     }
     
     func setupConstraints() {
-        hourLabel.snp.makeConstraints { make in
-            make.leftMargin.equalToSuperview()
-            make.centerY.equalToSuperview()
-        }
-
-        temperatureLabel.snp.makeConstraints { make in
-            make.left.lessThanOrEqualTo(hourLabel.snp.right).offset(kSideMargin)
-            make.centerY.equalToSuperview()
-        }
-
-        pressureLabel.snp.makeConstraints { make in
-            make.left.lessThanOrEqualTo(temperatureLabel.snp.right).offset(kSideMargin)
-            make.centerY.equalToSuperview()
-        }
-        
-        windSpeedLabel.snp.makeConstraints { make in
-            make.left.lessThanOrEqualTo(pressureLabel.snp.right).offset(kSideMargin)
-            make.centerY.equalToSuperview()
-        }
-        
-        weatherImageView.snp.makeConstraints { make in
-            make.left.lessThanOrEqualTo(windSpeedLabel.snp.right).offset(kSideMargin)
-            make.centerY.equalToSuperview()
+        stackView.snp.makeConstraints { make in
+            make.left.right.top.bottom.equalToSuperview()
         }
     }
     

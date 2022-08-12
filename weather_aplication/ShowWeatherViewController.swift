@@ -43,7 +43,7 @@ class ShowWeatherViewController: UIViewController{
             }
             
             if let httpResponse = response as? HTTPURLResponse {
-                if httpResponse.statusCode == 200 {
+                if 200...299 ~= httpResponse.statusCode {
                     do {
                         guard let data = data else { return }
                         let jsonResult = try JSONDecoder().decode(OpenMeteoJSON.self, from: data)
@@ -64,7 +64,11 @@ class ShowWeatherViewController: UIViewController{
         let elementsCount = kElementsToShow
         let kCharsToDrop = 11
         var dataArray2: [WeatherData] = []
-        if jsonResult.hourly.time.count >= kElementsToShow && jsonResult.hourly.temperature2M.count >= kElementsToShow && jsonResult.hourly.surfacePressure.count >= kElementsToShow && jsonResult.hourly.windspeed10M.count >= kElementsToShow && jsonResult.hourly.weathercode.count >= kElementsToShow {
+        if jsonResult.hourly.time.count >= kElementsToShow,
+           jsonResult.hourly.temperature2M.count >= kElementsToShow,
+           jsonResult.hourly.surfacePressure.count >= kElementsToShow,
+           jsonResult.hourly.windspeed10M.count >= kElementsToShow,
+           jsonResult.hourly.weathercode.count >= kElementsToShow {
             date = String(jsonResult.hourly.time[0].prefix(kCharsToDrop-1))
             for data in 0...(elementsCount-1) {
                 dataArray2.append(WeatherData(hour: String(jsonResult.hourly.time[data].dropFirst(kCharsToDrop)), temperature: jsonResult.hourly.temperature2M[data], pressure: jsonResult.hourly.surfacePressure[data], windSpeed: jsonResult.hourly.windspeed10M[data], weatherCode: jsonResult.hourly.weathercode[data]))
@@ -132,15 +136,14 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let kTempOffset = 50
-        let kPressOffset = 20
-        let kWindOffset = 10
         let headerView = UIView.init(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight))
         let dateLabel = UILabel()
         let hourLabel = UILabel()
         let temperatureLabel = UILabel()
         let pressureLabel = UILabel()
         let windSpeedLabel = UILabel()
+        let weatherLabel = UILabel()
+        let stackView = UIStackView()
         
         headerView.backgroundColor = .white
         
@@ -149,39 +152,26 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
         temperatureLabel.text = "[C]"
         pressureLabel.text = "[hPa]"
         windSpeedLabel.text = "[km/h]"
+        weatherLabel.text = "weather"
         
         headerView.addSubview(dateLabel)
-        headerView.addSubview(hourLabel)
-        headerView.addSubview(temperatureLabel)
-        headerView.addSubview(pressureLabel)
-        headerView.addSubview(windSpeedLabel)
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .equalCentering
+        stackView.addArrangedSubview(hourLabel)
+        stackView.addArrangedSubview(temperatureLabel)
+        stackView.addArrangedSubview(pressureLabel)
+        stackView.addArrangedSubview(windSpeedLabel)
+        stackView.addArrangedSubview(weatherLabel)
+        headerView.addSubview(stackView)
         
         dateLabel.snp.makeConstraints { make in
             make.top.left.equalToSuperview()
         }
         
-        hourLabel.snp.makeConstraints { make in
-            make.leftMargin.equalToSuperview()
+        stackView.snp.makeConstraints { make in
             make.top.equalTo(dateLabel.snp.bottom)
-            make.bottom.equalToSuperview().offset(-kBottomMargin)
-        }
-
-        temperatureLabel.snp.makeConstraints { make in
-            make.left.lessThanOrEqualTo(hourLabel.snp.right).offset(kTempOffset)
-            make.top.equalTo(dateLabel.snp.bottom)
-            make.bottom.equalToSuperview().offset(-kBottomMargin)
-        }
-
-        pressureLabel.snp.makeConstraints { make in
-            make.left.lessThanOrEqualTo(temperatureLabel.snp.right).offset(kPressOffset)
-            make.top.equalTo(dateLabel.snp.bottom)
-            make.bottom.equalToSuperview().offset(-kBottomMargin)
-        }
-        
-        windSpeedLabel.snp.makeConstraints { make in
-            make.left.lessThanOrEqualTo(pressureLabel.snp.right).offset(kWindOffset)
-            make.top.equalTo(dateLabel.snp.bottom)
-            make.bottom.equalToSuperview().offset(-kBottomMargin)
+            make.left.right.bottom.equalToSuperview()
         }
         
         return headerView

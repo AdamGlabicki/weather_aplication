@@ -12,7 +12,6 @@ class SearchViewController: UIViewController {
     
     private let cityNameTextfield = UITextField()
     private let cityNamesTableView = UITableView()
-    private var cityNameArray: [String] = []
     private var locationsArray: [Location] = []
     
     override func viewDidLoad() {
@@ -28,13 +27,6 @@ class SearchViewController: UIViewController {
         getCityName(fromCity: cityName, completion: {(location) -> Void in
             self.locationsArray = []
             self.locationsArray = location
-            let results = location
-            var cityArray: [String] = []
-            for result in results{
-                guard let city = result.city else { break }
-                cityArray.append(city)
-            }
-            self.cityNameArray = cityArray
             DispatchQueue.main.async {
                 self.cityNamesTableView.reloadData()
             }
@@ -106,20 +98,20 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cityNameArray.count
+        return locationsArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = "\(cityNameArray[indexPath.row])"
+        cell.textLabel?.text = locationsArray[indexPath.row].city
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
-        guard let text = cell?.textLabel?.text else { return }
-        guard let longitude = locationsArray[indexPath.row].longitude else { return }
-        guard let latitude = locationsArray[indexPath.row].latitude else { return }
+        guard let text = cell?.textLabel?.text,
+              let longitude = locationsArray[indexPath.row].longitude,
+              let latitude = locationsArray[indexPath.row].latitude else { return }
         let mainViewController = ShowWeatherViewController(city: text, longitude: longitude, latitude: latitude)
         navigationController?.pushViewController(mainViewController, animated: true)
     }
