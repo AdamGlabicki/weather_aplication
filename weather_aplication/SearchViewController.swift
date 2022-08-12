@@ -77,6 +77,10 @@ class SearchViewController: UIViewController {
         cityNameTextfield.textAlignment = .center
         view.addSubview(cityNameTextfield)
         
+        setupCollectionView()
+    }
+    
+    func setupCollectionView() {
         cityNamesTableView.dataSource = self
         cityNamesTableView.delegate = self
         cityNamesTableView.backgroundColor = .white

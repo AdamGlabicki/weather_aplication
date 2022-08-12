@@ -18,12 +18,12 @@ class ShowWeatherViewController: UIViewController{
     
     private var dataArray: [WeatherData] = []
     private var urlString: String {
-       let url =  "https://api.open-meteo.com/v1/forecast?latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,surface_pressure,weathercode,windspeed_10m"
+       let url =  "https://api.open-meteo.com/v1/forecast?"
         return url
     }
     
     func makeURLRequest() {
-        guard let queryURL =  URL(string:urlString) else { return }
+        guard let queryURL =  URL(string:urlString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,surface_pressure,weathercode,windspeed_10m") else { return }
         let session = URLSession.shared
         
         session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
