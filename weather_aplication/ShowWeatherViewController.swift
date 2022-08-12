@@ -166,12 +166,15 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
         headerView.addSubview(stackView)
         
         dateLabel.snp.makeConstraints { make in
-            make.top.left.equalToSuperview()
+            make.top.equalToSuperview()
+            make.left.equalToSuperview().offset(kSideMargin)
         }
         
         stackView.snp.makeConstraints { make in
             make.top.equalTo(dateLabel.snp.bottom)
-            make.left.right.bottom.equalToSuperview()
+            make.left.equalToSuperview().offset(kSideMargin)
+            make.right.equalToSuperview().offset(-kSideMargin)
+            make.bottom.equalToSuperview()
         }
         
         return headerView

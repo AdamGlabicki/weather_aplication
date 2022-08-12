@@ -3,7 +3,7 @@ import UIKit
 
 
 class CustomTableViewCell: UITableViewCell {
-    private let kSideMargin: CGFloat = 20
+    private let kSideMargin: CGFloat = 10
     private let hourLabel = UILabel()
     private let temperatureLabel = UILabel()
     private let pressureLabel = UILabel()
@@ -46,7 +46,9 @@ class CustomTableViewCell: UITableViewCell {
     
     func setupConstraints() {
         stackView.snp.makeConstraints { make in
-            make.left.right.top.bottom.equalToSuperview()
+            make.top.bottom.equalToSuperview()
+            make.left.equalToSuperview().offset(kSideMargin)
+            make.right.equalToSuperview().offset(-kSideMargin)
         }
     }
     
