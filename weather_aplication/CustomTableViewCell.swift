@@ -47,8 +47,7 @@ class CustomTableViewCell: UITableViewCell {
     func setupConstraints() {
         stackView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
-            make.left.equalToSuperview().offset(kSideMargin)
-            make.right.equalToSuperview().offset(-kSideMargin)
+            make.left.right.equalToSuperview().inset(kSideMargin)
         }
     }
     

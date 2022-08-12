@@ -50,8 +50,7 @@ class WeatherDataHeaderView: UIView {
         
         stackView.snp.makeConstraints { make in
             make.top.equalTo(dateLabel.snp.bottom)
-            make.left.equalToSuperview().offset(kSideMargin)
-            make.right.equalToSuperview().offset(-kSideMargin)
+            make.left.right.equalToSuperview().inset(kSideMargin)
             make.bottom.equalToSuperview()
         }
     }

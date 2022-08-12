@@ -11,8 +11,3 @@ struct GeoDBJSONDecoded: Decodable {
         self.metadata = metadata
     }
 }
-
-
-
-
-

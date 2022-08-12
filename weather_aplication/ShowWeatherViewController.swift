@@ -103,8 +103,7 @@ class ShowWeatherViewController: UIViewController{
         
         cityLabel.snp.makeConstraints { make in
             make.top.equalTo(view.snp.topMargin)
-            make.left.equalToSuperview().offset(kSideMargin)
-            make.right.equalToSuperview().offset(-kSideMargin)
+            make.left.right.equalToSuperview().inset(kSideMargin)
             make.centerX.equalToSuperview()
         }
         
