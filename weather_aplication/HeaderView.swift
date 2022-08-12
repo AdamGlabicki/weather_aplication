@@ -1,7 +1,7 @@
 import UIKit
 import SnapKit
 
-class HeaderView: UIView {
+class WeatherDataHeaderView: UIView {
     private let kSideMargin = 10
     private let dateLabel = UILabel()
     private let hourLabel = UILabel()

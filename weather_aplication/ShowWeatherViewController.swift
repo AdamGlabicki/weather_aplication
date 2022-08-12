@@ -127,7 +127,7 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = HeaderView(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight), date: date)
+        let header = WeatherDataHeaderView(frame: CGRect.init(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight), date: date)
         return header
     }
     
