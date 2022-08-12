@@ -38,7 +38,7 @@ class ShowWeatherViewController: UIViewController{
                 if 200...299 ~= httpResponse.statusCode {
                     do {
                         guard let data = data else { return }
-                        let jsonResult = try JSONDecoder().decode(OpenMeteoJSON.self, from: data)
+                        let jsonResult = try JSONDecoder().decode(OpenMeteoJSONDecoded.self, from: data)
                         self?.takeDataFromJson(jsonResult: jsonResult)
                         DispatchQueue.main.async {
                             self?.weatherTableView.reloadData()
@@ -52,7 +52,7 @@ class ShowWeatherViewController: UIViewController{
         }).resume()
     }
     
-    func takeDataFromJson(jsonResult: OpenMeteoJSON) {
+    func takeDataFromJson(jsonResult: OpenMeteoJSONDecoded) {
         let kElementsCount = kElementsToShow
         let kCharsToDrop = 11
         var dataArray2: [WeatherData] = []

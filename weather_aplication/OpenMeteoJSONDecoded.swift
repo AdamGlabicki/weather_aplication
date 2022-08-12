@@ -1,6 +1,6 @@
 import UIKit
 
-struct OpenMeteoJSON: Decodable {
+struct OpenMeteoJSONDecoded: Decodable {
     let latitude: Double
     let longitude: Double
     let generationtimeMS: Double
