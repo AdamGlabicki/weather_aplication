@@ -10,14 +10,11 @@ class CustomTableViewCell: UITableViewCell {
     private let windSpeedLabel = UILabel()
     private let weatherImageView = UIImageView()
     private let stackView = UIStackView()
-    private let sunImage = UIImage(named: "sun.max.fill.png")
-    private let cloudAndSunImage = UIImage(named: "cloud.sun.fill.png")
-    private let cloudImage = UIImage(named: "cloud.fill.png")
-    private let snowImage = UIImage(named: "cloud.snow.fill.png")
-    private let rainImage = UIImage(named: "cloud.rain.fill.png")
-    private let heavyRainImage = UIImage(named: "cloud.heavyrain.fill.png")
-    private let drizzleImage = UIImage(named: "cloud.drizzle.fill.png")
-    private let boltImage = UIImage(named: "cloud.bolt.fill.png")
+    private let sunImage = UIImage(systemName: "sun.max.fill")
+    private let cloudImage = UIImage(systemName: "cloud.fill")
+    private let cloudAndSunConfig = UIImage.SymbolConfiguration(paletteColors: [.init(red: 0.3, green: 0.8, blue: 0.9, alpha: 1), .init(red: 1, green: 0.7, blue: 0.2, alpha: 1)])
+    private let precipitationConfig = UIImage.SymbolConfiguration(paletteColors: [.init(red: 0.3, green: 0.8, blue: 0.9, alpha: 1), .blue])
+    private let boltConfig = UIImage.SymbolConfiguration(paletteColors: [.init(red: 0.3, green: 0.8, blue: 0.9, alpha: 1), .init(red: 1, green: 0.7, blue: 0.2, alpha: 1)])
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -59,15 +56,21 @@ class CustomTableViewCell: UITableViewCell {
     }
     
     func chosenImage(weatherCode: Int) -> UIImage? {
+        let cloudAndSunImage = UIImage(systemName: "cloud.sun.fill", withConfiguration: cloudAndSunConfig)
+        let snowImage = UIImage(systemName: "cloud.snow.fill", withConfiguration: precipitationConfig)
+        let rainImage = UIImage(systemName: "cloud.rain.fill", withConfiguration: precipitationConfig)
+        let heavyRainImage = UIImage(systemName: "cloud.heavyrain.fill", withConfiguration: precipitationConfig)
+        let drizzleImage = UIImage(systemName: "cloud.drizzle.fill", withConfiguration: precipitationConfig)
+        let boltImage = UIImage(systemName: "cloud.bolt.fill", withConfiguration: boltConfig)
         switch weatherCode {
         case 0:
-            return sunImage
+            return sunImage?.withTintColor(.init(red: 1, green: 0.7, blue: 0.2, alpha: 1), renderingMode: .alwaysOriginal)
         case 1:
             return cloudAndSunImage
         case 2:
             return cloudAndSunImage
         case 3:
-            return cloudImage
+            return cloudImage?.withTintColor(.init(red: 0.3, green: 0.8, blue: 0.9, alpha: 1), renderingMode: .alwaysOriginal)
         case 51, 53, 55, 56, 57:
             return drizzleImage
         case 61, 63, 66:
@@ -79,7 +82,7 @@ class CustomTableViewCell: UITableViewCell {
         case 95, 96, 99:
             return boltImage
         default:
-            return sunImage
+            return sunImage?.withTintColor(.init(red: 1, green: 0.7, blue: 0.2, alpha: 1), renderingMode: .alwaysOriginal)
         }
     }
 }
