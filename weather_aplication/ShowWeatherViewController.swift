@@ -76,11 +76,11 @@ class ShowWeatherViewController: UIViewController{
         makeURLRequest()
     }
     
-    init(city: String, longitude: Double, latitude: Double) {
-        self.latitude = latitude
-        self.longitude = longitude
+    init(data: CityInfo) {
+        self.latitude = data.latitude
+        self.longitude = data.longitude
         super.init(nibName: nil, bundle: nil)
-        cityLabel.text = city
+        cityLabel.text = data.city
     }
     
     required init?(coder: NSCoder) {

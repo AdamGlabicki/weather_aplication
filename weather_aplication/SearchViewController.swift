@@ -107,11 +107,8 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath)
-        guard let text = cell?.textLabel?.text else { return }
-        let longitude = CityInfosArray[indexPath.row].longitude
-        let latitude = CityInfosArray[indexPath.row].latitude
-        let nextViewController = ShowWeatherViewController(city: text, longitude: longitude, latitude: latitude)
+        let cityInfoToSend = CityInfosArray[indexPath.row]
+        let nextViewController = ShowWeatherViewController(data: cityInfoToSend)
         navigationController?.pushViewController(nextViewController, animated: true)
     }
 }
