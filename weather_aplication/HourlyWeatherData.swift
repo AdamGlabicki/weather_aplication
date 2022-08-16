@@ -8,10 +8,9 @@ struct HourlyWeatherData: Decodable {
     let windspeed: [Double]
 
     enum CodingKeys: String, CodingKey {
-        case time
+        case time, weathercode
         case temperature = "temperature_2m"
         case surfacePressure = "surface_pressure"
-        case weathercode
         case windspeed = "windspeed_10m"
     }
 }

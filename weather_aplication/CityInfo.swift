@@ -2,6 +2,6 @@ import UIKit
 
 struct CityInfo: Decodable {
     let id: Int
-    let city: String?
-    let latitude, longitude: Double?
+    let city: String
+    let latitude, longitude: Double
 }

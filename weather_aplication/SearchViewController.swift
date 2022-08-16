@@ -2,9 +2,9 @@ import SnapKit
 import UIKit
 
 struct Location {
-    public var city: String?
-    public var longitude: Double?
-    public var latitude: Double?
+    public var city: String
+    public var longitude: Double
+    public var latitude: Double
 }
 
 class SearchViewController: UIViewController {
@@ -53,7 +53,7 @@ class SearchViewController: UIViewController {
                 if 200...299 ~= httpResponse.statusCode {
                     do {
                         guard let data = data else { return }
-                        let jsonResult = try JSONDecoder().decode(GeoDBJSONDecoded.self, from: data)
+                        let jsonResult = try JSONDecoder().decode(GeoDBDecoded.self, from: data)
                         completion(self?.takeDataFromJson(jsonResult: jsonResult) ?? [])
                     } catch let error {
                         let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
@@ -66,7 +66,7 @@ class SearchViewController: UIViewController {
         }).resume()
     }
     
-    func takeDataFromJson(jsonResult: GeoDBJSONDecoded) -> [Location] {
+    func takeDataFromJson(jsonResult: GeoDBDecoded) -> [Location] {
         var cityNames: [Location] = []
         let datas = jsonResult.data
         for data in datas {
@@ -116,9 +116,9 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
-        guard let text = cell?.textLabel?.text,
-              let longitude = locationsArray[indexPath.row].longitude,
-              let latitude = locationsArray[indexPath.row].latitude else { return }
+        guard let text = cell?.textLabel?.text else { return }
+        let longitude = locationsArray[indexPath.row].longitude
+        let latitude = locationsArray[indexPath.row].latitude
         let nextViewController = ShowWeatherViewController(city: text, longitude: longitude, latitude: latitude)
         navigationController?.pushViewController(nextViewController, animated: true)
     }

@@ -1,6 +1,6 @@
 import UIKit
 
-struct OpenMeteoJSONDecoded: Decodable {
+struct OpenMeteoDecoded: Decodable {
     let latitude: Double
     let longitude: Double
     let generationtimeMS: Double
@@ -12,13 +12,10 @@ struct OpenMeteoJSONDecoded: Decodable {
     let hourly: HourlyWeatherData
 
     enum CodingKeys: String, CodingKey {
-        case latitude, longitude
+        case latitude, longitude, timezone, elevation, hourly
         case generationtimeMS = "generationtime_ms"
         case utcOffsetSeconds = "utc_offset_seconds"
-        case timezone
         case timezoneAbbreviation = "timezone_abbreviation"
-        case elevation
         case hourlyUnits = "hourly_units"
-        case hourly
     }
 }

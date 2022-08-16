@@ -17,10 +17,7 @@ class ShowWeatherViewController: UIViewController{
     private var date = String()
     
     private var dataArray: [WeatherData] = []
-    private var urlString: String {
-       let url =  "https://api.open-meteo.com/v1/forecast?"
-        return url
-    }
+    private let urlString: String = "https://api.open-meteo.com/v1/forecast?"
     
     func makeURLRequest() {
         guard let queryURL =  URL(string:urlString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,surface_pressure,weathercode,windspeed_10m") else { return }
@@ -38,7 +35,7 @@ class ShowWeatherViewController: UIViewController{
                 if 200...299 ~= httpResponse.statusCode {
                     do {
                         guard let data = data else { return }
-                        let jsonResult = try JSONDecoder().decode(OpenMeteoJSONDecoded.self, from: data)
+                        let jsonResult = try JSONDecoder().decode(OpenMeteoDecoded.self, from: data)
                         self?.takeDataFromJson(jsonResult: jsonResult)
                         DispatchQueue.main.async {
                             self?.weatherTableView.reloadData()
@@ -52,7 +49,7 @@ class ShowWeatherViewController: UIViewController{
         }).resume()
     }
     
-    func takeDataFromJson(jsonResult: OpenMeteoJSONDecoded) {
+    func takeDataFromJson(jsonResult: OpenMeteoDecoded) {
         let kCharsToDrop = 11
         var dataArray: [WeatherData] = []
         if jsonResult.hourly.time.count >= kElementsToShow,
@@ -62,7 +59,11 @@ class ShowWeatherViewController: UIViewController{
            jsonResult.hourly.weathercode.count >= kElementsToShow {
             date = String(jsonResult.hourly.time[0].prefix(kCharsToDrop - 1))
             for index in 0...(kElementsToShow - 1) {
-                dataArray.append(WeatherData(hour: String(jsonResult.hourly.time[index].dropFirst(kCharsToDrop)), temperature: jsonResult.hourly.temperature[index], pressure: jsonResult.hourly.surfacePressure[index], windSpeed: jsonResult.hourly.windspeed[index], weatherCode: jsonResult.hourly.weathercode[index]))
+                dataArray.append(WeatherData(hour: String(jsonResult.hourly.time[index].dropFirst(kCharsToDrop)),
+                                             temperature: jsonResult.hourly.temperature[index],
+                                             pressure: jsonResult.hourly.surfacePressure[index],
+                                             windSpeed: jsonResult.hourly.windspeed[index],
+                                             weatherCode: jsonResult.hourly.weathercode[index]))
             }
             self.dataArray = dataArray
         }
