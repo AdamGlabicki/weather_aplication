@@ -1,12 +1,6 @@
 import SnapKit
 import UIKit
 
-struct Location {
-    public var city: String
-    public var longitude: Double
-    public var latitude: Double
-}
-
 class SearchViewController: UIViewController {
     private let kTopMargin = 20
     
@@ -16,29 +10,30 @@ class SearchViewController: UIViewController {
         cityNameTextField.textAlignment = .center
         return cityNameTextField
     }()
+    
     private let cityNamesTableView = UITableView()
-    private var locationsArray: [Location] = []
+    private var CityInfosArray: [CityInfo] = []
+    private let urlString: String = "http://geodb-free-service.wirefreethought.com/v1/geo/cities?"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        cityNameTextField.addTarget(self, action: #selector(loadCityNames), for: .editingChanged)
     }
     
     @objc func loadCityNames() {
         guard let cityName = cityNameTextField.text else { return }
-        getCityName(fromCity: cityName, completion: { (location) -> Void in
-            self.locationsArray = []
-            self.locationsArray = location
+        getCityName(fromCity: cityName, completion: { [weak self] (CityInfo) -> Void in
+            self?.CityInfosArray = []
+            self?.CityInfosArray = CityInfo
             DispatchQueue.main.async {
-                self.cityNamesTableView.reloadData()
+                self?.cityNamesTableView.reloadData()
             }
           })
     }
     
-    func getCityName(fromCity cityName: String, completion: @escaping (_ result: [Location]) -> Void) {
-        guard let queryURL =  URL(string:"http://geodb-free-service.wirefreethought.com/v1/geo/cities?&namePrefix=" + cityName + "&sort=-population") else { return }
+    func getCityName(fromCity cityName: String, completion: @escaping (_ result: [CityInfo]) -> Void) {
+        guard let queryURL =  URL(string: urlString + "&namePrefix=" + cityName + "&sort=-population") else { return }
         let session = URLSession.shared
         
         session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
@@ -66,20 +61,17 @@ class SearchViewController: UIViewController {
         }).resume()
     }
     
-    func takeDataFromJson(jsonResult: GeoDBDecoded) -> [Location] {
-        var cityNames: [Location] = []
-        let datas = jsonResult.data
-        for data in datas {
-            cityNames.append(Location(city: data.city, longitude: data.longitude, latitude: data.latitude))
-        }
+    func takeDataFromJson(jsonResult: GeoDBDecoded) -> [CityInfo] {
+        var cityNames: [CityInfo] = []
+        cityNames = jsonResult.data.map {$0}
         return cityNames
     }
 
     func setupView() {
         view.backgroundColor = .white
         view.addSubview(cityNameTextField)
-        
         setupCollectionView()
+        cityNameTextField.addTarget(self, action: #selector(loadCityNames), for: .editingChanged)
     }
     
     func setupCollectionView() {
@@ -105,20 +97,20 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return locationsArray.count
+        return CityInfosArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = locationsArray[indexPath.row].city
+        cell.textLabel?.text = CityInfosArray[indexPath.row].city
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath)
         guard let text = cell?.textLabel?.text else { return }
-        let longitude = locationsArray[indexPath.row].longitude
-        let latitude = locationsArray[indexPath.row].latitude
+        let longitude = CityInfosArray[indexPath.row].longitude
+        let latitude = CityInfosArray[indexPath.row].latitude
         let nextViewController = ShowWeatherViewController(city: text, longitude: longitude, latitude: latitude)
         navigationController?.pushViewController(nextViewController, animated: true)
     }

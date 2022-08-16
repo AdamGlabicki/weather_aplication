@@ -5,6 +5,7 @@ class ShowWeatherViewController: UIViewController{
     private let kSideMargin = 10
     private let kTopMargin = 20
     private let kBottomMargin = 5
+    private let kCharsToDrop = 11
     private let kElementsToShow: Int = 24
     private let kHeaderHeight: CGFloat = 50
     
@@ -50,7 +51,6 @@ class ShowWeatherViewController: UIViewController{
     }
     
     func takeDataFromJson(jsonResult: OpenMeteoDecoded) {
-        let kCharsToDrop = 11
         var dataArray: [WeatherData] = []
         if jsonResult.hourly.time.count >= kElementsToShow,
            jsonResult.hourly.temperature.count >= kElementsToShow,
