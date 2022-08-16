@@ -56,13 +56,13 @@ class ShowWeatherViewController: UIViewController{
         let kCharsToDrop = 11
         var dataArray: [WeatherData] = []
         if jsonResult.hourly.time.count >= kElementsToShow,
-           jsonResult.hourly.temperature2M.count >= kElementsToShow,
+           jsonResult.hourly.temperature.count >= kElementsToShow,
            jsonResult.hourly.surfacePressure.count >= kElementsToShow,
-           jsonResult.hourly.windspeed10M.count >= kElementsToShow,
+           jsonResult.hourly.windspeed.count >= kElementsToShow,
            jsonResult.hourly.weathercode.count >= kElementsToShow {
             date = String(jsonResult.hourly.time[0].prefix(kCharsToDrop - 1))
             for index in 0...(kElementsToShow - 1) {
-                dataArray.append(WeatherData(hour: String(jsonResult.hourly.time[index].dropFirst(kCharsToDrop)), temperature: jsonResult.hourly.temperature2M[index], pressure: jsonResult.hourly.surfacePressure[index], windSpeed: jsonResult.hourly.windspeed10M[index], weatherCode: jsonResult.hourly.weathercode[index]))
+                dataArray.append(WeatherData(hour: String(jsonResult.hourly.time[index].dropFirst(kCharsToDrop)), temperature: jsonResult.hourly.temperature[index], pressure: jsonResult.hourly.surfacePressure[index], windSpeed: jsonResult.hourly.windspeed[index], weatherCode: jsonResult.hourly.weathercode[index]))
             }
             self.dataArray = dataArray
         }

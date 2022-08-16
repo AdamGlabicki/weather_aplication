@@ -21,16 +21,4 @@ struct OpenMeteoJSONDecoded: Decodable {
         case hourlyUnits = "hourly_units"
         case hourly
     }
-
-    init(latitude: Double, longitude: Double, generationtimeMS: Double, utcOffsetSeconds: Int, timezone: String, timezoneAbbreviation: String, elevation: Int, hourlyUnits: HourlyUnits, hourly: HourlyWeatherData) {
-        self.latitude = latitude
-        self.longitude = longitude
-        self.generationtimeMS = generationtimeMS
-        self.utcOffsetSeconds = utcOffsetSeconds
-        self.timezone = timezone
-        self.timezoneAbbreviation = timezoneAbbreviation
-        self.elevation = elevation
-        self.hourlyUnits = hourlyUnits
-        self.hourly = hourly
-    }
 }

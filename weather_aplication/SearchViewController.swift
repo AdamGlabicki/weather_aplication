@@ -28,7 +28,7 @@ class SearchViewController: UIViewController {
     
     @objc func loadCityNames() {
         guard let cityName = cityNameTextField.text else { return }
-        getCityName(fromCity: cityName, completion: {(location) -> Void in
+        getCityName(fromCity: cityName, completion: { (location) -> Void in
             self.locationsArray = []
             self.locationsArray = location
             DispatchQueue.main.async {
