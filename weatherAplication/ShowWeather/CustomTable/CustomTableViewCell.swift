@@ -17,9 +17,9 @@ class CustomTableViewCell: UITableViewCell {
     }()
     private let sunImage = UIImage(systemName: "sun.max.fill")
     private let cloudImage = UIImage(systemName: "cloud.fill")
-    private let cloudAndSunConfig = UIImage.SymbolConfiguration(paletteColors: [cloudColor, darkYellowColor])
-    private let precipitationConfig = UIImage.SymbolConfiguration(paletteColors: [cloudColor, .blue])
-    private let boltConfig = UIImage.SymbolConfiguration(paletteColors: [cloudColor, darkYellowColor])
+    private let cloudAndSunConfig = UIImage.SymbolConfiguration(paletteColors: [UIColor.cloudColor(), UIColor.darkYellowColor()])
+    private let precipitationConfig = UIImage.SymbolConfiguration(paletteColors: [UIColor.cloudColor(), .blue])
+    private let boltConfig = UIImage.SymbolConfiguration(paletteColors: [UIColor.cloudColor(), UIColor.darkYellowColor()])
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -65,15 +65,16 @@ class CustomTableViewCell: UITableViewCell {
         let heavyRainImage = UIImage(systemName: "cloud.heavyrain.fill", withConfiguration: precipitationConfig)
         let drizzleImage = UIImage(systemName: "cloud.drizzle.fill", withConfiguration: precipitationConfig)
         let boltImage = UIImage(systemName: "cloud.bolt.fill", withConfiguration: boltConfig)
+
         switch weatherCode {
         case 0:
-            return sunImage?.withTintColor(darkYellowColor, renderingMode: .alwaysOriginal)
+            return sunImage?.withTintColor(UIColor.darkYellowColor(), renderingMode: .alwaysOriginal)
         case 1:
             return cloudAndSunImage
         case 2:
             return cloudAndSunImage
         case 3:
-            return cloudImage?.withTintColor(cloudColor, renderingMode: .alwaysOriginal)
+            return cloudImage?.withTintColor(UIColor.cloudColor(), renderingMode: .alwaysOriginal)
         case 51, 53, 55, 56, 57:
             return drizzleImage
         case 61, 63, 66:
@@ -85,7 +86,7 @@ class CustomTableViewCell: UITableViewCell {
         case 95, 96, 99:
             return boltImage
         default:
-            return sunImage?.withTintColor(darkYellowColor, renderingMode: .alwaysOriginal)
+            return sunImage?.withTintColor(UIColor.darkYellowColor(), renderingMode: .alwaysOriginal)
         }
     }
 }
