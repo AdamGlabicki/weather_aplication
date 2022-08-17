@@ -1,9 +1,9 @@
-import UIKit
 import SnapKit
+import UIKit
 
 class WeatherDataHeaderView: UIView {
     private let kSideMargin = 10
-    
+
     private let dateLabel = UILabel()
     private let hourLabel = UILabel()
     private let temperatureLabel = UILabel()
@@ -11,17 +11,17 @@ class WeatherDataHeaderView: UIView {
     private let windSpeedLabel = UILabel()
     private let weatherLabel = UILabel()
     private let stackView = UIStackView()
-   
+
     init(frame: CGRect, date: String) {
         super.init(frame: frame)
         setupView(date: date)
         setupConstraints()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func setupView(date: String) {
         backgroundColor = .white
         dateLabel.text = date
@@ -30,7 +30,7 @@ class WeatherDataHeaderView: UIView {
         pressureLabel.text = "[hPa]"
         windSpeedLabel.text = "[km/h]"
         weatherLabel.text = "weather"
-        
+
         addSubview(dateLabel)
         stackView.axis = .horizontal
         stackView.alignment = .center
@@ -42,18 +42,18 @@ class WeatherDataHeaderView: UIView {
         stackView.addArrangedSubview(weatherLabel)
         addSubview(stackView)
     }
-    
+
     func setupConstraints() {
         dateLabel.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.left.equalToSuperview().offset(kSideMargin)
         }
-        
+
         stackView.snp.makeConstraints { make in
             make.top.equalTo(dateLabel.snp.bottom)
             make.left.right.equalToSuperview().inset(kSideMargin)
             make.bottom.equalToSuperview()
         }
     }
-    
+
 }

@@ -1,10 +1,9 @@
 import SnapKit
 import UIKit
 
-
 class CustomTableViewCell: UITableViewCell {
     private let kSideMargin: CGFloat = 10
-    
+
     private let hourLabel = UILabel()
     private let temperatureLabel = UILabel()
     private let pressureLabel = UILabel()
@@ -21,7 +20,7 @@ class CustomTableViewCell: UITableViewCell {
     private let cloudAndSunConfig = UIImage.SymbolConfiguration(paletteColors: [cloudColor, darkYellowColor])
     private let precipitationConfig = UIImage.SymbolConfiguration(paletteColors: [cloudColor, .blue])
     private let boltConfig = UIImage.SymbolConfiguration(paletteColors: [cloudColor, darkYellowColor])
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -32,7 +31,7 @@ class CustomTableViewCell: UITableViewCell {
         super.init(coder: aDecoder)
 
     }
-    
+
     func setupView() {
         contentView.backgroundColor = UIColor.clear
         backgroundColor = UIColor.clear
@@ -43,14 +42,14 @@ class CustomTableViewCell: UITableViewCell {
         stackView.addArrangedSubview(weatherImageView)
         addSubview(stackView)
     }
-    
+
     func setupConstraints() {
         stackView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.left.right.equalToSuperview().inset(kSideMargin)
         }
     }
-    
+
     func setupData(cellData: WeatherData) {
         hourLabel.text = cellData.hour
         temperatureLabel.text = "\(cellData.temperature)"
@@ -58,7 +57,7 @@ class CustomTableViewCell: UITableViewCell {
         windSpeedLabel.text = "\(cellData.windSpeed)"
         weatherImageView.image = chosenImage(weatherCode: cellData.weatherCode)
     }
-    
+
     func chosenImage(weatherCode: Int) -> UIImage? {
         let cloudAndSunImage = UIImage(systemName: "cloud.sun.fill", withConfiguration: cloudAndSunConfig)
         let snowImage = UIImage(systemName: "cloud.snow.fill", withConfiguration: precipitationConfig)

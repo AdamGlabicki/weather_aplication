@@ -13,59 +13,59 @@ class HomeViewController: UIViewController {
     private let proceedButton = UIButton()
     private let aplicationNameString: String = "MyWeather"
     private let buttonString: String = "Proceed"
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        
+
         proceedButton.addTarget(self, action: #selector(proceedButtonPressed), for: .touchUpInside)
     }
-    @objc func proceedButtonPressed() {
+    @objc
+    func proceedButtonPressed() {
         let nextViewController = SearchViewController()
         navigationController?.pushViewController(nextViewController, animated: true)
     }
-    
+
     func setupView() {
         view.backgroundColor = .blue
-        
+
         logoImageView.image = aplicationImage
         view.addSubview(logoImageView)
-        
+
         aplicationNameLabel.text = aplicationNameString
         aplicationNameLabel.textColor = .white
         aplicationNameLabel.textAlignment = .center
         aplicationNameLabel.backgroundColor = .black
         view.addSubview(aplicationNameLabel)
-        
+
         proceedButton.setTitle(buttonString, for: .normal)
         proceedButton.setTitleColor(.red, for: .normal)
         proceedButton.backgroundColor = .yellow
         view.addSubview(proceedButton)
     }
-    
+
     func setupConstraints() {
-        
+
         logoImageView.snp.makeConstraints { make in
             make.width.equalTo(kLogoWidth)
             make.height.equalTo(kLogoHeight)
             make.top.equalTo(view.snp.topMargin).offset(kTopMargin)
             make.centerX.equalTo(view.snp.centerX)
-            }
-        
+        }
+
         aplicationNameLabel.snp.makeConstraints { make in
             make.top.equalTo(logoImageView.snp.bottom).offset(kTopMargin)
             make.left.equalTo(view.snp.leftMargin).offset(kSideMargin)
             make.right.equalTo(view.snp.rightMargin).offset(-kSideMargin)
         }
-        
+
         proceedButton.snp.makeConstraints { make in
             make.left.equalTo(view.snp.leftMargin).offset(kSideMargin)
             make.right.equalTo(view.snp.rightMargin).offset(-kSideMargin)
             make.bottom.equalTo(view.snp.bottomMargin).offset(-kBottomMargin).priority(.required)
         }
-        
-    }
-    
-}
 
+    }
+
+}
