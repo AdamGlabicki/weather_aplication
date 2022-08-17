@@ -136,24 +136,14 @@
 		873DCBED2894199200660927 /* weather_aplication */ = {
 			isa = PBXGroup;
 			children = (
-				873DCBEE2894199200660927 /* AppDelegate.swift */,
-				873DCBF02894199200660927 /* SceneDelegate.swift */,
-				873DCBF22894199200660927 /* ViewController.swift */,
+				8789FB9728ACDF90007581FD /* App&ScenDelegates */,
+				8789FB9628ACDF61007581FD /* First_view */,
 				873DCBF72894199300660927 /* Assets.xcassets */,
 				873DCBFC2894199300660927 /* Info.plist */,
-				87732F232897C23D001EE71D /* ShowWeatherViewController.swift */,
-				876CC57C2899097100D184D7 /* CustomTableViewCell.swift */,
-				875E4A172899401900920D8A /* SearchViewController.swift */,
-				878C591328A1196700884866 /* GeoDBDecoded.swift */,
-				87482CD728A2839200BCE15C /* OpenMeteoDecoded.swift */,
-				87152D3A28A66BEE00C779A9 /* WeatherData.swift */,
-				87152D3C28A66D4200C779A9 /* Metadata.swift */,
-				87152D3E28A66DB000C779A9 /* Link.swift */,
-				87152D4028A66E1300C779A9 /* CityInfo.swift */,
-				87152D4228A67A5E00C779A9 /* WeatherDataHeaderView.swift */,
-				87152D4428A6890F00C779A9 /* HourlyUnits.swift */,
-				87152D4628A6896A00C779A9 /* HourlyWeatherData.swift */,
-				879FA7D028AB90F400852A58 /* CustomColour.swift */,
+				8789FB9328ACDEFF007581FD /* ShowWeather */,
+				8789FB9528ACDF48007581FD /* SearchView */,
+				8789FB9128ACDE51007581FD /* Data_models */,
+				8789FB9228ACDEB0007581FD /* Constants */,
 			);
 			path = weather_aplication;
 			sourceTree = "<group>";
@@ -173,6 +163,88 @@
 				873DCC112894199300660927 /* weather_aplicationUITestsLaunchTests.swift */,
 			);
 			path = weather_aplicationUITests;
+			sourceTree = "<group>";
+		};
+		8789FB8F28ACDDC6007581FD /* GeoDB */ = {
+			isa = PBXGroup;
+			children = (
+				878C591328A1196700884866 /* GeoDBDecoded.swift */,
+				87152D4028A66E1300C779A9 /* CityInfo.swift */,
+				87152D3E28A66DB000C779A9 /* Link.swift */,
+				87152D3C28A66D4200C779A9 /* Metadata.swift */,
+			);
+			path = GeoDB;
+			sourceTree = "<group>";
+		};
+		8789FB9028ACDDF9007581FD /* OpenMeteo */ = {
+			isa = PBXGroup;
+			children = (
+				87482CD728A2839200BCE15C /* OpenMeteoDecoded.swift */,
+				87152D4428A6890F00C779A9 /* HourlyUnits.swift */,
+				87152D4628A6896A00C779A9 /* HourlyWeatherData.swift */,
+			);
+			path = OpenMeteo;
+			sourceTree = "<group>";
+		};
+		8789FB9128ACDE51007581FD /* Data_models */ = {
+			isa = PBXGroup;
+			children = (
+				87152D3A28A66BEE00C779A9 /* WeatherData.swift */,
+				8789FB9028ACDDF9007581FD /* OpenMeteo */,
+				8789FB8F28ACDDC6007581FD /* GeoDB */,
+			);
+			path = Data_models;
+			sourceTree = "<group>";
+		};
+		8789FB9228ACDEB0007581FD /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				879FA7D028AB90F400852A58 /* CustomColour.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
+		8789FB9328ACDEFF007581FD /* ShowWeather */ = {
+			isa = PBXGroup;
+			children = (
+				87732F232897C23D001EE71D /* ShowWeatherViewController.swift */,
+				8789FB9428ACDF15007581FD /* CustomTable */,
+			);
+			path = ShowWeather;
+			sourceTree = "<group>";
+		};
+		8789FB9428ACDF15007581FD /* CustomTable */ = {
+			isa = PBXGroup;
+			children = (
+				876CC57C2899097100D184D7 /* CustomTableViewCell.swift */,
+				87152D4228A67A5E00C779A9 /* WeatherDataHeaderView.swift */,
+			);
+			path = CustomTable;
+			sourceTree = "<group>";
+		};
+		8789FB9528ACDF48007581FD /* SearchView */ = {
+			isa = PBXGroup;
+			children = (
+				875E4A172899401900920D8A /* SearchViewController.swift */,
+			);
+			path = SearchView;
+			sourceTree = "<group>";
+		};
+		8789FB9628ACDF61007581FD /* First_view */ = {
+			isa = PBXGroup;
+			children = (
+				873DCBF22894199200660927 /* ViewController.swift */,
+			);
+			path = First_view;
+			sourceTree = "<group>";
+		};
+		8789FB9728ACDF90007581FD /* App&ScenDelegates */ = {
+			isa = PBXGroup;
+			children = (
+				873DCBEE2894199200660927 /* AppDelegate.swift */,
+				873DCBF02894199200660927 /* SceneDelegate.swift */,
+			);
+			path = "App&ScenDelegates";
 			sourceTree = "<group>";
 		};
 		BDE188DDFC51C8C3DCAE2901 /* Pods */ = {
