@@ -4,6 +4,7 @@ import UIKit
 
 class CustomTableViewCell: UITableViewCell {
     private let kSideMargin: CGFloat = 10
+    
     private let hourLabel = UILabel()
     private let temperatureLabel = UILabel()
     private let pressureLabel = UILabel()
