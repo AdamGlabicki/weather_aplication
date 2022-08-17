@@ -22,8 +22,8 @@ class HomeViewController: UIViewController {
         proceedButton.addTarget(self, action: #selector(proceedButtonPressed), for: .touchUpInside)
     }
     @objc func proceedButtonPressed() {
-        let mainViewController = SearchViewController()
-        navigationController?.pushViewController(mainViewController, animated: true)
+        let nextViewController = SearchViewController()
+        navigationController?.pushViewController(nextViewController, animated: true)
     }
     
     func setupView() {
