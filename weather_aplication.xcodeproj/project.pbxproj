@@ -129,12 +129,12 @@
 			isa = PBXGroup;
 			children = (
 				8789FB9728ACDF90007581FD /* App&ScenDelegates */,
-				8789FB9628ACDF61007581FD /* First_view */,
+				8789FB9628ACDF61007581FD /* FirstView */,
 				873DCBF72894199300660927 /* Assets.xcassets */,
 				873DCBFC2894199300660927 /* Info.plist */,
 				8789FB9328ACDEFF007581FD /* ShowWeather */,
 				8789FB9528ACDF48007581FD /* SearchView */,
-				8789FB9128ACDE51007581FD /* Data_models */,
+				8789FB9128ACDE51007581FD /* DataModels */,
 				8789FB9228ACDEB0007581FD /* Constants */,
 			);
 			path = weather_aplication;
@@ -161,14 +161,14 @@
 			path = OpenMeteo;
 			sourceTree = "<group>";
 		};
-		8789FB9128ACDE51007581FD /* Data_models */ = {
+		8789FB9128ACDE51007581FD /* DataModels */ = {
 			isa = PBXGroup;
 			children = (
 				87152D3A28A66BEE00C779A9 /* WeatherData.swift */,
 				8789FB9028ACDDF9007581FD /* OpenMeteo */,
 				8789FB8F28ACDDC6007581FD /* GeoDB */,
 			);
-			path = Data_models;
+			path = DataModels;
 			sourceTree = "<group>";
 		};
 		8789FB9228ACDEB0007581FD /* Constants */ = {
@@ -205,12 +205,12 @@
 			path = SearchView;
 			sourceTree = "<group>";
 		};
-		8789FB9628ACDF61007581FD /* First_view */ = {
+		8789FB9628ACDF61007581FD /* FirstView */ = {
 			isa = PBXGroup;
 			children = (
 				873DCBF22894199200660927 /* ViewController.swift */,
 			);
-			path = First_view;
+			path = FirstView;
 			sourceTree = "<group>";
 		};
 		8789FB9728ACDF90007581FD /* App&ScenDelegates */ = {
