@@ -12,7 +12,7 @@ class SearchViewController: UIViewController {
     }()
     
     private let cityNamesTableView = UITableView()
-    private var CityInfosArray: [CityInfo] = []
+    private var cityInfosArray: [CityInfo] = []
     private let urlString: String = "http://geodb-free-service.wirefreethought.com/v1/geo/cities?"
     
     override func viewDidLoad() {
@@ -24,8 +24,8 @@ class SearchViewController: UIViewController {
     @objc func loadCityNames() {
         guard let cityName = cityNameTextField.text else { return }
         getCityName(fromCity: cityName, completion: { [weak self] (CityInfo) -> Void in
-            self?.CityInfosArray = []
-            self?.CityInfosArray = CityInfo
+            self?.cityInfosArray = []
+            self?.cityInfosArray = CityInfo
             DispatchQueue.main.async {
                 self?.cityNamesTableView.reloadData()
             }
@@ -97,17 +97,17 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return CityInfosArray.count
+        return cityInfosArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = CityInfosArray[indexPath.row].city
+        cell.textLabel?.text = cityInfosArray[indexPath.row].city
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cityInfoToSend = CityInfosArray[indexPath.row]
+        let cityInfoToSend = cityInfosArray[indexPath.row]
         let nextViewController = ShowWeatherViewController(data: cityInfoToSend)
         navigationController?.pushViewController(nextViewController, animated: true)
     }
