@@ -108,7 +108,7 @@
 		873DCBE22894199200660927 = {
 			isa = PBXGroup;
 			children = (
-				873DCBED2894199200660927 /* weather_aplication */,
+				873DCBED2894199200660927 /* weatherAplication */,
 				873DCBEC2894199200660927 /* Products */,
 				BDE188DDFC51C8C3DCAE2901 /* Pods */,
 				42B37F616605AB0BDD6267F4 /* Frameworks */,
@@ -125,7 +125,7 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		873DCBED2894199200660927 /* weather_aplication */ = {
+		873DCBED2894199200660927 /* weatherAplication */ = {
 			isa = PBXGroup;
 			children = (
 				8789FB9728ACDF90007581FD /* App&ScenDelegates */,
@@ -137,7 +137,7 @@
 				8789FB9128ACDE51007581FD /* DataModels */,
 				8789FB9228ACDEB0007581FD /* Constants */,
 			);
-			path = weather_aplication;
+			path = weatherAplication;
 			sourceTree = "<group>";
 		};
 		8789FB8F28ACDDC6007581FD /* GeoDB */ = {
