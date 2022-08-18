@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B856CB60F2FB7CF71F1B889086CE0D0D"
-               BuildableName = "Pods_weather_aplication.framework"
-               BlueprintName = "Pods-weather_aplication"
+               BlueprintIdentifier = "02A8FD7C0AD9D6D34C346539102DE442"
+               BuildableName = "Pods_weatherAplication.framework"
+               BlueprintName = "Pods-weatherAplication"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
