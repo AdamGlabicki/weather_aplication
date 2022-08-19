@@ -16,13 +16,13 @@ class ShowWeatherViewController: UIViewController {
     private var dateString = String()
 
     private var dataArray: [WeatherData] = []
-    private let client = ClientAPI.sharedInstance
+    private let apiClient = APIClient.sharedInstance
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        client.searchWeather(latitude: latitude, longitude: longitude, view: self, completion: { [weak self] weatherData, date -> Void in
+        apiClient.searchWeather(latitude: latitude, longitude: longitude, view: self, completion: { [weak self] weatherData, date -> Void in
             self?.dataArray = []
             self?.dateString = ""
             self?.dateString = date

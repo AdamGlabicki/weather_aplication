@@ -1,13 +1,13 @@
 import SnapKit
 import UIKit
 
-final class ClientAPI {
+final class APIClient {
     private var kElementsToShow = 24
     private let kCharsToDrop = 11
     private let urlGeoDBString: String = "http://geodb-free-service.wirefreethought.com/v1/geo/cities?"
     private let urlOpenMeteoString: String = "https://api.open-meteo.com/v1/forecast?"
-    static let sharedInstance: ClientAPI = {
-        let instance = ClientAPI()
+    static let sharedInstance: APIClient = {
+        let instance = APIClient()
         return instance
     }()
 

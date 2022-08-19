@@ -3,7 +3,7 @@ import UIKit
 
 class SearchViewController: UIViewController {
     private let kTopMargin = 20
-    private let client = ClientAPI.sharedInstance
+    private let apiClient = APIClient.sharedInstance
 
     private let cityNameTextField: UITextField = {
         let cityNameTextField = UITextField()
@@ -24,7 +24,7 @@ class SearchViewController: UIViewController {
     @objc
     func loadCityNames() {
         guard let cityName = cityNameTextField.text else { return }
-        client.searchCities(searchTerm: cityName, view: self, completion: { [weak self] cityInfo -> Void in
+        apiClient.searchCities(searchTerm: cityName, view: self, completion: { [weak self] cityInfo -> Void in
             self?.cityInfosArray = []
             self?.cityInfosArray = cityInfo
             DispatchQueue.main.async {
