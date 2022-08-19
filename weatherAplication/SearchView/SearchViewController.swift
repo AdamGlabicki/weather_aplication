@@ -14,7 +14,6 @@ class SearchViewController: UIViewController {
 
     private let cityNamesTableView = UITableView()
     private var cityInfosArray: [CityInfo] = []
-    private let urlString: String = "http://geodb-free-service.wirefreethought.com/v1/geo/cities?"
 
     override func viewDidLoad() {
         super.viewDidLoad()
