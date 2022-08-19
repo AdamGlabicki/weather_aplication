@@ -24,11 +24,18 @@ class SearchViewController: UIViewController {
     @objc
     func loadCityNames() {
         guard let cityName = cityNameTextField.text else { return }
-        apiClient.searchCities(searchTerm: cityName, view: self, completion: { [weak self] cityInfo -> Void in
+        apiClient.searchCities(searchTerm: cityName, completion: { [weak self] cityInfo -> Void in
             self?.cityInfosArray = []
-            self?.cityInfosArray = cityInfo
-            DispatchQueue.main.async {
-                self?.cityNamesTableView.reloadData()
+            switch cityInfo {
+            case .success(let cityInfo):
+                self?.cityInfosArray = cityInfo
+                DispatchQueue.main.async {
+                    self?.cityNamesTableView.reloadData()
+                }
+            case .failure(let error):
+                let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self?.present(alert, animated: true)
             }
         })
     }

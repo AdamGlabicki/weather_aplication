@@ -13,16 +13,15 @@ final class APIClient {
 
     private init() {}
 
-    func searchWeather(latitude: Double, longitude: Double, view: UIViewController, completion: @escaping (_ result: [WeatherData], _ date: String) -> Void) {
+    func searchWeather(latitude: Double, longitude: Double, completion: @escaping (_ result: Result<[WeatherData], Error>, _ date: String) -> Void) {
         guard let queryURL = URL(string: urlOpenMeteoString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,surface_pressure,weathercode,windspeed_10m") else { return }
         let session = URLSession.shared
 
         session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
 
             if error != nil {
-                let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
-                view.present(alert, animated: true)
+                guard let error = error else { return }
+                completion(.failure(error), "")
             }
 
             if let httpResponse = response as? HTTPURLResponse {
@@ -31,11 +30,9 @@ final class APIClient {
                         guard let data = data else { return }
                         let jsonResult = try JSONDecoder().decode(OpenMeteoDecoded.self, from: data)
                         guard let weatherData = self?.takeDataFromJson(jsonResult: jsonResult) else { return }
-                        completion(weatherData.data, weatherData.date)
+                        completion(.success(weatherData.data), weatherData.date)
                     } catch let error {
-                        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .default))
-                        view.present(alert, animated: true)
+                        completion(.failure(error), "")
                     }
                 }
             }
@@ -64,16 +61,15 @@ final class APIClient {
         return (dataArray, date)
     }
 
-    func searchCities(searchTerm: String, view: UIViewController, completion: @escaping (_ result: [CityInfo]) -> Void) {
+    func searchCities(searchTerm: String, completion: @escaping (_ result: Result<[CityInfo], Error>) -> Void) {
         guard let queryURL = URL(string: urlGeoDBString + "&namePrefix=" + searchTerm + "&sort=-population") else { return }
         let session = URLSession.shared
 
         session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
 
             if error != nil {
-                let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
-                view.present(alert, animated: true)
+                guard let error = error else { return }
+                completion(.failure(error))
             }
 
             if let httpResponse = response as? HTTPURLResponse {
@@ -81,11 +77,9 @@ final class APIClient {
                     do {
                         guard let data = data else { return }
                         let jsonResult = try JSONDecoder().decode(GeoDBDecoded.self, from: data)
-                        completion(self?.takeDataFromGeoDBJson(jsonResult: jsonResult) ?? [])
+                        completion(.success(self?.takeDataFromGeoDBJson(jsonResult: jsonResult) ?? []))
                     } catch let error {
-                        let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                        alert.addAction(UIAlertAction(title: "OK", style: .default))
-                        view.present(alert, animated: true)
+                        completion(.failure(error))
                     }
                 }
             }
