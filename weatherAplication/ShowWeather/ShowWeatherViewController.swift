@@ -23,22 +23,28 @@ class ShowWeatherViewController: UIViewController {
         self.longitude = data.longitude
         super.init(nibName: nil, bundle: nil)
         cityLabel.text = data.city
-        apiClient.searchWeather(latitude: latitude, longitude: longitude, completion: { [weak self] weatherData, date -> Void in
-            self?.dataArray = []
-            self?.dateString = ""
-            self?.dateString = date
-            switch weatherData {
-            case .success(let weatherData):
-                self?.dataArray = weatherData
-                DispatchQueue.main.async {
-                    self?.weatherTableView.reloadData()
+        do {
+            try apiClient.searchWeather(latitude: latitude, longitude: longitude, completion: { [weak self] weatherInfo, date -> Void in
+                self?.dataArray = []
+                self?.dateString = ""
+                self?.dateString = date
+                switch weatherInfo {
+                case .success(let weatherInfo):
+                    self?.dataArray = weatherInfo
+                    DispatchQueue.main.async {
+                        self?.weatherTableView.reloadData()
+                    }
+                case .failure(let error):
+                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default))
+                    self?.present(alert, animated: true)
                 }
-            case .failure(let error):
-                let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
-                self?.present(alert, animated: true)
-            }
-        })
+            })
+        } catch {
+            let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true)
+        }
     }
 
     override func viewDidLoad() {

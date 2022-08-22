@@ -13,14 +13,13 @@ final class APIClient {
 
     private init() {}
 
-    func searchWeather(latitude: Double, longitude: Double, completion: @escaping (_ result: Result<[WeatherData], Error>, _ date: String) -> Void) {
+    func searchWeather(latitude: Double, longitude: Double, completion: @escaping (_ result: Result<[WeatherData], Error>, _ date: String) -> Void) throws {
         guard let queryURL = URL(string: urlOpenMeteoString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,surface_pressure,weathercode,windspeed_10m") else { return }
         let session = URLSession.shared
 
         session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
 
-            if error != nil {
-                guard let error = error else { return }
+            if let error = error {
                 completion(.failure(error), "")
             }
 
@@ -61,11 +60,11 @@ final class APIClient {
         return (dataArray, date)
     }
 
-    func searchCities(searchTerm: String, completion: @escaping (_ result: Result<[CityInfo], Error>) -> Void) {
+    func searchCities(searchTerm: String, completion: @escaping (_ result: Result<[CityInfo], Error>) -> Void) throws {
         guard let queryURL = URL(string: urlGeoDBString + "&namePrefix=" + searchTerm + "&sort=-population") else { return }
         let session = URLSession.shared
 
-        session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
+        session.dataTask(with: queryURL, completionHandler: { data, response, error -> Void in
 
             if let error = error {
                 completion(.failure(error))
