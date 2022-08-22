@@ -18,10 +18,11 @@ class ShowWeatherViewController: UIViewController {
     private var dataArray: [WeatherData] = []
     private let apiClient = APIClient.sharedInstance
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupView()
-        setupConstraints()
+    init(data: CityInfo) {
+        self.latitude = data.latitude
+        self.longitude = data.longitude
+        super.init(nibName: nil, bundle: nil)
+        cityLabel.text = data.city
         apiClient.searchWeather(latitude: latitude, longitude: longitude, completion: { [weak self] weatherData, date -> Void in
             self?.dataArray = []
             self?.dateString = ""
@@ -40,11 +41,10 @@ class ShowWeatherViewController: UIViewController {
         })
     }
 
-    init(data: CityInfo) {
-        self.latitude = data.latitude
-        self.longitude = data.longitude
-        super.init(nibName: nil, bundle: nil)
-        cityLabel.text = data.city
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupView()
+        setupConstraints()
     }
 
     required init?(coder: NSCoder) {

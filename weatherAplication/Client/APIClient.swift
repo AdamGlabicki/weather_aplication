@@ -67,8 +67,7 @@ final class APIClient {
 
         session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
 
-            if error != nil {
-                guard let error = error else { return }
+            if let error = error {
                 completion(.failure(error))
             }
 
@@ -77,7 +76,7 @@ final class APIClient {
                     do {
                         guard let data = data else { return }
                         let jsonResult = try JSONDecoder().decode(GeoDBDecoded.self, from: data)
-                        completion(.success(self?.takeDataFromGeoDBJson(jsonResult: jsonResult) ?? []))
+                        completion(.success(jsonResult.data.map { $0 }))
                     } catch let error {
                         completion(.failure(error))
                     }
@@ -86,9 +85,4 @@ final class APIClient {
         }).resume()
     }
 
-    func takeDataFromGeoDBJson(jsonResult: GeoDBDecoded) -> [CityInfo] {
-        var cityNames: [CityInfo] = []
-        cityNames = jsonResult.data.map { $0 }
-        return cityNames
-    }
 }
