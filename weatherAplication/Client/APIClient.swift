@@ -2,7 +2,7 @@ import SnapKit
 import UIKit
 
 final class APIClient {
-    private var kElementsToShow = 24
+    private let kElementsToShow = 24
     private let kCharsToDrop = 11
     private let urlGeoDBString: String = "http://geodb-free-service.wirefreethought.com/v1/geo/cities?"
     private let urlOpenMeteoString: String = "https://api.open-meteo.com/v1/forecast?"
@@ -13,14 +13,14 @@ final class APIClient {
 
     private init() {}
 
-    func searchWeather(latitude: Double, longitude: Double, completion: @escaping (_ result: Result<[WeatherData], Error>, _ date: String) -> Void) throws {
+    func searchWeather(latitude: Double, longitude: Double, completion: @escaping (_ result: [WeatherData], _ date: String) -> Void, failure: @escaping ((WeatherError) -> Void)) throws {
         guard let queryURL = URL(string: urlOpenMeteoString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,surface_pressure,weathercode,windspeed_10m") else { return }
         let session = URLSession.shared
 
         session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
 
-            if let error = error {
-                completion(.failure(error), "")
+            if error != nil {
+                failure(WeatherError.invalidConnection)
             }
 
             if let httpResponse = response as? HTTPURLResponse {
@@ -29,9 +29,9 @@ final class APIClient {
                         guard let data = data else { return }
                         let jsonResult = try JSONDecoder().decode(OpenMeteoDecoded.self, from: data)
                         guard let weatherData = self?.takeDataFromJson(jsonResult: jsonResult) else { return }
-                        completion(.success(weatherData.data), weatherData.date)
-                    } catch let error {
-                        completion(.failure(error), "")
+                        completion((weatherData.data), weatherData.date)
+                    } catch {
+                        failure(WeatherError.decoding)
                     }
                 }
             }
@@ -60,14 +60,14 @@ final class APIClient {
         return (dataArray, date)
     }
 
-    func searchCities(searchTerm: String, completion: @escaping (_ result: Result<[CityInfo], Error>) -> Void) throws {
+    func searchCities(searchTerm: String, completion: @escaping (_ result: [CityInfo]) -> Void, failure: @escaping ((WeatherError) -> Void)) throws {
         guard let queryURL = URL(string: urlGeoDBString + "&namePrefix=" + searchTerm + "&sort=-population") else { return }
         let session = URLSession.shared
 
         session.dataTask(with: queryURL, completionHandler: { data, response, error -> Void in
 
-            if let error = error {
-                completion(.failure(error))
+            if error != nil {
+                failure(WeatherError.invalidConnection)
             }
 
             if let httpResponse = response as? HTTPURLResponse {
@@ -75,13 +75,17 @@ final class APIClient {
                     do {
                         guard let data = data else { return }
                         let jsonResult = try JSONDecoder().decode(GeoDBDecoded.self, from: data)
-                        completion(.success(jsonResult.data.map { $0 }))
-                    } catch let error {
-                        completion(.failure(error))
+                        completion(jsonResult.data.map { $0 })
+                    } catch {
+                        failure(WeatherError.decoding)
                     }
                 }
             }
         }).resume()
     }
 
+}
+
+enum WeatherError: Error {
+    case invalidConnection, decoding
 }

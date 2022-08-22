@@ -19,8 +19,8 @@ class ShowWeatherViewController: UIViewController {
     private let apiClient = APIClient.sharedInstance
 
     init(data: CityInfo) {
-        self.latitude = data.latitude
-        self.longitude = data.longitude
+        latitude = data.latitude
+        longitude = data.longitude
         super.init(nibName: nil, bundle: nil)
         cityLabel.text = data.city
         do {
@@ -28,22 +28,19 @@ class ShowWeatherViewController: UIViewController {
                 self?.dataArray = []
                 self?.dateString = ""
                 self?.dateString = date
-                switch weatherInfo {
-                case .success(let weatherInfo):
                     self?.dataArray = weatherInfo
                     DispatchQueue.main.async {
                         self?.weatherTableView.reloadData()
                     }
-                case .failure(let error):
-                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
+                }, failure: { weatherError in
+                    let alert = UIAlertController(title: "Error", message: weatherError.localizedDescription, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default))
-                    self?.present(alert, animated: true)
-                }
+                    self.present(alert, animated: true)
             })
         } catch {
             let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default))
-            self.present(alert, animated: true)
+            present(alert, animated: true)
         }
     }
 

@@ -27,22 +27,20 @@ class SearchViewController: UIViewController {
         do {
             try apiClient.searchCities(searchTerm: cityName, completion: { [weak self] cityInfo -> Void in
                 self?.cityInfosArray = []
-                switch cityInfo {
-                case .success(let cityInfo):
-                    self?.cityInfosArray = cityInfo
-                    DispatchQueue.main.async {
-                        self?.cityNamesTableView.reloadData()
-                    }
-                case .failure(let error):
-                    let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default))
-                    self?.present(alert, animated: true)
+                self?.cityInfosArray = cityInfo
+                DispatchQueue.main.async {
+                    self?.cityNamesTableView.reloadData()
                 }
-            })
+            }, failure: { weatherError in
+                let alert = UIAlertController(title: "Error", message: weatherError.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true)
+            }
+            )
         } catch {
             let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default))
-            self.present(alert, animated: true)
+            present(alert, animated: true)
         }
     }
 
