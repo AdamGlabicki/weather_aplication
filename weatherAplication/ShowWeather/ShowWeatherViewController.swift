@@ -23,25 +23,19 @@ class ShowWeatherViewController: UIViewController {
         longitude = data.longitude
         super.init(nibName: nil, bundle: nil)
         cityLabel.text = data.city
-        do {
-            try apiClient.searchWeather(latitude: latitude, longitude: longitude, completion: { [weak self] weatherInfo, date -> Void in
-                self?.dataArray = []
-                self?.dateString = ""
-                self?.dateString = date
-                    self?.dataArray = weatherInfo
-                    DispatchQueue.main.async {
-                        self?.weatherTableView.reloadData()
-                    }
-                }, failure: { weatherError in
-                    let alert = UIAlertController(title: "Error", message: weatherError.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default))
-                    self.present(alert, animated: true)
+        apiClient.searchWeather(latitude: latitude, longitude: longitude, completion: { [weak self] weatherInfo, date -> Void in
+            self?.dataArray = []
+            self?.dateString = ""
+            self?.dateString = date
+                self?.dataArray = weatherInfo
+                DispatchQueue.main.async {
+                    self?.weatherTableView.reloadData()
+                }
+            }, failure: { weatherError in
+                let alert = UIAlertController(title: "Error", message: weatherError.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true)
             })
-        } catch {
-            let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-        }
     }
 
     override func viewDidLoad() {
