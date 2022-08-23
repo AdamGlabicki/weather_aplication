@@ -3,38 +3,22 @@ import UIKit
 
 class SearchViewController: UIViewController {
     private let kTopMargin = 20
-    private let apiClient = APIClient.sharedInstance
+    internal let apiClient = APIClient.sharedInstance
 
-    private let cityNameTextField: UITextField = {
+    internal let cityNameTextField: UITextField = {
         let cityNameTextField = UITextField()
         cityNameTextField.placeholder = "city name"
         cityNameTextField.textAlignment = .center
         return cityNameTextField
     }()
 
-    private let cityNamesTableView = UITableView()
-    private var cityInfosArray: [CityInfo] = []
+    internal let cityNamesTableView = UITableView()
+    internal var cityInfosArray: [CityInfo] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-    }
-
-    @objc
-    func loadCityNames() {
-        guard let cityName = cityNameTextField.text else { return }
-        apiClient.searchCities(searchTerm: cityName, completion: { [weak self] cityInfo -> Void in
-            self?.cityInfosArray = []
-            self?.cityInfosArray = cityInfo
-            DispatchQueue.main.async {
-                self?.cityNamesTableView.reloadData()
-            }
-        }, failure: { weatherError in
-            let alert = UIAlertController(title: "Error", message: weatherError.localizedDescription, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            self.present(alert, animated: true)
-        })
     }
 
     func setupView() {
@@ -77,8 +61,6 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cityInfoToSend = cityInfosArray[indexPath.row]
-        let nextViewController = ShowWeatherViewController(data: cityInfoToSend)
-        navigationController?.pushViewController(nextViewController, animated: true)
+        cityChosen(index: indexPath.row)
     }
 }

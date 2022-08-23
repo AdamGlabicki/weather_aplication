@@ -21,11 +21,6 @@ class HomeViewController: UIViewController {
 
         proceedButton.addTarget(self, action: #selector(proceedButtonPressed), for: .touchUpInside)
     }
-    @objc
-    func proceedButtonPressed() {
-        let nextViewController = SearchViewController()
-        navigationController?.pushViewController(nextViewController, animated: true)
-    }
 
     func setupView() {
         view.backgroundColor = .blue
