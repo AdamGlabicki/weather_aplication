@@ -18,6 +18,7 @@
 		871651FE28B4B2FE002426BB /* proceedButtonPressed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871651FD28B4B2FE002426BB /* proceedButtonPressed.swift */; };
 		8716520028B4B3FE002426BB /* loadCityNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = 871651FF28B4B3FE002426BB /* loadCityNames.swift */; };
 		8716520228B4CC42002426BB /* cityChosen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8716520128B4CC42002426BB /* cityChosen.swift */; };
+		8716520828B4EA61002426BB /* chosenImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8716520728B4EA61002426BB /* chosenImage.swift */; };
 		873DCBEF2894199200660927 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873DCBEE2894199200660927 /* AppDelegate.swift */; };
 		873DCBF12894199200660927 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873DCBF02894199200660927 /* SceneDelegate.swift */; };
 		873DCBF32894199200660927 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 873DCBF22894199200660927 /* HomeViewController.swift */; };
@@ -63,6 +64,7 @@
 		871651FD28B4B2FE002426BB /* proceedButtonPressed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = proceedButtonPressed.swift; sourceTree = "<group>"; };
 		871651FF28B4B3FE002426BB /* loadCityNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = loadCityNames.swift; sourceTree = "<group>"; };
 		8716520128B4CC42002426BB /* cityChosen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = cityChosen.swift; sourceTree = "<group>"; };
+		8716520728B4EA61002426BB /* chosenImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = chosenImage.swift; sourceTree = "<group>"; };
 		873DCBEB2894199200660927 /* weatherAplication.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = weatherAplication.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		873DCBEE2894199200660927 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		873DCBF02894199200660927 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -131,6 +133,7 @@
 				871651FD28B4B2FE002426BB /* proceedButtonPressed.swift */,
 				871651FF28B4B3FE002426BB /* loadCityNames.swift */,
 				8716520128B4CC42002426BB /* cityChosen.swift */,
+				8716520728B4EA61002426BB /* chosenImage.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -448,6 +451,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				87C6A55228AE57230062CA4B /* APIClient.swift in Sources */,
+				8716520828B4EA61002426BB /* chosenImage.swift in Sources */,
 				875E4A182899401900920D8A /* SearchViewController.swift in Sources */,
 				873DCBF32894199200660927 /* HomeViewController.swift in Sources */,
 				87152D4528A6890F00C779A9 /* HourlyUnits.swift in Sources */,
