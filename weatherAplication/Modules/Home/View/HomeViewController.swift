@@ -14,12 +14,14 @@ class HomeViewController: UIViewController {
     private let aplicationNameString: String = "MyWeather"
     private let buttonString: String = "Proceed"
 
+    private let viewModel = HomeViewModel()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-
-        proceedButton.addTarget(self, action: #selector(proceedButtonPressed), for: .touchUpInside)
+        viewModel.delegate = self
+        proceedButton.addTarget(viewModel, action: #selector(viewModel.proceedButtonPressed), for: .touchUpInside)
     }
 
     func setupView() {
@@ -61,6 +63,14 @@ class HomeViewController: UIViewController {
             make.bottom.equalTo(view.snp.bottomMargin).offset(-kBottomMargin).priority(.required)
         }
 
+    }
+
+}
+
+extension HomeViewController: HomeViewModelDelegate {
+    func openSearchViewController() {
+        let nextViewController = SearchViewController()
+        navigationController?.pushViewController(nextViewController, animated: true)
     }
 
 }
