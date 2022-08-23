@@ -5,8 +5,6 @@ class ShowWeatherViewController: UIViewController {
     private let kSideMargin = 10
     private let kTopMargin = 20
     private let kBottomMargin = 5
-    private let kCharsToDrop = 11
-    private let kElementsToShow: Int = 24
     private let kHeaderHeight: CGFloat = 50
 
     private let longitude: Double
@@ -15,72 +13,35 @@ class ShowWeatherViewController: UIViewController {
     private let cityLabel = UILabel()
     private let weatherTableView = UITableView()
 
-    private var date = String()
+    private var dateString = String()
 
     private var dataArray: [WeatherData] = []
-    private let urlString: String = "https://api.open-meteo.com/v1/forecast?"
+    private let apiClient = APIClient.sharedInstance
 
-    func makeURLRequest() {
-        guard let queryURL = URL(string: urlString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,surface_pressure,weathercode,windspeed_10m") else { return }
-        let session = URLSession.shared
-
-        session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
-
-            if error != nil {
-                let alert = UIAlertController(title: "Error", message: error?.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
-                self?.present(alert, animated: true)
-            }
-
-            if let httpResponse = response as? HTTPURLResponse {
-                if 200...299 ~= httpResponse.statusCode {
-                    do {
-                        guard let data = data else { return }
-                        let jsonResult = try JSONDecoder().decode(OpenMeteoDecoded.self, from: data)
-                        self?.takeDataFromJson(jsonResult: jsonResult)
-                        DispatchQueue.main.async {
-                            self?.weatherTableView.reloadData()
-                        }
-                    } catch let error {
-                        print(error)
-                    }
+    init(data: CityInfo) {
+        latitude = data.latitude
+        longitude = data.longitude
+        super.init(nibName: nil, bundle: nil)
+        cityLabel.text = data.city
+        apiClient.searchWeather(latitude: latitude, longitude: longitude, completion: { [weak self] weatherInfo, date -> Void in
+            self?.dataArray = []
+            self?.dateString = ""
+            self?.dateString = date
+                self?.dataArray = weatherInfo
+                DispatchQueue.main.async {
+                    self?.weatherTableView.reloadData()
                 }
-            }
-
-        }).resume()
-    }
-
-    func takeDataFromJson(jsonResult: OpenMeteoDecoded) {
-        var dataArray: [WeatherData] = []
-        if jsonResult.hourly.time.count >= kElementsToShow,
-           jsonResult.hourly.temperature.count >= kElementsToShow,
-           jsonResult.hourly.surfacePressure.count >= kElementsToShow,
-           jsonResult.hourly.windspeed.count >= kElementsToShow,
-           jsonResult.hourly.weathercode.count >= kElementsToShow {
-            date = String(jsonResult.hourly.time[0].prefix(kCharsToDrop - 1))
-            for index in 0...(kElementsToShow - 1) {
-                dataArray.append(WeatherData(hour: String(jsonResult.hourly.time[index].dropFirst(kCharsToDrop)),
-                                             temperature: jsonResult.hourly.temperature[index],
-                                             pressure: jsonResult.hourly.surfacePressure[index],
-                                             windSpeed: jsonResult.hourly.windspeed[index],
-                                             weatherCode: jsonResult.hourly.weathercode[index]))
-            }
-            self.dataArray = dataArray
-        }
+            }, failure: { weatherError in
+                let alert = UIAlertController(title: "Error", message: weatherError.localizedDescription, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default))
+                self.present(alert, animated: true)
+            })
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-        makeURLRequest()
-    }
-
-    init(data: CityInfo) {
-        self.latitude = data.latitude
-        self.longitude = data.longitude
-        super.init(nibName: nil, bundle: nil)
-        cityLabel.text = data.city
     }
 
     required init?(coder: NSCoder) {
@@ -127,7 +88,7 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = WeatherDataHeaderView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight), date: date)
+        let header = WeatherDataHeaderView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight), date: dateString)
         return header
     }
 
