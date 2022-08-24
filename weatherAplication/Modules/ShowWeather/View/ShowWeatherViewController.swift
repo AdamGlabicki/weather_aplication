@@ -58,7 +58,7 @@ class ShowWeatherViewController: UIViewController {
         weatherTableView.delegate = self
         weatherTableView.backgroundColor = .white
         view.addSubview(weatherTableView)
-        weatherTableView.register(CustomTableViewCell.self, forCellReuseIdentifier: "cell")
+        weatherTableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
     func setupConstraints() {
@@ -82,7 +82,7 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? CustomTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? WeatherTableViewCell else { return UITableViewCell() }
         cell.setupData(cellData: dataArray[indexPath.row])
         return cell
     }

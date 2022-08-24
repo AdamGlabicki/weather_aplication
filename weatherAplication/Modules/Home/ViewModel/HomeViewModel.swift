@@ -12,6 +12,6 @@ class HomeViewModel {
 
 }
 
-protocol HomeViewModelDelegate {
+protocol HomeViewModelDelegate: AnyObject {
     func openSearchViewController()
 }

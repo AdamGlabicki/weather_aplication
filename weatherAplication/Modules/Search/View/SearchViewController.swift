@@ -15,17 +15,20 @@ class SearchViewController: UIViewController {
     internal let cityNamesTableView = UITableView()
     internal var cityInfosArray: [CityInfo] = []
 
+    private var viewModel = SearchViewModel()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
+        viewModel.delegate = self
     }
 
     func setupView() {
         view.backgroundColor = .white
         view.addSubview(cityNameTextField)
         setupCollectionView()
-        cityNameTextField.addTarget(self, action: #selector(loadCityNames), for: .editingChanged)
+        cityNameTextField.addTarget(viewModel, action: #selector(viewModel.loadCityNames), for: .editingChanged)
     }
 
     func setupCollectionView() {
@@ -62,5 +65,27 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         cityChosen(index: indexPath.row)
+    }
+}
+
+extension SearchViewController: SearchViewModelDelegate {
+    func cityChosen(index: Int) {
+        let cityInfoToSend = cityInfosArray[index]
+        let nextViewController = ShowWeatherViewController(data: cityInfoToSend)
+        navigationController?.pushViewController(nextViewController, animated: true)
+    }
+    func loadCityNames() {
+        guard let cityName = cityNameTextField.text else { return }
+        apiClient.searchCities(searchTerm: cityName, completion: { [weak self] cityInfo -> Void in
+            self?.cityInfosArray = []
+            self?.cityInfosArray = cityInfo
+            DispatchQueue.main.async {
+                self?.cityNamesTableView.reloadData()
+            }
+        }, failure: { weatherError in
+            let alert = UIAlertController(title: "Error", message: weatherError.localizedDescription, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .default))
+            self.present(alert, animated: true)
+        })
     }
 }
