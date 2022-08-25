@@ -13,9 +13,6 @@ class ShowWeatherViewController: UIViewController {
     private let cityLabel = UILabel()
     private let weatherTableView = UITableView()
 
-    private var dateString = String()
-
-    private var dataArray: [WeatherData] = []
     private let apiClient = APIClient.sharedInstance
     private var viewModel = ShowWeatherViewModel()
 
@@ -69,17 +66,17 @@ class ShowWeatherViewController: UIViewController {
 
 extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataArray.count
+        return viewModel.getWeatherDataArray().count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? WeatherTableViewCell else { return UITableViewCell() }
-        cell.setupData(cellData: dataArray[indexPath.row])
+        cell.setupData(cellData: viewModel.getWeatherDataArray()[indexPath.row])
         return cell
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = WeatherDataHeaderView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight), date: dateString)
+        let header = WeatherDataHeaderView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight), date: viewModel.getDate())
         return header
     }
 
@@ -90,10 +87,6 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
 
 extension ShowWeatherViewController: ShowWeatherDelegate {
     func weatherLoaded(weatherInfo: [WeatherData], date: String) {
-        dataArray = []
-        dateString = ""
-        dateString = date
-        dataArray = weatherInfo
         DispatchQueue.main.async {
             self.weatherTableView.reloadData()
         }
@@ -102,4 +95,9 @@ extension ShowWeatherViewController: ShowWeatherDelegate {
     func wetherLoadingError(alert: UIAlertController) {
         self.present(alert, animated: true)
     }
+}
+
+protocol ShowWeatherViewModelContract {
+    func getWeatherDataArray() -> [WeatherData]
+    func getDate() -> String
 }

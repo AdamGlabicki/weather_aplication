@@ -13,7 +13,6 @@ class SearchViewController: UIViewController {
     }()
 
     internal let cityNamesTableView = UITableView()
-    internal var cityInfosArray: [CityInfo] = []
 
     private var viewModel = SearchViewModel()
 
@@ -54,17 +53,17 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cityInfosArray.count
+        return viewModel.getCityInfoArray().count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = cityInfosArray[indexPath.row].city
+        cell.textLabel?.text = viewModel.getCityInfoArray()[indexPath.row].city
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cityInfoToSend = cityInfosArray[indexPath.row]
+        let cityInfoToSend = viewModel.getCityInfoArray()[indexPath.row]
         cityChosen(cityInfo: cityInfoToSend)
     }
 }
@@ -76,8 +75,6 @@ extension SearchViewController: SearchViewModelDelegate {
     }
 
     func cityNamesLaoded(cityNames: [CityInfo]) {
-        self.cityInfosArray = []
-        self.cityInfosArray = cityNames
         DispatchQueue.main.async {
             self.cityNamesTableView.reloadData()
         }
@@ -86,4 +83,8 @@ extension SearchViewController: SearchViewModelDelegate {
     func cityNamesLoadingError(alert: UIAlertController) {
         self.present(alert, animated: true)
     }
+}
+
+protocol SearchViewModelContract {
+    func getCityInfoArray() -> [CityInfo]
 }
