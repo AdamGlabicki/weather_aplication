@@ -17,25 +17,16 @@ class ShowWeatherViewController: UIViewController {
 
     private var dataArray: [WeatherData] = []
     private let apiClient = APIClient.sharedInstance
+    private var viewModel = ShowWeatherViewModel()
 
     init(data: CityInfo) {
         latitude = data.latitude
         longitude = data.longitude
         super.init(nibName: nil, bundle: nil)
+        viewModel.delegate = self
+        viewModel.getWeather(data: data)
         cityLabel.text = data.city
-        apiClient.searchWeather(latitude: latitude, longitude: longitude, completion: { [weak self] weatherInfo, date -> Void in
-            self?.dataArray = []
-            self?.dateString = ""
-            self?.dateString = date
-                self?.dataArray = weatherInfo
-                DispatchQueue.main.async {
-                    self?.weatherTableView.reloadData()
-                }
-            }, failure: { weatherError in
-                let alert = UIAlertController(title: "Error", message: weatherError.localizedDescription, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default))
-                self.present(alert, animated: true)
-            })
+
     }
 
     override func viewDidLoad() {
@@ -94,5 +85,21 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return kHeaderHeight
+    }
+}
+
+extension ShowWeatherViewController: ShowWeatherDelegate {
+    func weatherLoaded(weatherInfo: [WeatherData], date: String) {
+        dataArray = []
+        dateString = ""
+        dateString = date
+        dataArray = weatherInfo
+        DispatchQueue.main.async {
+            self.weatherTableView.reloadData()
+        }
+    }
+
+    func wetherLoadingError(alert: UIAlertController) {
+        self.present(alert, animated: true)
     }
 }

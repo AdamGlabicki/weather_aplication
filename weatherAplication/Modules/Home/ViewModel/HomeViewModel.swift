@@ -6,7 +6,6 @@ class HomeViewModel {
 
     @objc
     func proceedButtonPressed() {
-
         delegate?.openSearchViewController()
     }
 

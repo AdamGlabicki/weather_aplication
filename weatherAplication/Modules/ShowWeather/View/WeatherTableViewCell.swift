@@ -15,19 +15,11 @@ class WeatherTableViewCell: UITableViewCell {
         stackView.distribution = .equalCentering
         return stackView
     }()
-    internal let sunImage = UIImage(systemName: "sun.max.fill")
-    internal let cloudImage = UIImage(systemName: "cloud.fill")
-    internal let cloudAndSunConfig = UIImage.SymbolConfiguration(paletteColors: [UIColor.cloudColor(), UIColor.darkYellowColor()])
-    internal let precipitationConfig = UIImage.SymbolConfiguration(paletteColors: [UIColor.cloudColor(), .blue])
-    internal let boltConfig = UIImage.SymbolConfiguration(paletteColors: [UIColor.cloudColor(), UIColor.darkYellowColor()])
-
-    private var viewModel = ShowWeatherViewModel()
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
         setupConstraints()
-        viewModel.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -58,14 +50,7 @@ class WeatherTableViewCell: UITableViewCell {
         temperatureLabel.text = "\(cellData.temperature)"
         pressureLabel.text = "\(cellData.pressure)"
         windSpeedLabel.text = "\(cellData.windSpeed)"
-        weatherImageView.image = chosenImage(weatherCode: WeatherCodes(rawValue: cellData.weatherCode) ?? WeatherCodes.sun)
+        weatherImageView.image = WeatherCodes(rawValue: cellData.weatherCode)?.image ?? WeatherCodes.sun.image
     }
 
-}
-
-extension WeatherTableViewCell: ShowWeatherDelegate {
-
-    func chosenImage(weatherCode: WeatherCodes) -> UIImage? {
-        return weatherCode.image
-    }
 }
