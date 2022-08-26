@@ -1,6 +1,12 @@
 import Foundation
 
-class HomeViewModel {
+protocol HomeViewModelContract {
+    var delegate: HomeViewModelDelegate? { get set }
+
+    func proceedButtonPressed()
+}
+
+class HomeViewModel: HomeViewModelContract {
 
     var delegate: HomeViewModelDelegate?
 

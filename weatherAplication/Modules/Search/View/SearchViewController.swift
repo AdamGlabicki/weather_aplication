@@ -14,7 +14,16 @@ class SearchViewController: UIViewController {
 
     internal let cityNamesTableView = UITableView()
 
-    private var viewModel = SearchViewModel()
+    private var viewModel: SearchViewModelContract
+
+    init() {
+        viewModel = SearchViewModel()
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +36,12 @@ class SearchViewController: UIViewController {
         view.backgroundColor = .white
         view.addSubview(cityNameTextField)
         setupCollectionView()
-        cityNameTextField.addTarget(viewModel, action: #selector (viewModel.loadCityNames), for: .editingChanged)
+        cityNameTextField.addTarget(self, action: #selector (textChanged), for: .editingChanged)
+    }
+
+    @objc
+    func textChanged() {
+        viewModel.textChanged(searchTerm: cityNameTextField.text ?? "")
     }
 
     func setupCollectionView() {
@@ -53,17 +67,17 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.getCityInfoArray().count
+        return viewModel.cityInfoArray.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = viewModel.getCityInfoArray()[indexPath.row].city
+        cell.textLabel?.text = viewModel.cityInfoArray[indexPath.row].city
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cityInfoToSend = viewModel.getCityInfoArray()[indexPath.row]
+        let cityInfoToSend = viewModel.cityInfoArray[indexPath.row]
         cityChosen(cityInfo: cityInfoToSend)
     }
 }
@@ -74,17 +88,15 @@ extension SearchViewController: SearchViewModelDelegate {
         navigationController?.pushViewController(nextViewController, animated: true)
     }
 
-    func cityNamesLaoded(cityNames: [CityInfo]) {
+    func reloadCityNames() {
         DispatchQueue.main.async {
             self.cityNamesTableView.reloadData()
         }
     }
 
-    func cityNamesLoadingError(alert: UIAlertController) {
+    func showAlert(description: String) {
+        let alert = UIAlertController(title: "Error", message: description, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
         self.present(alert, animated: true)
     }
-}
-
-protocol SearchViewModelContract {
-    func getCityInfoArray() -> [CityInfo]
 }

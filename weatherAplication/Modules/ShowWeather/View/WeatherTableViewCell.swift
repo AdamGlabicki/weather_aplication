@@ -28,8 +28,6 @@ class WeatherTableViewCell: UITableViewCell {
     }
 
     func setupView() {
-        contentView.backgroundColor = UIColor.clear
-        backgroundColor = UIColor.clear
         stackView.addArrangedSubview(hourLabel)
         stackView.addArrangedSubview(temperatureLabel)
         stackView.addArrangedSubview(pressureLabel)

@@ -1,12 +1,20 @@
 import Foundation
-import UIKit
 
-class SearchViewModel {
+protocol SearchViewModelContract {
+    var delegate: SearchViewModelDelegate? { get set }
+    var cityInfoArray: [CityInfo] { get }
+
+    func textChanged(searchTerm: String)
+}
+
+class SearchViewModel: SearchViewModelContract {
 
     var delegate: SearchViewModelDelegate?
     let apiClient = APIClient.sharedInstance
 
-    var APIrequestFlag: Bool = false
+    var debounceTimer: Timer?
+
+    var APIRequestFlag: Bool = false
     var cityInfoArray: [CityInfo] = []
     let delay = 0.5
 
@@ -14,40 +22,37 @@ class SearchViewModel {
         delegate?.cityChosen(cityInfo: cityInfo)
     }
 
-    @objc
-    func loadCityNames(sender: UITextField) {
-        if APIrequestFlag != true {
-            APIrequestFlag = true
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
-                guard let cityName = sender.text else {
-                    self.APIrequestFlag = false
-                    return }
-                self.apiClient.searchCities(searchTerm: cityName, completion: { [weak self] cityInfo -> Void in
-                    self?.cityInfoArray = []
-                    self?.cityInfoArray = cityInfo
-                    self?.APIrequestFlag = false
-                    self?.delegate?.cityNamesLaoded(cityNames: cityInfo)
-                }, failure: { weatherError in
-                    let alert = UIAlertController(title: "Error", message: weatherError.localizedDescription, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default))
-                    self.APIrequestFlag = false
-                    self.delegate?.cityNamesLoadingError(alert: alert)
-                })
-            }
+    func textChanged(searchTerm: String) {
+        validate(searchTerm: searchTerm)
+    }
+
+    func loadCityNames(searchTerm: String) {
+        if searchTerm == "" {
+                cityInfoArray = []
+                delegate?.reloadCityNames()
+        } else {
+            self.apiClient.searchCities(searchTerm: searchTerm, completion: { [weak self] cityInfo -> Void in
+                self?.cityInfoArray = []
+                self?.cityInfoArray = cityInfo
+                self?.delegate?.reloadCityNames()
+            }, failure: { weatherError in
+                self.delegate?.showAlert(description: weatherError.localizedDescription)
+            })
         }
+
+    }
+
+    func validate(searchTerm: String) {
+        debounceTimer?.invalidate()
+        debounceTimer = Timer.scheduledTimer(withTimeInterval: delay, repeats: false, block: { _ in
+            self.loadCityNames(searchTerm: searchTerm)
+        })
     }
 
 }
 
 protocol SearchViewModelDelegate: AnyObject {
     func cityChosen(cityInfo: CityInfo)
-    func cityNamesLaoded(cityNames: [CityInfo])
-    func cityNamesLoadingError(alert: UIAlertController)
-}
-
-extension SearchViewModel: SearchViewModelContract {
-    func getCityInfoArray() -> [CityInfo] {
-        return cityInfoArray
-    }
-
+    func reloadCityNames()
+    func showAlert(description: String)
 }
