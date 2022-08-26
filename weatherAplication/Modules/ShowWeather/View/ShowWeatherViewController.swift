@@ -10,7 +10,6 @@ class ShowWeatherViewController: UIViewController {
     private let cityLabel = UILabel()
     private let weatherTableView = UITableView()
 
-    private let apiClient = APIClient.sharedInstance
     private var viewModel: ShowWeatherViewModelContract
 
     init(data: CityInfo) {

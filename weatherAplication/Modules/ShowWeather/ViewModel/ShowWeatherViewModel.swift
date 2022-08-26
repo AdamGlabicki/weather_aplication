@@ -28,8 +28,6 @@ class ShowWeatherViewModel: ShowWeatherViewModelContract {
 
     func getWeather() {
         apiClient.searchWeather(latitude: latitude, longitude: longitude, completion: { [weak self] weatherInfo, date -> Void in
-            self?.weatherDataArray = []
-            self?.dateString = ""
             self?.dateString = date
             self?.weatherDataArray = weatherInfo
             self?.delegate?.weatherLoaded(weatherInfo: weatherInfo, date: date)

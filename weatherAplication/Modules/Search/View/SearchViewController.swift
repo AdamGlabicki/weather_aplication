@@ -3,7 +3,6 @@ import UIKit
 
 class SearchViewController: UIViewController {
     private let kTopMargin = 20
-    internal let apiClient = APIClient.sharedInstance
 
     internal let cityNameTextField: UITextField = {
         let cityNameTextField = UITextField()
@@ -78,12 +77,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cityInfoToSend = viewModel.cityInfoArray[indexPath.row]
-        cityChosen(cityInfo: cityInfoToSend)
+        showWeather(cityInfo: cityInfoToSend)
     }
 }
 
 extension SearchViewController: SearchViewModelDelegate {
-    func cityChosen(cityInfo: CityInfo) {
+    func showWeather(cityInfo: CityInfo) {
         let nextViewController = ShowWeatherViewController(data: cityInfo)
         navigationController?.pushViewController(nextViewController, animated: true)
     }
