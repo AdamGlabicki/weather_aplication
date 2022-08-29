@@ -5,4 +5,5 @@ use_frameworks!
 target 'weatherAplication' do
   pod 'SnapKit', '~> 5.0.0'
   pod 'SwiftLint'
+  pod 'R.swift'
 end

@@ -27,6 +27,7 @@
 		876CC57D2899097100D184D7 /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 876CC57C2899097100D184D7 /* WeatherTableViewCell.swift */; };
 		87732F242897C23D001EE71D /* ShowWeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87732F232897C23D001EE71D /* ShowWeatherViewController.swift */; };
 		878C591428A1196700884866 /* GeoDBDecoded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 878C591328A1196700884866 /* GeoDBDecoded.swift */; };
+		879BE2FB28BCCC3A00B43DED /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879BE2FA28BCCC3A00B43DED /* R.generated.swift */; };
 		879FA7D128AB90F400852A58 /* CustomColour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879FA7D028AB90F400852A58 /* CustomColour.swift */; };
 		87C6A55228AE57230062CA4B /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C6A55128AE57230062CA4B /* APIClient.swift */; };
 /* End PBXBuildFile section */
@@ -76,6 +77,7 @@
 		876CC57C2899097100D184D7 /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
 		87732F232897C23D001EE71D /* ShowWeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowWeatherViewController.swift; sourceTree = "<group>"; };
 		878C591328A1196700884866 /* GeoDBDecoded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoDBDecoded.swift; sourceTree = "<group>"; };
+		879BE2FA28BCCC3A00B43DED /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		879FA7D028AB90F400852A58 /* CustomColour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColour.swift; sourceTree = "<group>"; };
 		87C6A55128AE57230062CA4B /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		C9A95A2B1660A499E043DD0B /* Pods-weather_aplication.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weather_aplication.debug.xcconfig"; path = "Target Support Files/Pods-weather_aplication/Pods-weather_aplication.debug.xcconfig"; sourceTree = "<group>"; };
@@ -155,6 +157,7 @@
 		8716520D28B4ED6F002426BB /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				879BE2FA28BCCC3A00B43DED /* R.generated.swift */,
 				873DCBEE2894199200660927 /* AppDelegate.swift */,
 				873DCBF72894199300660927 /* Assets.xcassets */,
 				873DCBF02894199200660927 /* SceneDelegate.swift */,
@@ -319,6 +322,7 @@
 			buildConfigurationList = 873DCC152894199300660927 /* Build configuration list for PBXNativeTarget "weatherAplication" */;
 			buildPhases = (
 				804F9C0EACD60859C53739E9 /* [CP] Check Pods Manifest.lock */,
+				87BCEC1C28B90297007D40D6 /* Rswift */,
 				873DCBE72894199200660927 /* Sources */,
 				8791D16128ACEBDA0085EF35 /* SwiftLint */,
 				873DCBE82894199200660927 /* Frameworks */,
@@ -496,6 +500,26 @@
 			shellPath = /bin/sh;
 			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
 		};
+		87BCEC1C28B90297007D40D6 /* Rswift */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = Rswift;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				$SRCROOT/R.generated.swift,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -511,6 +535,7 @@
 				87152D4528A6890F00C779A9 /* HourlyUnits.swift in Sources */,
 				87152D3D28A66D4200C779A9 /* Metadata.swift in Sources */,
 				876CC57D2899097100D184D7 /* WeatherTableViewCell.swift in Sources */,
+				879BE2FB28BCCC3A00B43DED /* R.generated.swift in Sources */,
 				8716521928B5055C002426BB /* ShowWeatherViewModel.swift in Sources */,
 				87152D3F28A66DB000C779A9 /* Link.swift in Sources */,
 				873DCBEF2894199200660927 /* AppDelegate.swift in Sources */,
