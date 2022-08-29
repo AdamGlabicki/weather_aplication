@@ -89,3 +89,68 @@ final class APIClient {
 enum WeatherError: Error {
     case invalidConnection, decoding
 }
+
+enum WeatherCodes: Int {
+    case sun = 0
+    case cloudAndSun = 1
+    case bigCloudAndSun = 2
+    case cloud = 3
+    case smallDrizzle = 51
+    case drizzle = 53
+    case bigDrizzle = 55
+    case freezingDrizzle = 56
+    case freezingBigDrizzle = 57
+    case smallRain = 61
+    case rain = 63
+    case freezingRain = 66
+    case heavyRain = 65
+    case bigHeavyRain = 67
+    case freezingSmallHeavyRain = 80
+    case freezingHeavyRain = 81
+    case freezingBigHeavyRain = 82
+    case smallSnow = 71
+    case snow = 73
+    case bigSnow = 75
+    case heavySnow = 77
+    case freezingSmallSnow = 85
+    case freezingSnow = 86
+    case smallStorm = 95
+    case storm = 96
+    case heavyStorm = 99
+
+    var image: UIImage? {
+        let cloudAndSunConfig = UIImage.SymbolConfiguration(paletteColors: [UIColor.cloudColor(), UIColor.darkYellowColor()])
+        let precipitationConfig = UIImage.SymbolConfiguration(paletteColors: [UIColor.cloudColor(), .blue])
+        let boltConfig = UIImage.SymbolConfiguration(paletteColors: [UIColor.cloudColor(), UIColor.darkYellowColor()])
+
+        let cloudAndSunImage = UIImage(systemName: "cloud.sun.fill", withConfiguration: cloudAndSunConfig)
+        let snowImage = UIImage(systemName: "cloud.snow.fill", withConfiguration: precipitationConfig)
+        let rainImage = UIImage(systemName: "cloud.rain.fill", withConfiguration: precipitationConfig)
+        let heavyRainImage = UIImage(systemName: "cloud.heavyrain.fill", withConfiguration: precipitationConfig)
+        let drizzleImage = UIImage(systemName: "cloud.drizzle.fill", withConfiguration: precipitationConfig)
+        let boltImage = UIImage(systemName: "cloud.bolt.fill", withConfiguration: boltConfig)
+        let sunImage = UIImage(systemName: "sun.max.fill")
+        let cloudImage = UIImage(systemName: "cloud.fill")
+
+        switch self {
+        case .sun:
+            return sunImage?.withTintColor(UIColor.darkYellowColor(), renderingMode: .alwaysOriginal)
+        case .cloudAndSun:
+            return cloudAndSunImage
+        case .bigCloudAndSun:
+            return cloudAndSunImage
+        case .cloud:
+            return cloudImage?.withTintColor(UIColor.cloudColor(), renderingMode: .alwaysOriginal)
+        case .smallDrizzle, .drizzle, .bigDrizzle, .freezingDrizzle, .freezingBigDrizzle:
+            return drizzleImage
+        case .smallRain, .rain, .freezingRain:
+            return rainImage
+        case .heavyRain, .bigHeavyRain, .freezingSmallHeavyRain, .freezingHeavyRain, .freezingBigHeavyRain:
+            return heavyRainImage
+        case .smallSnow, .snow, .bigSnow, .heavySnow, .freezingSmallSnow, .freezingSnow:
+            return snowImage
+        case .smallStorm, .storm, .heavyStorm:
+            return boltImage
+        }
+    }
+}

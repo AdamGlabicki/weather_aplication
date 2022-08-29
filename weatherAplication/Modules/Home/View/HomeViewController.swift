@@ -14,17 +14,28 @@ class HomeViewController: UIViewController {
     private let aplicationNameString: String = "MyWeather"
     private let buttonString: String = "Proceed"
 
+    private var viewModel: HomeViewModelContract
+
+    init() {
+        viewModel = HomeViewModel()
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-
-        proceedButton.addTarget(self, action: #selector(proceedButtonPressed), for: .touchUpInside)
+        viewModel.delegate = self
+        proceedButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
     }
+
     @objc
-    func proceedButtonPressed() {
-        let nextViewController = SearchViewController()
-        navigationController?.pushViewController(nextViewController, animated: true)
+    func buttonPressed() {
+        viewModel.proceedButtonPressed()
     }
 
     func setupView() {
@@ -66,6 +77,14 @@ class HomeViewController: UIViewController {
             make.bottom.equalTo(view.snp.bottomMargin).offset(-kBottomMargin).priority(.required)
         }
 
+    }
+
+}
+
+extension HomeViewController: HomeViewModelDelegate {
+    func openSearchViewController() {
+        let nextViewController = SearchViewController()
+        navigationController?.pushViewController(nextViewController, animated: true)
     }
 
 }

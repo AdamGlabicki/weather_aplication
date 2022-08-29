@@ -3,45 +3,44 @@ import UIKit
 
 class SearchViewController: UIViewController {
     private let kTopMargin = 20
-    private let apiClient = APIClient.sharedInstance
 
-    private let cityNameTextField: UITextField = {
+    internal let cityNameTextField: UITextField = {
         let cityNameTextField = UITextField()
         cityNameTextField.placeholder = "city name"
         cityNameTextField.textAlignment = .center
         return cityNameTextField
     }()
 
-    private let cityNamesTableView = UITableView()
-    private var cityInfosArray: [CityInfo] = []
+    internal let cityNamesTableView = UITableView()
+
+    private var viewModel: SearchViewModelContract
+
+    init() {
+        viewModel = SearchViewModel()
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         setupConstraints()
-    }
-
-    @objc
-    func loadCityNames() {
-        guard let cityName = cityNameTextField.text else { return }
-        apiClient.searchCities(searchTerm: cityName, completion: { [weak self] cityInfo -> Void in
-            self?.cityInfosArray = []
-            self?.cityInfosArray = cityInfo
-            DispatchQueue.main.async {
-                self?.cityNamesTableView.reloadData()
-            }
-        }, failure: { weatherError in
-            let alert = UIAlertController(title: "Error", message: weatherError.localizedDescription, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            self.present(alert, animated: true)
-        })
+        viewModel.delegate = self
     }
 
     func setupView() {
         view.backgroundColor = .white
         view.addSubview(cityNameTextField)
         setupCollectionView()
-        cityNameTextField.addTarget(self, action: #selector(loadCityNames), for: .editingChanged)
+        cityNameTextField.addTarget(self, action: #selector (textChanged), for: .editingChanged)
+    }
+
+    @objc
+    func textChanged() {
+        viewModel.textChanged(searchTerm: cityNameTextField.text ?? "")
     }
 
     func setupCollectionView() {
@@ -67,18 +66,36 @@ class SearchViewController: UIViewController {
 
 extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cityInfosArray.count
+        return viewModel.cityInfoArray.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = cityInfosArray[indexPath.row].city
+        cell.textLabel?.text = viewModel.cityInfoArray[indexPath.row].city
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cityInfoToSend = cityInfosArray[indexPath.row]
-        let nextViewController = ShowWeatherViewController(data: cityInfoToSend)
+        let cityInfoToSend = viewModel.cityInfoArray[indexPath.row]
+        showWeather(cityInfo: cityInfoToSend)
+    }
+}
+
+extension SearchViewController: SearchViewModelDelegate {
+    func showWeather(cityInfo: CityInfo) {
+        let nextViewController = ShowWeatherViewController(data: cityInfo)
         navigationController?.pushViewController(nextViewController, animated: true)
+    }
+
+    func reloadCityNames() {
+        DispatchQueue.main.async {
+            self.cityNamesTableView.reloadData()
+        }
+    }
+
+    func showAlert(description: String) {
+        let alert = UIAlertController(title: "Error", message: description, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alert, animated: true)
     }
 }
