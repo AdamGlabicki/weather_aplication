@@ -12,7 +12,7 @@ class HomeViewController: UIViewController {
     private let aplicationNameLabel = UILabel()
     private let proceedButton = UIButton()
     private let aplicationNameString: String = "MyWeather"
-    private let buttonString: String = "Proceed"
+    private let buttonString: String = R.string.localizable.button_string()
 
     private var viewModel: HomeViewModelContract
 
