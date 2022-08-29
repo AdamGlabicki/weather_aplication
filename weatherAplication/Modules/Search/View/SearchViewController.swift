@@ -6,7 +6,7 @@ class SearchViewController: UIViewController {
 
     internal let cityNameTextField: UITextField = {
         let cityNameTextField = UITextField()
-        cityNameTextField.placeholder = "city name"
+        cityNameTextField.placeholder = R.string.localizable.text_field_placeholder()
         cityNameTextField.textAlignment = .center
         return cityNameTextField
     }()

@@ -7,12 +7,12 @@ class HomeViewController: UIViewController {
     private let kSideMargin: CGFloat = 10
     private let kTopMargin: CGFloat = 20
     private let kBottomMargin: CGFloat = 15
-    private let aplicationImage = UIImage(named: "weather_symbol.png")
+    private let aplicationImage = R.image.weather_symbol()
     private let logoImageView = UIImageView()
     private let aplicationNameLabel = UILabel()
     private let proceedButton = UIButton()
     private let aplicationNameString: String = "MyWeather"
-    private let buttonString: String = "Proceed"
+    private let buttonString: String = R.string.localizable.button_string()
 
     private var viewModel: HomeViewModelContract
 
