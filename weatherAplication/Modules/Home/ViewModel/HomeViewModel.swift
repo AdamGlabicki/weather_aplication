@@ -4,6 +4,7 @@ protocol HomeViewModelContract {
     var delegate: HomeViewModelDelegate? { get set }
     var lastSearches: [CityInfo] { get set }
 
+    func refresh()
     func proceedButtonPressed()
 }
 
@@ -13,6 +14,20 @@ class HomeViewModel: HomeViewModelContract {
     var lastSearches: [CityInfo]
 
     init() {
+        if let data = UserDefaults.standard.data(forKey: "test1") {
+            do {
+                lastSearches = try PropertyListDecoder().decode([CityInfo].self, from: data)
+            } catch {
+                lastSearches = []
+                self.delegate?.showAlert(description: error.localizedDescription)
+            }
+        } else {
+            lastSearches = []
+        }
+        lastSearches = Array(Set(lastSearches))
+    }
+
+    func refresh() {
         if let data = UserDefaults.standard.data(forKey: "test1") {
             do {
                 lastSearches = try PropertyListDecoder().decode([CityInfo].self, from: data)

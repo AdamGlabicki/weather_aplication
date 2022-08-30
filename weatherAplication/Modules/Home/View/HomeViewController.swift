@@ -27,6 +27,12 @@ class HomeViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.refresh()
+        lastCityNamesTable.reloadData()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
