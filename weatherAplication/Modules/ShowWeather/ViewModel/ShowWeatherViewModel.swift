@@ -23,9 +23,20 @@ class ShowWeatherViewModel: ShowWeatherViewModelContract {
         self.latitude = data.latitude
         self.longitude = data.longitude
         self.cityName = data.city
-        UserDefaults.standard.set(data.city, forKey: "lastCityName")
-        UserDefaults.standard.set(data.latitude, forKey: "lastCityLatitude")
-        UserDefaults.standard.set(data.longitude, forKey: "lastCityLongitude")
+        var dataArray: [CityInfo] = []
+
+        if let dataRecived = UserDefaults.standard.data(forKey: "test1") {
+            do {
+                dataArray = try PropertyListDecoder().decode([CityInfo].self, from: dataRecived)
+            } catch {
+                self.delegate?.showAlert(description: error.localizedDescription)
+            }
+            dataArray.append(data)
+        }
+        if let dataToSend = try? PropertyListEncoder().encode(dataArray) {
+            UserDefaults.standard.set(dataToSend, forKey: "test1")
+        }
+
         getWeather()
     }
 

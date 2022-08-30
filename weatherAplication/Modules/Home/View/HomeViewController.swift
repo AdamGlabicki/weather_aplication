@@ -98,20 +98,21 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        let lastCity = viewModel.lastSearches
+        return lastCity.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
         cell.textLabel?.textColor = .yellow
         cell.backgroundColor = .blue
-        let lastCity = UserDefaults.standard.string(forKey: "lastCityName")
-        cell.textLabel?.text = lastCity
+        let lastCityArray = viewModel.lastSearches
+        cell.textLabel?.text = lastCityArray[indexPath.row].city
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cityInfoToSend = CityInfo(city: UserDefaults.standard.string(forKey: "lastCityName") ?? "", latitude: UserDefaults.standard.double(forKey: "lastCityLatitude"), longitude: UserDefaults.standard.double(forKey: "lastCityLongitude"))
+        let cityInfoToSend = viewModel.lastSearches[indexPath.row]
         showWeather(cityInfo: cityInfoToSend)
     }
 }
@@ -125,5 +126,11 @@ extension HomeViewController: HomeViewModelDelegate {
     func showWeather(cityInfo: CityInfo) {
         let nextViewController = ShowWeatherViewController(data: cityInfo)
         navigationController?.pushViewController(nextViewController, animated: true)
+    }
+
+    func showAlert(description: String) {
+        let alert = UIAlertController(title: "Error", message: description, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        self.present(alert, animated: true)
     }
 }
