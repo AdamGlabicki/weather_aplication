@@ -23,6 +23,9 @@ class ShowWeatherViewModel: ShowWeatherViewModelContract {
         self.latitude = data.latitude
         self.longitude = data.longitude
         self.cityName = data.city
+        UserDefaults.standard.set(data.city, forKey: "lastCityName")
+        UserDefaults.standard.set(data.latitude, forKey: "lastCityLatitude")
+        UserDefaults.standard.set(data.longitude, forKey: "lastCityLongitude")
         getWeather()
     }
 

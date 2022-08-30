@@ -19,4 +19,5 @@ class HomeViewModel: HomeViewModelContract {
 
 protocol HomeViewModelDelegate: AnyObject {
     func openSearchViewController()
+    func showWeather(cityInfo: CityInfo)
 }
