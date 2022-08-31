@@ -1,11 +1,11 @@
 import Foundation
 
-final class RecentlySearchedCities {
+final class StorageService {
     var citiesInfoArray: [CityInfo] = []
     let lastSearchesKey = "lastSearchesKey"
 
-    static let sharedInstance: RecentlySearchedCities = {
-        let instance = RecentlySearchedCities()
+    static let sharedInstance: StorageService = {
+        let instance = StorageService()
         return instance
     }()
 

@@ -12,7 +12,7 @@ class SearchViewModel: SearchViewModelContract {
 
     var delegate: SearchViewModelDelegate?
     let apiClient = APIClient.sharedInstance
-    let recentCities = RecentlySearchedCities.sharedInstance
+    let recentCities = StorageService.sharedInstance
 
     var debounceTimer: Timer?
 

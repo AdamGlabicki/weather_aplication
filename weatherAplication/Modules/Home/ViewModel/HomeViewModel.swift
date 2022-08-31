@@ -13,7 +13,7 @@ class HomeViewModel: HomeViewModelContract {
 
     var delegate: HomeViewModelDelegate?
     var lastSearches: [CityInfo] = []
-    let recentCities = RecentlySearchedCities.sharedInstance
+    let recentCities = StorageService.sharedInstance
 
     init() {
         viewAppear()
