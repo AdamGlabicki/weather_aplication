@@ -29,7 +29,7 @@ class HomeViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.refresh()
+        viewModel.viewAppear()
         lastCityNamesTable.reloadData()
     }
 
@@ -60,7 +60,7 @@ class HomeViewController: UIViewController {
 
         lastCityNamesTable.dataSource = self
         lastCityNamesTable.delegate = self
-        lastCityNamesTable.backgroundColor = .blue
+        lastCityNamesTable.backgroundColor = .cyan
         view.addSubview(lastCityNamesTable)
         lastCityNamesTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
 
@@ -104,14 +104,13 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let lastCity = viewModel.lastSearches
-        return lastCity.count
+        return viewModel.lastSearches.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.textColor = .yellow
-        cell.backgroundColor = .blue
+        cell.textLabel?.textColor = .black
+        cell.backgroundColor = .cyan
         let lastCityArray = viewModel.lastSearches
         cell.textLabel?.text = lastCityArray[indexPath.row].city
         return cell
@@ -119,7 +118,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cityInfoToSend = viewModel.lastSearches[indexPath.row]
-        showWeather(cityInfo: cityInfoToSend)
+        viewModel.cellPressed(cityInfo: cityInfoToSend)
     }
 }
 

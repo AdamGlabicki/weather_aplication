@@ -5,6 +5,7 @@ protocol SearchViewModelContract {
     var cityInfoArray: [CityInfo] { get }
 
     func textChanged(searchTerm: String)
+    func cellPressed(cityInfo: CityInfo)
 }
 
 class SearchViewModel: SearchViewModelContract {
@@ -17,6 +18,7 @@ class SearchViewModel: SearchViewModelContract {
     var APIRequestFlag: Bool = false
     var cityInfoArray: [CityInfo] = []
     let delay = 0.5
+    let lastSearchesKey = "lastSearchesKey"
 
     func textChanged(searchTerm: String) {
         validate(searchTerm: searchTerm)
@@ -35,6 +37,24 @@ class SearchViewModel: SearchViewModelContract {
             })
         }
 
+    }
+
+    func cellPressed(cityInfo: CityInfo) {
+        var dataArray: [CityInfo] = []
+
+        if let dataRecived = UserDefaults.standard.data(forKey: lastSearchesKey) {
+            do {
+                dataArray = try PropertyListDecoder().decode([CityInfo].self, from: dataRecived)
+            } catch {
+                self.delegate?.showAlert(description: error.localizedDescription)
+            }
+            dataArray.append(cityInfo)
+        }
+        if let dataToSend = try? PropertyListEncoder().encode(dataArray) {
+            UserDefaults.standard.set(dataToSend, forKey: lastSearchesKey)
+        }
+
+        delegate?.showWeather(cityInfo: cityInfo)
     }
 
     func validate(searchTerm: String) {
