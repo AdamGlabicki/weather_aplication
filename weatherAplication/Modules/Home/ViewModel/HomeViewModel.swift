@@ -1,5 +1,4 @@
 import Foundation
-import UIKit
 
 protocol HomeViewModelContract {
     var delegate: HomeViewModelDelegate? { get set }
