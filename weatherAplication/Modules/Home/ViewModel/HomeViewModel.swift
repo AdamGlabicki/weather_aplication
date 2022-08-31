@@ -1,4 +1,5 @@
 import Foundation
+import UIKit
 
 protocol HomeViewModelContract {
     var delegate: HomeViewModelDelegate? { get set }
@@ -13,21 +14,16 @@ class HomeViewModel: HomeViewModelContract {
 
     var delegate: HomeViewModelDelegate?
     var lastSearches: [CityInfo] = []
-    let lastSearchesKey = "lastSearchesKey"
+    let recentCities = RecentlySearchedCities.sharedInstance
 
     init() {
         viewAppear()
     }
 
     func viewAppear() {
-        if let data = UserDefaults.standard.data(forKey: lastSearchesKey) {
-            do {
-                lastSearches = try PropertyListDecoder().decode([CityInfo].self, from: data)
-            } catch {
-                self.delegate?.showAlert(description: error.localizedDescription)
-            }
-        }
-        lastSearches = Array(Set(lastSearches))
+        lastSearches = recentCities.getCitiesInfo(failure: { [weak self] error -> Void in
+            self?.delegate?.showAlert(description: error.localizedDescription)
+        })
     }
 
     @objc

@@ -12,6 +12,7 @@ class SearchViewModel: SearchViewModelContract {
 
     var delegate: SearchViewModelDelegate?
     let apiClient = APIClient.sharedInstance
+    let recentCities = RecentlySearchedCities.sharedInstance
 
     var debounceTimer: Timer?
 
@@ -40,20 +41,9 @@ class SearchViewModel: SearchViewModelContract {
     }
 
     func cellPressed(cityInfo: CityInfo) {
-        var dataArray: [CityInfo] = []
-
-        if let dataRecived = UserDefaults.standard.data(forKey: lastSearchesKey) {
-            do {
-                dataArray = try PropertyListDecoder().decode([CityInfo].self, from: dataRecived)
-            } catch {
-                self.delegate?.showAlert(description: error.localizedDescription)
-            }
-            dataArray.append(cityInfo)
-        }
-        if let dataToSend = try? PropertyListEncoder().encode(dataArray) {
-            UserDefaults.standard.set(dataToSend, forKey: lastSearchesKey)
-        }
-
+        recentCities.addRecentlySearchedCity(cityInfo: cityInfo, failure: { [weak self] error -> Void in
+            self?.delegate?.showAlert(description: error.localizedDescription)
+        })
         delegate?.showWeather(cityInfo: cityInfo)
     }
 
