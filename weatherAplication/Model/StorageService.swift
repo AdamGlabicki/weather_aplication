@@ -1,7 +1,6 @@
 import Foundation
 
 final class StorageService {
-    var citiesInfoArray: [CityInfo] = []
     let lastSearchesKey = "lastSearchesKey"
 
     static let sharedInstance: StorageService = {
@@ -10,6 +9,7 @@ final class StorageService {
     }()
 
     func getCitiesInfo(failure: @escaping ((Error) -> Void)) -> [CityInfo] {
+        var citiesInfoArray: [CityInfo] = []
         if let data = UserDefaults.standard.data(forKey: lastSearchesKey) {
             do {
                 citiesInfoArray = try PropertyListDecoder().decode([CityInfo].self, from: data)
@@ -22,6 +22,7 @@ final class StorageService {
     }
 
     func addRecentlySearchedCity(cityInfo: CityInfo, failure: @escaping ((Error) -> Void)) {
+        var citiesInfoArray: [CityInfo] = []
         if let dataRecived = UserDefaults.standard.data(forKey: lastSearchesKey) {
             do {
                 citiesInfoArray = try PropertyListDecoder().decode([CityInfo].self, from: dataRecived)

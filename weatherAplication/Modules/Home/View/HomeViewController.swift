@@ -29,8 +29,7 @@ class HomeViewController: UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        viewModel.viewAppear()
-        lastCityNamesTable.reloadData()
+        viewModel.viewWillAppear()
     }
 
     override func viewDidLoad() {
@@ -137,5 +136,9 @@ extension HomeViewController: HomeViewModelDelegate {
         let alert = UIAlertController(title: "Error", message: description, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         self.present(alert, animated: true)
+    }
+
+    func refreshCityNamesTable() {
+        lastCityNamesTable.reloadData()
     }
 }

@@ -19,7 +19,6 @@ class SearchViewModel: SearchViewModelContract {
     var APIRequestFlag: Bool = false
     var cityInfoArray: [CityInfo] = []
     let delay = 0.5
-    let lastSearchesKey = "lastSearchesKey"
 
     func textChanged(searchTerm: String) {
         validate(searchTerm: searchTerm)
