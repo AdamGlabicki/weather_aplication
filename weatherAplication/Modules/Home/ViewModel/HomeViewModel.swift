@@ -2,7 +2,7 @@ import Foundation
 
 protocol HomeViewModelContract {
     var delegate: HomeViewModelDelegate? { get set }
-    var lastSearches: [CityInfo] { get set }
+    var lastSearches: [CityInfo] { get }
 
     func viewWillAppear()
     func proceedButtonPressed()

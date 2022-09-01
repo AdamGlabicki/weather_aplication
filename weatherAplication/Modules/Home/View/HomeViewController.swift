@@ -11,9 +11,8 @@ class HomeViewController: UIViewController {
     private let aplicationImage = R.image.weather_symbol()
     private let logoImageView = UIImageView()
     private let aplicationNameLabel = UILabel()
-    private let proceedButton = UIButton()
+    private let searchButton = SearchButton()
     private let aplicationNameString: String = "MyWeather"
-    private let buttonString: String = R.string.localizable.button_string()
     private let lastCityNamesTableView = UITableView()
 
     private var viewModel: HomeViewModelContract
@@ -37,7 +36,7 @@ class HomeViewController: UIViewController {
         setupView()
         setupConstraints()
         viewModel.delegate = self
-        proceedButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        searchButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
     }
 
     @objc
@@ -55,7 +54,7 @@ class HomeViewController: UIViewController {
 
         lastCityNamesTableViewSetup()
 
-        proceedButtonSetup()
+        view.addSubview(searchButton)
     }
 
     func aplicationNameLabelSetup() {
@@ -71,14 +70,7 @@ class HomeViewController: UIViewController {
         lastCityNamesTableView.delegate = self
         lastCityNamesTableView.backgroundColor = .cyan
         view.addSubview(lastCityNamesTableView)
-        lastCityNamesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-    }
-
-    func proceedButtonSetup() {
-        proceedButton.setTitle(buttonString, for: .normal)
-        proceedButton.setTitleColor(.red, for: .normal)
-        proceedButton.backgroundColor = .yellow
-        view.addSubview(proceedButton)
+        lastCityNamesTableView.register(HomeTableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
     func setupConstraints() {
@@ -100,10 +92,10 @@ class HomeViewController: UIViewController {
             make.top.equalTo(aplicationNameLabel.snp.bottom).offset(kTopMargin)
             make.left.equalTo(view.snp.leftMargin).offset(kSideMargin)
             make.right.equalTo(view.snp.rightMargin).offset(-kSideMargin)
-            make.bottom.equalTo(proceedButton.snp.bottom).offset(-kTableBottomMargin)
+            make.bottom.equalTo(searchButton.snp.bottom).offset(-kTableBottomMargin)
         }
 
-        proceedButton.snp.makeConstraints { make in
+        searchButton.snp.makeConstraints { make in
             make.left.equalTo(view.snp.leftMargin).offset(kSideMargin)
             make.right.equalTo(view.snp.rightMargin).offset(-kSideMargin)
             make.bottom.equalTo(view.snp.bottomMargin).offset(-kBottomMargin).priority(.required)
@@ -119,16 +111,12 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.textColor = .black
-        cell.backgroundColor = .cyan
-        let lastCityArray = viewModel.lastSearches
-        cell.textLabel?.text = lastCityArray[indexPath.row].city
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? HomeTableViewCell else { return UITableViewCell() }
+        cell.setupData(cityName: viewModel.lastSearches[indexPath.row].city)
         return cell
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let cityInfoToSend = viewModel.lastSearches[indexPath.row]
         viewModel.cellPressed(index: indexPath.row)
     }
 }
