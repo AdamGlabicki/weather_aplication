@@ -14,7 +14,7 @@ class HomeViewController: UIViewController {
     private let proceedButton = UIButton()
     private let aplicationNameString: String = "MyWeather"
     private let buttonString: String = R.string.localizable.button_string()
-    private let lastCityNamesTable = UITableView()
+    private let lastCityNamesTableView = UITableView()
 
     private var viewModel: HomeViewModelContract
 
@@ -51,18 +51,30 @@ class HomeViewController: UIViewController {
         logoImageView.image = aplicationImage
         view.addSubview(logoImageView)
 
+        aplicationNameLabelSetup()
+
+        lastCityNamesTableViewSetup()
+
+        proceedButtonSetup()
+    }
+
+    func aplicationNameLabelSetup() {
         aplicationNameLabel.text = aplicationNameString
         aplicationNameLabel.textColor = .white
         aplicationNameLabel.textAlignment = .center
         aplicationNameLabel.backgroundColor = .black
         view.addSubview(aplicationNameLabel)
+    }
 
-        lastCityNamesTable.dataSource = self
-        lastCityNamesTable.delegate = self
-        lastCityNamesTable.backgroundColor = .cyan
-        view.addSubview(lastCityNamesTable)
-        lastCityNamesTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+    func lastCityNamesTableViewSetup() {
+        lastCityNamesTableView.dataSource = self
+        lastCityNamesTableView.delegate = self
+        lastCityNamesTableView.backgroundColor = .cyan
+        view.addSubview(lastCityNamesTableView)
+        lastCityNamesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+    }
 
+    func proceedButtonSetup() {
         proceedButton.setTitle(buttonString, for: .normal)
         proceedButton.setTitleColor(.red, for: .normal)
         proceedButton.backgroundColor = .yellow
@@ -84,7 +96,7 @@ class HomeViewController: UIViewController {
             make.right.equalTo(view.snp.rightMargin).offset(-kSideMargin)
         }
 
-        lastCityNamesTable.snp.makeConstraints { make in
+        lastCityNamesTableView.snp.makeConstraints { make in
             make.top.equalTo(aplicationNameLabel.snp.bottom).offset(kTopMargin)
             make.left.equalTo(view.snp.leftMargin).offset(kSideMargin)
             make.right.equalTo(view.snp.rightMargin).offset(-kSideMargin)
@@ -116,8 +128,8 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cityInfoToSend = viewModel.lastSearches[indexPath.row]
-        viewModel.cellPressed(cityInfo: cityInfoToSend)
+//        let cityInfoToSend = viewModel.lastSearches[indexPath.row]
+        viewModel.cellPressed(index: indexPath.row)
     }
 }
 
@@ -139,6 +151,6 @@ extension HomeViewController: HomeViewModelDelegate {
     }
 
     func refreshCityNamesTable() {
-        lastCityNamesTable.reloadData()
+        lastCityNamesTableView.reloadData()
     }
 }

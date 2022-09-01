@@ -12,7 +12,7 @@ class SearchViewModel: SearchViewModelContract {
 
     var delegate: SearchViewModelDelegate?
     let apiClient = APIClient.sharedInstance
-    let recentCities = StorageService.sharedInstance
+    let storageService = StorageService.sharedInstance
 
     var debounceTimer: Timer?
 
@@ -40,7 +40,7 @@ class SearchViewModel: SearchViewModelContract {
     }
 
     func cellPressed(cityInfo: CityInfo) {
-        recentCities.addRecentlySearchedCity(cityInfo: cityInfo, failure: { [weak self] error -> Void in
+        storageService.addRecentlySearchedCity(cityInfo: cityInfo, failure: { [weak self] error -> Void in
             self?.delegate?.showAlert(description: error.localizedDescription)
         })
         delegate?.showWeather(cityInfo: cityInfo)

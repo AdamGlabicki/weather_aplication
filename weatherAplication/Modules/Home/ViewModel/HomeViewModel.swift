@@ -6,21 +6,17 @@ protocol HomeViewModelContract {
 
     func viewWillAppear()
     func proceedButtonPressed()
-    func cellPressed(cityInfo: CityInfo)
+    func cellPressed(index: Int)
 }
 
 class HomeViewModel: HomeViewModelContract {
 
     var delegate: HomeViewModelDelegate?
     var lastSearches: [CityInfo] = []
-    let recentCities = StorageService.sharedInstance
-
-    init() {
-        viewWillAppear()
-    }
+    let storageService = StorageService.sharedInstance
 
     func viewWillAppear() {
-        lastSearches = recentCities.getCitiesInfo(failure: { [weak self] error -> Void in
+        lastSearches = storageService.getCitiesInfo(failure: { [weak self] error -> Void in
             self?.delegate?.showAlert(description: error.localizedDescription)
         })
         delegate?.refreshCityNamesTable()
@@ -31,7 +27,8 @@ class HomeViewModel: HomeViewModelContract {
         delegate?.openSearchViewController()
     }
 
-    func cellPressed(cityInfo: CityInfo) {
+    func cellPressed(index: Int) {
+        let cityInfo = lastSearches[index]
         delegate?.showWeather(cityInfo: cityInfo)
     }
 
