@@ -76,8 +76,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cityInfoToSend = viewModel.cityInfoArray[indexPath.row]
-        viewModel.cellPressed(cityInfo: cityInfoToSend)
+        viewModel.cellPressed(index: indexPath.row)
     }
 }
 
@@ -94,8 +93,8 @@ extension SearchViewController: SearchViewModelDelegate {
     }
 
     func showAlert(description: String) {
-        let alert = UIAlertController(title: "Error", message: description, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        let alert = UIAlertController(title: R.string.localizable.error(), message: description, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: R.string.localizable.oK(), style: .default))
         self.present(alert, animated: true)
     }
 }

@@ -4,8 +4,8 @@ import UIKit
 class SearchButton: UIButton {
     private let buttonString: String = R.string.localizable.button_string()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    required init() {
+        super.init(frame: .zero)
         self.setTitle(buttonString, for: .normal)
         self.backgroundColor = .yellow
         self.setTitleColor(.red, for: .normal)

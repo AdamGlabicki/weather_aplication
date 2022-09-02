@@ -5,7 +5,7 @@ protocol SearchViewModelContract {
     var cityInfoArray: [CityInfo] { get }
 
     func textChanged(searchTerm: String)
-    func cellPressed(cityInfo: CityInfo)
+    func cellPressed(index: Int)
 }
 
 class SearchViewModel: SearchViewModelContract {
@@ -39,7 +39,8 @@ class SearchViewModel: SearchViewModelContract {
 
     }
 
-    func cellPressed(cityInfo: CityInfo) {
+    func cellPressed(index: Int) {
+        let cityInfo = cityInfoArray[index]
         storageService.addRecentlySearchedCity(cityInfo: cityInfo, failure: { [weak self] error -> Void in
             self?.delegate?.showAlert(description: error.localizedDescription)
         })

@@ -49,11 +49,8 @@ class HomeViewController: UIViewController {
 
         logoImageView.image = aplicationImage
         view.addSubview(logoImageView)
-
         aplicationNameLabelSetup()
-
         lastCityNamesTableViewSetup()
-
         view.addSubview(searchButton)
     }
 
@@ -133,8 +130,8 @@ extension HomeViewController: HomeViewModelDelegate {
     }
 
     func showAlert(description: String) {
-        let alert = UIAlertController(title: "Error", message: description, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        let alert = UIAlertController(title: R.string.localizable.error(), message: description, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: R.string.localizable.oK(), style: .default))
         self.present(alert, animated: true)
     }
 
