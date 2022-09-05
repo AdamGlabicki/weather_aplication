@@ -4,8 +4,7 @@ final class StorageService {
     private let lastSearchesKey = "lastSearches"
 
     static let sharedInstance: StorageService = {
-        let instance = StorageService()
-        return instance
+        return StorageService()
     }()
 
     func getCitiesInfo(failure: @escaping ((Error) -> Void)) -> [CityInfo] {

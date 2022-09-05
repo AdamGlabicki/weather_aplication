@@ -2,20 +2,18 @@ import SnapKit
 import UIKit
 
 class SearchView: UIView {
-    private let kTopMargin = 20
+    let kTopMargin = 20
 
-    internal let cityNameTextField: UITextField = {
+    let cityNameTextField: UITextField = {
         let cityNameTextField = UITextField()
         cityNameTextField.placeholder = R.string.localizable.text_field_placeholder()
         cityNameTextField.textAlignment = .center
         return cityNameTextField
     }()
 
-    internal let cityNamesTableView = UITableView()
-    private var viewModel: SearchViewModelContract
+    let cityNamesTableView = UITableView()
 
-    init(viewModelContract: SearchViewModelContract) {
-        self.viewModel = viewModelContract
+    init() {
         super.init(frame: .zero)
         setupView()
         setupConstraints()
@@ -32,8 +30,6 @@ class SearchView: UIView {
     }
 
     func setupCollectionView() {
-        cityNamesTableView.dataSource = self
-        cityNamesTableView.delegate = self
         cityNamesTableView.backgroundColor = .white
         self.addSubview(cityNamesTableView)
         cityNamesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
@@ -41,7 +37,7 @@ class SearchView: UIView {
 
     func setupConstraints() {
         cityNameTextField.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.topMargin)
+            make.topMargin.equalToSuperview().offset(kTopMargin)
             make.left.right.equalToSuperview()
         }
 
@@ -49,21 +45,5 @@ class SearchView: UIView {
             make.top.equalTo(cityNameTextField.snp.bottom).offset(kTopMargin)
             make.left.right.bottom.equalToSuperview()
         }
-    }
-}
-
-extension SearchView: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.cityInfoArray.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = viewModel.cityInfoArray[indexPath.row].city
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.cellPressed(index: indexPath.row)
     }
 }

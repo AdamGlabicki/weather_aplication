@@ -2,24 +2,25 @@ import SnapKit
 import UIKit
 
 class ShowWeatherViewController: UIViewController {
+    let kHeaderHeight: CGFloat = 50
     private var viewModel: ShowWeatherViewModelContract
-    private var showWeatherView: ShowWeatherView
+    private var showWeatherView = ShowWeatherView()
 
     init(data: CityInfo) {
         viewModel = ShowWeatherViewModel(data: data)
-        showWeatherView = ShowWeatherView(viewModelContract: viewModel)
         super.init(nibName: nil, bundle: nil)
         viewModel.delegate = self
-        showWeatherView.cityLabel.text = viewModel.cityName
+        showWeatherView.weatherTableView.delegate = self
+        showWeatherView.weatherTableView.dataSource = self
+    }
 
+    override func loadView() {
+       view = showWeatherView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.addSubview(showWeatherView)
-        showWeatherView.snp.makeConstraints { make in
-            make.top.left.right.bottom.equalToSuperview()
-        }
+        showWeatherView.cityLabel.text = viewModel.cityName
     }
 
     required init?(coder: NSCoder) {
@@ -37,7 +38,28 @@ extension ShowWeatherViewController: ShowWeatherDelegate {
 
     func showAlert(description: String) {
         let alert = UIAlertController(title: R.string.localizable.error(), message: description, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: R.string.localizable.oK(), style: .default))
+        alert.addAction(UIAlertAction(title: R.string.localizable.ok(), style: .default))
         self.present(alert, animated: true)
+    }
+}
+
+extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.weatherDataArray.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? WeatherTableViewCell else { return UITableViewCell() }
+        cell.setupData(cellData: viewModel.weatherDataArray[indexPath.row])
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = WeatherDataHeaderView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: kHeaderHeight), date: viewModel.dateString)
+        return header
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return kHeaderHeight
     }
 }

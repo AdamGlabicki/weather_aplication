@@ -3,12 +3,17 @@ import UIKit
 
 class HomeViewController: UIViewController {
     private var viewModel: HomeViewModelContract
-    private var homeView: HomeView
+    private var homeView = HomeView()
 
     init() {
         viewModel = HomeViewModel()
-        homeView = HomeView(viewModelContract: viewModel)
         super.init(nibName: nil, bundle: nil)
+        homeView.lastCityNamesTableView.dataSource = self
+        homeView.lastCityNamesTableView.delegate = self
+    }
+
+    override func loadView() {
+       view = homeView
     }
 
     required init?(coder: NSCoder) {
@@ -23,10 +28,6 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.delegate = self
-        view.addSubview(homeView)
-        homeView.snp.makeConstraints { make in
-            make.top.left.right.bottom.equalToSuperview()
-        }
         homeView.searchButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
     }
 
@@ -50,11 +51,27 @@ extension HomeViewController: HomeViewModelDelegate {
 
     func showAlert(description: String) {
         let alert = UIAlertController(title: R.string.localizable.error(), message: description, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: R.string.localizable.oK(), style: .default))
+        alert.addAction(UIAlertAction(title: R.string.localizable.ok(), style: .default))
         self.present(alert, animated: true)
     }
 
     func refreshCityNamesTable() {
         homeView.lastCityNamesTableView.reloadData()
+    }
+}
+
+extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.lastSearches.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? HomeTableViewCell else { return UITableViewCell() }
+        cell.setupData(cityName: viewModel.lastSearches[indexPath.row].city)
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.cellPressed(index: indexPath.row)
     }
 }

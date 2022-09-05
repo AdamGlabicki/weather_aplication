@@ -2,5 +2,5 @@
 "text_field_placeholder" = "city name";
 "hour_label" = "hour";
 "weather_label" = "weather";
-"Error" = "Error";
-"OK" = "OK";
+"error" = "Error";
+"ok" = "OK";
