@@ -4,8 +4,6 @@ import UIKit
 class ShowWeatherView: UIView {
     let kSideMargin = 10
     let kTopMargin = 20
-    let kBottomMargin = 5
-    let kHeaderHeight: CGFloat = 50
 
     let cityLabel = UILabel()
     let weatherTableView = UITableView()
@@ -21,13 +19,13 @@ class ShowWeatherView: UIView {
     }
 
     func setupView() {
-        self.backgroundColor = .lightGray
+        backgroundColor = .lightGray
 
         cityLabel.textAlignment = .center
-        self.addSubview(cityLabel)
+        addSubview(cityLabel)
 
         weatherTableView.backgroundColor = .white
-        self.addSubview(weatherTableView)
+        addSubview(weatherTableView)
         weatherTableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "cell")
     }
 

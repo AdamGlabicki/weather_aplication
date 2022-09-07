@@ -29,7 +29,7 @@ class SearchViewModel: SearchViewModelContract {
                 cityInfoArray = []
                 delegate?.reloadCityNames()
         } else {
-            self.apiClient.searchCities(searchTerm: searchTerm, completion: { [weak self] cityInfo -> Void in
+            apiClient.searchCities(searchTerm: searchTerm, completion: { [weak self] cityInfo -> Void in
                 self?.cityInfoArray = cityInfo
                 self?.delegate?.reloadCityNames()
             }, failure: { weatherError in

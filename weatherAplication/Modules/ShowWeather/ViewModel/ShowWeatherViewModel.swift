@@ -20,9 +20,9 @@ class ShowWeatherViewModel: ShowWeatherViewModelContract {
     let cityName: String
 
     init(data: CityInfo) {
-        self.latitude = data.latitude
-        self.longitude = data.longitude
-        self.cityName = data.city
+        latitude = data.latitude
+        longitude = data.longitude
+        cityName = data.city
 
         getWeather()
     }

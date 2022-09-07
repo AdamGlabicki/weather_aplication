@@ -12,8 +12,8 @@ class SearchButton: UIButton {
     }
 
     func setupView() {
-        self.setTitle(R.string.localizable.search(), for: .normal)
-        self.backgroundColor = .yellow
-        self.setTitleColor(.red, for: .normal)
+        setTitle(R.string.localizable.search(), for: .normal)
+        backgroundColor = .yellow
+        setTitleColor(.red, for: .normal)
     }
 }

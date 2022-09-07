@@ -4,8 +4,8 @@ import UIKit
 class HomeTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        self.backgroundColor = .cyan
-        self.textLabel?.textColor = .black
+        backgroundColor = .cyan
+        textLabel?.textColor = .black
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -13,6 +13,6 @@ class HomeTableViewCell: UITableViewCell {
     }
 
     func setupData(cityName: String) {
-        self.textLabel?.text = cityName
+        textLabel?.text = cityName
     }
 }

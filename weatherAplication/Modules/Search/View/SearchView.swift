@@ -2,7 +2,7 @@ import SnapKit
 import UIKit
 
 class SearchView: UIView {
-    let kTopMargin = 20
+    private let kTopMargin = 20
 
     let cityNameTextField: UITextField = {
         let cityNameTextField = UITextField()
@@ -24,14 +24,14 @@ class SearchView: UIView {
     }
 
     func setupView() {
-        self.backgroundColor = .white
-        self.addSubview(cityNameTextField)
+        backgroundColor = .white
+        addSubview(cityNameTextField)
         setupCollectionView()
     }
 
     func setupCollectionView() {
         cityNamesTableView.backgroundColor = .white
-        self.addSubview(cityNamesTableView)
+        addSubview(cityNamesTableView)
         cityNamesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
 

@@ -2,7 +2,8 @@ import SnapKit
 import UIKit
 
 class ShowWeatherViewController: UIViewController {
-    let kHeaderHeight: CGFloat = 50
+    private let kHeaderHeight: CGFloat = 50
+
     private var viewModel: ShowWeatherViewModelContract
     private var showWeatherView = ShowWeatherView()
 

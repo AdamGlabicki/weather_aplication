@@ -45,8 +45,8 @@ extension HomeViewController: HomeViewModelDelegate {
     }
 
     func showWeather(cityInfo: CityInfo) {
-        let nextViewController = ShowWeatherViewController(data: cityInfo)
-        navigationController?.pushViewController(nextViewController, animated: true)
+        let showWeatherViewController = ShowWeatherViewController(data: cityInfo)
+        navigationController?.pushViewController(showWeatherViewController, animated: true)
     }
 
     func showAlert(description: String) {
