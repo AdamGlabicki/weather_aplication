@@ -2,10 +2,10 @@ import UIKit
 
 struct HourlyWeatherData: Decodable {
     let time: [String]
-    let temperature: [Double]
-    let surfacePressure: [Double]
-    let weathercode: [Int]
-    let windspeed: [Double]
+    let temperature: [Double?]
+    let surfacePressure: [Double?]
+    let weathercode: [Int?]
+    let windspeed: [Double?]
 
     enum CodingKeys: String, CodingKey {
         case time, weathercode

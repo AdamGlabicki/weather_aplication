@@ -50,9 +50,11 @@ extension HomeViewController: HomeViewModelDelegate {
     }
 
     func showAlert(description: String) {
-        let alert = UIAlertController(title: R.string.localizable.error(), message: description, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: R.string.localizable.ok(), style: .default))
-        self.present(alert, animated: true)
+        DispatchQueue.main.async {
+            let alert = UIAlertController(title: R.string.localizable.error(), message: description, preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: R.string.localizable.ok(), style: .default))
+            self.present(alert, animated: true)
+        }
     }
 
     func refreshCityNamesTable() {

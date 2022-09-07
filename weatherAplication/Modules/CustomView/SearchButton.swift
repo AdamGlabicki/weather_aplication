@@ -2,7 +2,7 @@ import Foundation
 import UIKit
 
 class SearchButton: UIButton {
-    required init() {
+    init() {
         super.init(frame: .zero)
         setupView()
     }
@@ -12,7 +12,7 @@ class SearchButton: UIButton {
     }
 
     func setupView() {
-        self.setTitle(R.string.localizable.button_string(), for: .normal)
+        self.setTitle(R.string.localizable.search(), for: .normal)
         self.backgroundColor = .yellow
         self.setTitleColor(.red, for: .normal)
     }

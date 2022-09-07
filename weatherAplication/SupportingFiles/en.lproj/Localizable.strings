@@ -1,6 +1,7 @@
-"button_string" = "Search";
+"search" = "Search";
 "text_field_placeholder" = "city name";
 "hour_label" = "hour";
 "weather_label" = "weather";
 "error" = "Error";
 "ok" = "OK";
+"my_weather" = "MyWeather";

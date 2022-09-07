@@ -14,7 +14,7 @@ final class APIClient {
     private init() {}
 
     func searchWeather(latitude: Double, longitude: Double, completion: @escaping (_ result: [WeatherData], _ date: String) -> Void, failure: @escaping ((WeatherError) -> Void)) {
-        guard let queryURL = URL(string: urlOpenMeteoString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,surface_pressure,weathercode,windspeed_10m") else { return }
+        guard let queryURL = URL(string: urlOpenMeteoString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,weathercode,surface_pressure,windspeed_10m") else { return }
         let session = URLSession.shared
 
         session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
@@ -50,10 +50,10 @@ final class APIClient {
             date = String(jsonResult.hourly.time[0].prefix(kCharsToDrop - 1))
             for index in 0...(kElementsToShow - 1) {
                 dataArray.append(WeatherData(hour: String(jsonResult.hourly.time[index].dropFirst(kCharsToDrop)),
-                                             temperature: jsonResult.hourly.temperature[index],
-                                             pressure: jsonResult.hourly.surfacePressure[index],
-                                             windSpeed: jsonResult.hourly.windspeed[index],
-                                             weatherCode: jsonResult.hourly.weathercode[index]))
+                                             temperature: jsonResult.hourly.temperature[index] ?? 0,
+                                             pressure: jsonResult.hourly.surfacePressure[index] ?? 0,
+                                             windSpeed: jsonResult.hourly.windspeed[index] ?? 0,
+                                             weatherCode: jsonResult.hourly.weathercode[index] ?? 0))
             }
             return (dataArray, date)
         }

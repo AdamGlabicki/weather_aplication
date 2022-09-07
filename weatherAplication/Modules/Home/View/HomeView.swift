@@ -5,14 +5,13 @@ class HomeView: UIView {
     let kLogoWidth: CGFloat = 250
     let kLogoHeight: CGFloat = 250
     let kSideMargin: CGFloat = 10
-    let kTopMargin: CGFloat = 20
+    let kTopMargin: CGFloat = 40
     let kBottomMargin: CGFloat = 15
-    let kTableBottomMargin: CGFloat = 50
+    let kTableBottomMargin: CGFloat = 30
     let aplicationImage = R.image.weather_symbol()
     let logoImageView = UIImageView()
-    let aplicationNameLabel = UILabel()
+    let aplicationNameLabel = CustomLabel(text: R.string.localizable.my_weather(), textColor: .white, textAlignment: .center, backgroundColor: .black)
     let searchButton = SearchButton()
-    let aplicationNameString: String = "MyWeather"
     let lastCityNamesTableView = UITableView()
 
     init() {
@@ -29,17 +28,9 @@ class HomeView: UIView {
         self.backgroundColor = .blue
         logoImageView.image = aplicationImage
         self.addSubview(logoImageView)
-        aplicationNameLabelSetup()
+        self.addSubview(aplicationNameLabel)
         lastCityNamesTableViewSetup()
         self.addSubview(searchButton)
-    }
-
-    private func aplicationNameLabelSetup() {
-        aplicationNameLabel.text = aplicationNameString
-        aplicationNameLabel.textColor = .white
-        aplicationNameLabel.textAlignment = .center
-        aplicationNameLabel.backgroundColor = .black
-        self.addSubview(aplicationNameLabel)
     }
 
     private func lastCityNamesTableViewSetup() {
@@ -53,7 +44,7 @@ class HomeView: UIView {
         logoImageView.snp.makeConstraints { make in
             make.width.equalTo(kLogoWidth)
             make.height.equalTo(kLogoHeight)
-            make.topMargin.equalToSuperview().offset(kTopMargin)
+            make.top.equalToSuperview().offset(kTopMargin)
             make.centerX.equalToSuperview()
         }
 
@@ -67,13 +58,13 @@ class HomeView: UIView {
             make.top.equalTo(aplicationNameLabel.snp.bottom).offset(kTopMargin)
             make.left.equalToSuperview().offset(kSideMargin)
             make.right.equalToSuperview().offset(-kSideMargin)
-            make.bottom.equalTo(searchButton.snp.bottom).offset(-kTableBottomMargin)
+            make.bottom.equalTo(searchButton.snp.top).offset(-kTableBottomMargin)
         }
 
         searchButton.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(kSideMargin)
             make.right.equalToSuperview().offset(-kSideMargin)
-            make.bottomMargin.equalToSuperview().offset(-kBottomMargin).priority(.required)
+            make.bottomMargin.equalToSuperview().offset(-kBottomMargin)
         }
 
     }

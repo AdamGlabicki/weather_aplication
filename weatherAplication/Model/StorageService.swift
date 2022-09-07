@@ -3,9 +3,7 @@ import Foundation
 final class StorageService {
     private let lastSearchesKey = "lastSearches"
 
-    static let sharedInstance: StorageService = {
-        return StorageService()
-    }()
+    static let sharedInstance = StorageService()
 
     func getCitiesInfo(failure: @escaping ((Error) -> Void)) -> [CityInfo] {
         var citiesInfoArray: [CityInfo] = []
