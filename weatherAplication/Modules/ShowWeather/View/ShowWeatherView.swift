@@ -20,9 +20,7 @@ class ShowWeatherView: UIView {
 
     func setupView() {
         backgroundColor = .lightGray
-
         addSubview(cityLabel)
-
         setupWeatherTableView()
     }
 

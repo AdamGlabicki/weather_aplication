@@ -9,7 +9,7 @@ class HomeView: UIView {
     let kBottomMargin = 15
     let kTableBottomMargin = 30
 
-    let logoImageView = UIImageView()
+    let logoImageView = UIImageView(image: R.image.weather_symbol())
     let aplicationNameLabel = CustomLabel(text: R.string.localizable.my_weather())
     let searchButton = SearchButton()
     let lastCityNamesTableView = UITableView()
@@ -26,7 +26,6 @@ class HomeView: UIView {
 
     func setupView() {
         backgroundColor = .blue
-        logoImageView.image = R.image.weather_symbol()
         addSubview(logoImageView)
         addSubview(aplicationNameLabel)
         lastCityNamesTableViewSetup()
