@@ -10,7 +10,7 @@ class HomeView: UIView {
     let kTableBottomMargin = 30
 
     let logoImageView = UIImageView()
-    let aplicationNameLabel = CustomLabel(text: R.string.localizable.my_weather(), textColor: .white, textAlignment: .center, backgroundColor: .black)
+    let aplicationNameLabel = CustomLabel(text: R.string.localizable.my_weather())
     let searchButton = SearchButton()
     let lastCityNamesTableView = UITableView()
 

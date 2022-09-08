@@ -31,29 +31,29 @@ class ShowWeatherViewController: UIViewController {
 }
 
 extension ShowWeatherViewController: ShowWeatherDelegate {
-    func weatherLoaded(weatherInfo: [WeatherData], date: String) {
+    func weatherLoaded(weatherInfo: WeatherData, date: String) {
         DispatchQueue.main.async {
             self.showWeatherView.weatherTableView.reloadData()
         }
     }
 
     func showAlert(description: String) {
-        DispatchQueue.main.async {
-            let alert = UIAlertController(title: R.string.localizable.error(), message: description, preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: R.string.localizable.ok(), style: .default))
-            self.present(alert, animated: true)
-        }
+        showCustomAlert(description: description)
     }
 }
 
 extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.weatherDataArray.count
+        return viewModel.weatherDataArrays?.hour.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? WeatherTableViewCell else { return UITableViewCell() }
-        cell.setupData(cellData: viewModel.weatherDataArray[indexPath.row])
+        cell.setupData(hour: viewModel.weatherDataArrays?.hour[indexPath.row] ?? "",
+                       temperature: viewModel.weatherDataArrays?.temperature[indexPath.row] ?? 0,
+                       pressure: viewModel.weatherDataArrays?.pressure[indexPath.row] ?? 0,
+                       windSpeed: viewModel.weatherDataArrays?.windSpeed[indexPath.row] ?? 0,
+                       weatherCode: viewModel.weatherDataArrays?.weatherCode[indexPath.row] ?? 0)
         return cell
     }
 

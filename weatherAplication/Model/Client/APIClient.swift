@@ -13,7 +13,7 @@ final class APIClient {
 
     private init() {}
 
-    func searchWeather(latitude: Double, longitude: Double, completion: @escaping (_ result: [WeatherData], _ date: String) -> Void, failure: @escaping ((WeatherError) -> Void)) {
+    func searchWeather(latitude: Double, longitude: Double, completion: @escaping (_ result: WeatherData, _ date: String) -> Void, failure: @escaping ((WeatherError) -> Void)) {
         guard let queryURL = URL(string: urlOpenMeteoString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,weathercode,surface_pressure,windspeed_10m") else { return }
         let session = URLSession.shared
 
@@ -39,25 +39,17 @@ final class APIClient {
         }).resume()
     }
 
-    func takeDataFromJson(jsonResult: OpenMeteoDecoded) -> (data: [WeatherData], date: String) {
-        var dataArray: [WeatherData] = []
+    func takeDataFromJson(jsonResult: OpenMeteoDecoded) -> (data: WeatherData, date: String) {
+        var dataArrays: WeatherData
         var date: String = ""
-        if jsonResult.hourly.time.count >= kElementsToShow,
-           jsonResult.hourly.temperature.count >= kElementsToShow,
-           jsonResult.hourly.surfacePressure.count >= kElementsToShow,
-           jsonResult.hourly.windspeed.count >= kElementsToShow,
-           jsonResult.hourly.weathercode.count >= kElementsToShow {
-            date = String(jsonResult.hourly.time[0].prefix(kCharsToDrop - 1))
-            for index in 0...(kElementsToShow - 1) {
-                dataArray.append(WeatherData(hour: String(jsonResult.hourly.time[index].dropFirst(kCharsToDrop)),
-                                             temperature: jsonResult.hourly.temperature[index] ?? 0,
-                                             pressure: jsonResult.hourly.surfacePressure[index] ?? 0,
-                                             windSpeed: jsonResult.hourly.windspeed[index] ?? 0,
-                                             weatherCode: jsonResult.hourly.weathercode[index] ?? 0))
-            }
-            return (dataArray, date)
-        }
-        return (dataArray, date)
+        let data = jsonResult.hourly
+        date = String(data.time[0].prefix(kCharsToDrop - 1))
+        dataArrays = WeatherData(hour: Array(Array(data.time.map { String($0.dropFirst(kCharsToDrop)) })[0..<kElementsToShow]),
+                                 temperature: Array(data.temperature[0..<kElementsToShow]).map { $0 ?? 0 },
+                                 pressure: Array(data.surfacePressure[0..<kElementsToShow]).map { $0 ?? 0 },
+                                 windSpeed: Array(data.windspeed[0..<kElementsToShow]).map { $0 ?? 0 },
+                                 weatherCode: Array(data.weathercode[0..<kElementsToShow]).map { $0 ?? 0 })
+        return (dataArrays, date)
     }
 
     func searchCities(searchTerm: String, completion: @escaping (_ result: [CityInfo]) -> Void, failure: @escaping ((WeatherError) -> Void)) {
