@@ -36,7 +36,7 @@
 		879BE2FE28BCD97300B43DED /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 879BE30028BCD97300B43DED /* Localizable.strings */; };
 		879FA7D128AB90F400852A58 /* CustomColour.swift in Sources */ = {isa = PBXBuildFile; fileRef = 879FA7D028AB90F400852A58 /* CustomColour.swift */; };
 		87C6A55228AE57230062CA4B /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87C6A55128AE57230062CA4B /* APIClient.swift */; };
-		87E5B07A28C9EB6B004139CE /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E5B07928C9EB6B004139CE /* CustomAlert.swift */; };
+		87E5B07A28C9EB6B004139CE /* UIViewControllersExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87E5B07928C9EB6B004139CE /* UIViewControllersExtensions.swift */; };
 		87F30AE028C0BA5D0000EB13 /* SearchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F30ADF28C0BA5D0000EB13 /* SearchButton.swift */; };
 		87F30AE228C0C1200000EB13 /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87F30AE128C0C1200000EB13 /* HomeTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -95,7 +95,7 @@
 		879BE2FF28BCD97300B43DED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		879FA7D028AB90F400852A58 /* CustomColour.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomColour.swift; sourceTree = "<group>"; };
 		87C6A55128AE57230062CA4B /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
-		87E5B07928C9EB6B004139CE /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
+		87E5B07928C9EB6B004139CE /* UIViewControllersExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllersExtensions.swift; sourceTree = "<group>"; };
 		87F30ADF28C0BA5D0000EB13 /* SearchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchButton.swift; sourceTree = "<group>"; };
 		87F30AE128C0C1200000EB13 /* HomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 		C9A95A2B1660A499E043DD0B /* Pods-weather_aplication.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-weather_aplication.debug.xcconfig"; path = "Target Support Files/Pods-weather_aplication/Pods-weather_aplication.debug.xcconfig"; sourceTree = "<group>"; };
@@ -242,11 +242,18 @@
 		871DB2B728C6345300CF4F42 /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
-				87E5B07928C9EB6B004139CE /* CustomAlert.swift */,
 				879452BA28C77E6C008FA264 /* CustomLabel.swift */,
 				87F30ADF28C0BA5D0000EB13 /* SearchButton.swift */,
 			);
 			path = CustomView;
+			sourceTree = "<group>";
+		};
+		87292F9628CB7C7B00D5F25F /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				87E5B07928C9EB6B004139CE /* UIViewControllersExtensions.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 		873C140728B3AED500DFFA91 /* Model */ = {
@@ -283,6 +290,7 @@
 		873DCBED2894199200660927 /* weatherAplication */ = {
 			isa = PBXGroup;
 			children = (
+				87292F9628CB7C7B00D5F25F /* Helpers */,
 				873DCBFC2894199300660927 /* Info.plist */,
 				873C140728B3AED500DFFA91 /* Model */,
 				8716520928B4ECE3002426BB /* Modules */,
@@ -584,7 +592,7 @@
 				870755BE28C220E900191B68 /* ShowWeatherView.swift in Sources */,
 				87152D4728A6896A00C779A9 /* HourlyWeatherData.swift in Sources */,
 				878C591428A1196700884866 /* GeoDBDecoded.swift in Sources */,
-				87E5B07A28C9EB6B004139CE /* CustomAlert.swift in Sources */,
+				87E5B07A28C9EB6B004139CE /* UIViewControllersExtensions.swift in Sources */,
 				873DCBF12894199200660927 /* SceneDelegate.swift in Sources */,
 				87152D3B28A66BEE00C779A9 /* WeatherData.swift in Sources */,
 				879FA7D128AB90F400852A58 /* CustomColour.swift in Sources */,

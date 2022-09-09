@@ -27,7 +27,7 @@ class ShowWeatherView: UIView {
     func setupWeatherTableView() {
         weatherTableView.backgroundColor = .white
         addSubview(weatherTableView)
-        weatherTableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "cell")
+        weatherTableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.kCellIdentifier)
     }
 
     func setupConstraints() {
@@ -35,7 +35,6 @@ class ShowWeatherView: UIView {
         cityLabel.snp.makeConstraints { make in
             make.top.equalTo(self.snp.topMargin)
             make.left.right.equalToSuperview().inset(kSideMargin)
-            make.centerX.equalToSuperview()
         }
 
         weatherTableView.snp.makeConstraints { make in

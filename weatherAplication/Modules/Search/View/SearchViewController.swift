@@ -22,7 +22,7 @@ class SearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchView.cityNameTextField.addTarget(self, action: #selector (textChanged), for: .editingChanged)
+        searchView.cityNameTextField.addTarget(self, action: #selector(textChanged), for: .editingChanged)
         viewModel.delegate = self
     }
 
@@ -55,7 +55,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.kCellIdentifier, for: indexPath as IndexPath)
         cell.textLabel?.text = viewModel.cityInfoArray[indexPath.row].city
         return cell
     }

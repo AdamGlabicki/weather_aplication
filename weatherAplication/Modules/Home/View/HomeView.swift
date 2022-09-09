@@ -6,7 +6,7 @@ class HomeView: UIView {
     let kLogoHeight = 250
     let kSideMargin = 10
     let kTopMargin = 40
-    let kBottomMargin = 15
+    let kBottomMargin = 25
     let kTableBottomMargin = 30
 
     let logoImageView = UIImageView(image: R.image.weather_symbol())
@@ -35,7 +35,7 @@ class HomeView: UIView {
     private func lastCityNamesTableViewSetup() {
         lastCityNamesTableView.backgroundColor = .cyan
         addSubview(lastCityNamesTableView)
-        lastCityNamesTableView.register(HomeTableViewCell.self, forCellReuseIdentifier: "cell")
+        lastCityNamesTableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.kCellIdentifier)
     }
 
     func setupConstraints() {
@@ -55,12 +55,12 @@ class HomeView: UIView {
         lastCityNamesTableView.snp.makeConstraints { make in
             make.top.equalTo(aplicationNameLabel.snp.bottom).offset(kTopMargin)
             make.left.right.equalToSuperview().inset(kSideMargin)
-            make.bottom.equalTo(searchButton.snp.top).offset(-kTableBottomMargin)
         }
 
         searchButton.snp.makeConstraints { make in
+            make.top.equalTo(lastCityNamesTableView.snp.bottom).offset(kTableBottomMargin)
             make.left.right.equalToSuperview().inset(kSideMargin)
-            make.bottomMargin.equalToSuperview().offset(-kBottomMargin)
+            make.bottom.equalToSuperview().offset(-kBottomMargin)
         }
 
     }

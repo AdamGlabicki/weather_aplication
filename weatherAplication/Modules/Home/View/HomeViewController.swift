@@ -28,11 +28,15 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.delegate = self
-        homeView.searchButton.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
+        setupActions()
+    }
+
+    func setupActions() {
+        homeView.searchButton.addTarget(self, action: #selector(searchButtonPressed), for: .touchUpInside)
     }
 
     @objc
-    func buttonPressed() {
+    func searchButtonPressed() {
         viewModel.proceedButtonPressed()
     }
 
@@ -64,7 +68,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? HomeTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.kCellIdentifier, for: indexPath as IndexPath) as? HomeTableViewCell else { return UITableViewCell() }
         cell.setupData(cityName: viewModel.lastSearches[indexPath.row].city)
         return cell
     }

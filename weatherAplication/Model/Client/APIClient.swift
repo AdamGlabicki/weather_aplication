@@ -6,10 +6,7 @@ final class APIClient {
     private let kCharsToDrop = 11
     private let urlGeoDBString: String = "http://geodb-free-service.wirefreethought.com/v1/geo/cities?"
     private let urlOpenMeteoString: String = "https://api.open-meteo.com/v1/forecast?"
-    static let sharedInstance: APIClient = {
-        let instance = APIClient()
-        return instance
-    }()
+    static let sharedInstance = APIClient()
 
     private init() {}
 
@@ -47,8 +44,8 @@ final class APIClient {
         let hour = Array(Array(data.time.map { String($0.dropFirst(kCharsToDrop)) }).prefix(kElementsToShow))
         let temperature = Array(data.temperature.prefix(kElementsToShow)).compactMap { $0 }
         let pressure = Array(data.surfacePressure.prefix(kElementsToShow)).compactMap { $0 }
-        let windSpeed = Array(data.windspeed.prefix(kElementsToShow)).compactMap { $0 }
-        let weatherCode = Array(data.weathercode.prefix(kElementsToShow)).compactMap { $0 }
+        let windSpeed = Array(data.windSpeed.prefix(kElementsToShow)).compactMap { $0 }
+        let weatherCode = Array(data.weatherCode.prefix(kElementsToShow)).compactMap { $0 }
         for index in 0...(kElementsToShow - 1) {
             dataArray.append(WeatherData(hour: hour[index],
                                          temperature: temperature[index],

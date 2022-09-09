@@ -32,7 +32,7 @@ class SearchView: UIView {
     func setupCollectionView() {
         cityNamesTableView.backgroundColor = .white
         addSubview(cityNamesTableView)
-        cityNamesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        cityNamesTableView.register(UITableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.kCellIdentifier)
     }
 
     func setupConstraints() {

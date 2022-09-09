@@ -48,7 +48,7 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? WeatherTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.kCellIdentifier, for: indexPath as IndexPath) as? WeatherTableViewCell else { return UITableViewCell() }
         cell.setupData(cellData: viewModel.weatherDataArray[indexPath.row])
         return cell
     }
