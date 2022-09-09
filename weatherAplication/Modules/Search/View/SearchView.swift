@@ -6,7 +6,7 @@ class SearchView: UIView {
 
     let cityNameTextField: UITextField = {
         let cityNameTextField = UITextField()
-        cityNameTextField.placeholder = R.string.localizable.text_field_placeholder()
+        cityNameTextField.placeholder = R.string.localizable.city_name()
         cityNameTextField.textAlignment = .center
         return cityNameTextField
     }()

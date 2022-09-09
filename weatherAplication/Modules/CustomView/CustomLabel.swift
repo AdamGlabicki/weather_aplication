@@ -1,7 +1,7 @@
 import UIKit
 
 class CustomLabel: UILabel {
-    init(text: String = R.string.localizable.my_weather(),
+    init(text: String,
          textColor: UIColor = .white,
          textAlignment: NSTextAlignment = .center,
          backgroundColor: UIColor = .black) {

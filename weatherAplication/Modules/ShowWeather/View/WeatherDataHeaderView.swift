@@ -25,11 +25,11 @@ class WeatherDataHeaderView: UIView {
     func setupView(date: String) {
         backgroundColor = .white
         dateLabel.text = date
-        hourLabel.text = R.string.localizable.hour_label()
+        hourLabel.text = R.string.localizable.hour()
         temperatureLabel.text = "[C]"
         pressureLabel.text = "[hPa]"
         windSpeedLabel.text = "[km/h]"
-        weatherLabel.text = R.string.localizable.weather_label()
+        weatherLabel.text = R.string.localizable.weather()
 
         addSubview(dateLabel)
         stackView.axis = .horizontal

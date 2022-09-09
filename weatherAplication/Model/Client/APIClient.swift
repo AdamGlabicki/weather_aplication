@@ -13,7 +13,7 @@ final class APIClient {
 
     private init() {}
 
-    func searchWeather(latitude: Double, longitude: Double, completion: @escaping (_ result: WeatherData, _ date: String) -> Void, failure: @escaping ((WeatherError) -> Void)) {
+    func searchWeather(latitude: Double, longitude: Double, completion: @escaping (_ result: [WeatherData], _ date: String) -> Void, failure: @escaping ((WeatherError) -> Void)) {
         guard let queryURL = URL(string: urlOpenMeteoString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,weathercode,surface_pressure,windspeed_10m") else { return }
         let session = URLSession.shared
 
@@ -39,17 +39,24 @@ final class APIClient {
         }).resume()
     }
 
-    func takeDataFromJson(jsonResult: OpenMeteoDecoded) -> (data: WeatherData, date: String) {
-        var dataArrays: WeatherData
+    func takeDataFromJson(jsonResult: OpenMeteoDecoded) -> (data: [WeatherData], date: String) {
+        var dataArray: [WeatherData] = []
         var date: String = ""
         let data = jsonResult.hourly
         date = String(data.time[0].prefix(kCharsToDrop - 1))
-        dataArrays = WeatherData(hour: Array(Array(data.time.map { String($0.dropFirst(kCharsToDrop)) })[0..<kElementsToShow]),
-                                 temperature: Array(data.temperature[0..<kElementsToShow]).map { $0 ?? 0 },
-                                 pressure: Array(data.surfacePressure[0..<kElementsToShow]).map { $0 ?? 0 },
-                                 windSpeed: Array(data.windspeed[0..<kElementsToShow]).map { $0 ?? 0 },
-                                 weatherCode: Array(data.weathercode[0..<kElementsToShow]).map { $0 ?? 0 })
-        return (dataArrays, date)
+        let hour = Array(Array(data.time.map { String($0.dropFirst(kCharsToDrop)) }).prefix(kElementsToShow))
+        let temperature = Array(data.temperature.prefix(kElementsToShow)).compactMap { $0 }
+        let pressure = Array(data.surfacePressure.prefix(kElementsToShow)).compactMap { $0 }
+        let windSpeed = Array(data.windspeed.prefix(kElementsToShow)).compactMap { $0 }
+        let weatherCode = Array(data.weathercode.prefix(kElementsToShow)).compactMap { $0 }
+        for index in 0...(kElementsToShow - 1) {
+            dataArray.append(WeatherData(hour: hour[index],
+                                         temperature: temperature[index],
+                                         pressure: pressure[index],
+                                         windSpeed: windSpeed[index],
+                                         weatherCode: weatherCode[index]))
+        }
+        return (dataArray, date)
     }
 
     func searchCities(searchTerm: String, completion: @escaping (_ result: [CityInfo]) -> Void, failure: @escaping ((WeatherError) -> Void)) {

@@ -40,8 +40,8 @@ class HomeViewController: UIViewController {
 
 extension HomeViewController: HomeViewModelDelegate {
     func openSearchViewController() {
-        let nextViewController = SearchViewController()
-        navigationController?.pushViewController(nextViewController, animated: true)
+        let searchViewController = SearchViewController()
+        navigationController?.pushViewController(searchViewController, animated: true)
     }
 
     func showWeather(cityInfo: CityInfo) {

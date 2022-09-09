@@ -43,12 +43,12 @@ class WeatherTableViewCell: UITableViewCell {
         }
     }
 
-    func setupData(hour: String, temperature: Double, pressure: Double, windSpeed: Double, weatherCode: Int) {
-        hourLabel.text = hour
-        temperatureLabel.text = "\(temperature)"
-        pressureLabel.text = "\(pressure)"
-        windSpeedLabel.text = "\(windSpeed)"
-        weatherImageView.image = WeatherCodes(rawValue: weatherCode)?.image ?? WeatherCodes.sun.image
+    func setupData(cellData: WeatherData) {
+        hourLabel.text = cellData.hour
+        temperatureLabel.text = "\(cellData.temperature)"
+        pressureLabel.text = "\(cellData.pressure)"
+        windSpeedLabel.text = "\(cellData.windSpeed)"
+        weatherImageView.image = WeatherCodes(rawValue: cellData.weatherCode)?.image ?? WeatherCodes.sun.image
     }
 
 }

@@ -31,7 +31,7 @@ class ShowWeatherViewController: UIViewController {
 }
 
 extension ShowWeatherViewController: ShowWeatherDelegate {
-    func weatherLoaded(weatherInfo: WeatherData, date: String) {
+    func weatherLoaded(weatherInfo: [WeatherData], date: String) {
         DispatchQueue.main.async {
             self.showWeatherView.weatherTableView.reloadData()
         }
@@ -44,16 +44,12 @@ extension ShowWeatherViewController: ShowWeatherDelegate {
 
 extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.weatherDataArrays?.hour.count ?? 0
+        return viewModel.weatherDataArray.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? WeatherTableViewCell else { return UITableViewCell() }
-        cell.setupData(hour: viewModel.weatherDataArrays?.hour[indexPath.row] ?? "",
-                       temperature: viewModel.weatherDataArrays?.temperature[indexPath.row] ?? 0,
-                       pressure: viewModel.weatherDataArrays?.pressure[indexPath.row] ?? 0,
-                       windSpeed: viewModel.weatherDataArrays?.windSpeed[indexPath.row] ?? 0,
-                       weatherCode: viewModel.weatherDataArrays?.weatherCode[indexPath.row] ?? 0)
+        cell.setupData(cellData: viewModel.weatherDataArray[indexPath.row])
         return cell
     }
 

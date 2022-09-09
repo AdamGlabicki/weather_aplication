@@ -5,7 +5,7 @@ class ShowWeatherView: UIView {
     let kSideMargin = 10
     let kTopMargin = 20
 
-    let cityLabel = CustomLabel(textColor: .black, textAlignment: .center, backgroundColor: .clear)
+    let cityLabel = CustomLabel(text: "", textColor: .black, textAlignment: .center, backgroundColor: .clear)
     let weatherTableView = UITableView()
 
     init() {
