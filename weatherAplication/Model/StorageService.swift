@@ -1,35 +1,34 @@
 import Foundation
-
+import RealmSwift
+// swiftlint:disable force_try
 final class StorageService {
     private let kLastSearchesKey = "lastSearches"
 
     static let sharedInstance = StorageService()
 
+    let realm = try! Realm()
+    lazy var citiesInfoArray: Results<CityInfoObject> = { self.realm.objects(CityInfoObject.self) }()
+
     func getCitiesInfo(failure: @escaping ((Error) -> Void)) -> [CityInfo] {
-        var citiesInfoArray: [CityInfo] = []
-        if let data = UserDefaults.standard.data(forKey: kLastSearchesKey) {
-            do {
-                citiesInfoArray = try PropertyListDecoder().decode([CityInfo].self, from: data)
-            } catch {
-                failure(error)
-            }
+        var cityInfoArray: [CityInfo] = []
+        citiesInfoArray = citiesInfoArray.distinct(by: ["city"])
+        for index in citiesInfoArray {
+        let cities = CityInfo(persistedObject: index)
+            cityInfoArray.append(cities)
         }
-        citiesInfoArray = Array(Set(citiesInfoArray))
-        return citiesInfoArray
+        return cityInfoArray
     }
 
     func addRecentlySearchedCity(cityInfo: CityInfo, failure: @escaping ((Error) -> Void)) {
-        var citiesInfoArray: [CityInfo] = []
-        if let dataReceived = UserDefaults.standard.data(forKey: kLastSearchesKey) {
-            do {
-                citiesInfoArray = try PropertyListDecoder().decode([CityInfo].self, from: dataReceived)
-            } catch {
-                failure(error)
+        do {
+            try realm.write {
+                let city = cityInfo.persistedObject()
+                realm.add(city)
             }
-            citiesInfoArray.append(cityInfo)
+        } catch {
+            failure(error)
         }
-        if let dataToSend = try? PropertyListEncoder().encode(citiesInfoArray) {
-            UserDefaults.standard.set(dataToSend, forKey: kLastSearchesKey)
-        }
+        citiesInfoArray = realm.objects(CityInfoObject.self)
+        citiesInfoArray = citiesInfoArray.distinct(by: ["city"])
     }
 }
