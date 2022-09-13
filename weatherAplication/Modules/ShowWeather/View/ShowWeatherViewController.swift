@@ -2,59 +2,43 @@ import SnapKit
 import UIKit
 
 class ShowWeatherViewController: UIViewController {
-    private let kSideMargin = 10
-    private let kTopMargin = 20
-    private let kBottomMargin = 5
     private let kHeaderHeight: CGFloat = 50
 
-    private let cityLabel = UILabel()
-    private let weatherTableView = UITableView()
-
     private var viewModel: ShowWeatherViewModelContract
+    private var showWeatherView = ShowWeatherView()
 
     init(data: CityInfo) {
         viewModel = ShowWeatherViewModel(data: data)
         super.init(nibName: nil, bundle: nil)
         viewModel.delegate = self
-        cityLabel.text = viewModel.cityName
+        showWeatherView.weatherTableView.delegate = self
+        showWeatherView.weatherTableView.dataSource = self
+    }
 
+    override func loadView() {
+       view = showWeatherView
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        setupConstraints()
+        showWeatherView.cityLabel.text = viewModel.cityName
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setupView() {
-        view.backgroundColor = .lightGray
+}
 
-        cityLabel.textAlignment = .center
-        view.addSubview(cityLabel)
-
-        weatherTableView.dataSource = self
-        weatherTableView.delegate = self
-        weatherTableView.backgroundColor = .white
-        view.addSubview(weatherTableView)
-        weatherTableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "cell")
+extension ShowWeatherViewController: ShowWeatherDelegate {
+    func weatherLoaded(weatherInfo: [WeatherData], date: String) {
+        DispatchQueue.main.async {
+            self.showWeatherView.weatherTableView.reloadData()
+        }
     }
 
-    func setupConstraints() {
-
-        cityLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.snp.topMargin)
-            make.left.right.equalToSuperview().inset(kSideMargin)
-            make.centerX.equalToSuperview()
-        }
-
-        weatherTableView.snp.makeConstraints { make in
-            make.top.equalTo(cityLabel.snp.bottom).offset(kTopMargin)
-            make.leftMargin.rightMargin.bottomMargin.equalToSuperview()
-        }
+    func showAlert(description: String) {
+        showCustomAlert(description: description)
     }
 }
 
@@ -64,7 +48,7 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath) as? WeatherTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.kCellIdentifier, for: indexPath as IndexPath) as? WeatherTableViewCell else { return UITableViewCell() }
         cell.setupData(cellData: viewModel.weatherDataArray[indexPath.row])
         return cell
     }
@@ -76,19 +60,5 @@ extension ShowWeatherViewController: UITableViewDelegate, UITableViewDataSource 
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return kHeaderHeight
-    }
-}
-
-extension ShowWeatherViewController: ShowWeatherDelegate {
-    func weatherLoaded(weatherInfo: [WeatherData], date: String) {
-        DispatchQueue.main.async {
-            self.weatherTableView.reloadData()
-        }
-    }
-
-    func showAlert(description: String) {
-        let alert = UIAlertController(title: "Error", message: description, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        self.present(alert, animated: true)
     }
 }

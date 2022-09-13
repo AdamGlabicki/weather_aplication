@@ -6,15 +6,12 @@ final class APIClient {
     private let kCharsToDrop = 11
     private let urlGeoDBString: String = "http://geodb-free-service.wirefreethought.com/v1/geo/cities?"
     private let urlOpenMeteoString: String = "https://api.open-meteo.com/v1/forecast?"
-    static let sharedInstance: APIClient = {
-        let instance = APIClient()
-        return instance
-    }()
+    static let sharedInstance = APIClient()
 
     private init() {}
 
     func searchWeather(latitude: Double, longitude: Double, completion: @escaping (_ result: [WeatherData], _ date: String) -> Void, failure: @escaping ((WeatherError) -> Void)) {
-        guard let queryURL = URL(string: urlOpenMeteoString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,surface_pressure,weathercode,windspeed_10m") else { return }
+        guard let queryURL = URL(string: urlOpenMeteoString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,weathercode,surface_pressure,windspeed_10m") else { return }
         let session = URLSession.shared
 
         session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
@@ -42,20 +39,19 @@ final class APIClient {
     func takeDataFromJson(jsonResult: OpenMeteoDecoded) -> (data: [WeatherData], date: String) {
         var dataArray: [WeatherData] = []
         var date: String = ""
-        if jsonResult.hourly.time.count >= kElementsToShow,
-           jsonResult.hourly.temperature.count >= kElementsToShow,
-           jsonResult.hourly.surfacePressure.count >= kElementsToShow,
-           jsonResult.hourly.windspeed.count >= kElementsToShow,
-           jsonResult.hourly.weathercode.count >= kElementsToShow {
-            date = String(jsonResult.hourly.time[0].prefix(kCharsToDrop - 1))
-            for index in 0...(kElementsToShow - 1) {
-                dataArray.append(WeatherData(hour: String(jsonResult.hourly.time[index].dropFirst(kCharsToDrop)),
-                                             temperature: jsonResult.hourly.temperature[index],
-                                             pressure: jsonResult.hourly.surfacePressure[index],
-                                             windSpeed: jsonResult.hourly.windspeed[index],
-                                             weatherCode: jsonResult.hourly.weathercode[index]))
-            }
-            return (dataArray, date)
+        let data = jsonResult.hourly
+        date = String(data.time[0].prefix(kCharsToDrop - 1))
+        let hour = Array(Array(data.time.map { String($0.dropFirst(kCharsToDrop)) }).prefix(kElementsToShow))
+        let temperature = Array(data.temperature.prefix(kElementsToShow)).compactMap { $0 }
+        let pressure = Array(data.surfacePressure.prefix(kElementsToShow)).compactMap { $0 }
+        let windSpeed = Array(data.windSpeed.prefix(kElementsToShow)).compactMap { $0 }
+        let weatherCode = Array(data.weatherCode.prefix(kElementsToShow)).compactMap { $0 }
+        for index in 0...(kElementsToShow - 1) {
+            dataArray.append(WeatherData(hour: hour[index],
+                                         temperature: temperature[index],
+                                         pressure: pressure[index],
+                                         windSpeed: windSpeed[index],
+                                         weatherCode: weatherCode[index]))
         }
         return (dataArray, date)
     }

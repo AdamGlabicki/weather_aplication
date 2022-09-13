@@ -2,22 +2,18 @@ import SnapKit
 import UIKit
 
 class SearchViewController: UIViewController {
-    private let kTopMargin = 20
-
-    internal let cityNameTextField: UITextField = {
-        let cityNameTextField = UITextField()
-        cityNameTextField.placeholder = R.string.localizable.text_field_placeholder()
-        cityNameTextField.textAlignment = .center
-        return cityNameTextField
-    }()
-
-    internal let cityNamesTableView = UITableView()
-
     private var viewModel: SearchViewModelContract
+    private var searchView = SearchView()
 
     init() {
         viewModel = SearchViewModel()
         super.init(nibName: nil, bundle: nil)
+        searchView.cityNamesTableView.dataSource = self
+        searchView.cityNamesTableView.delegate = self
+    }
+
+    override func loadView() {
+       view = searchView
     }
 
     required init?(coder: NSCoder) {
@@ -26,58 +22,13 @@ class SearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        setupConstraints()
+        searchView.cityNameTextField.addTarget(self, action: #selector(textChanged), for: .editingChanged)
         viewModel.delegate = self
-    }
-
-    func setupView() {
-        view.backgroundColor = .white
-        view.addSubview(cityNameTextField)
-        setupCollectionView()
-        cityNameTextField.addTarget(self, action: #selector (textChanged), for: .editingChanged)
     }
 
     @objc
     func textChanged() {
-        viewModel.textChanged(searchTerm: cityNameTextField.text ?? "")
-    }
-
-    func setupCollectionView() {
-        cityNamesTableView.dataSource = self
-        cityNamesTableView.delegate = self
-        cityNamesTableView.backgroundColor = .white
-        view.addSubview(cityNamesTableView)
-        cityNamesTableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-    }
-
-    func setupConstraints() {
-        cityNameTextField.snp.makeConstraints { make in
-            make.top.equalTo(view.snp.topMargin)
-            make.left.right.equalToSuperview()
-        }
-
-        cityNamesTableView.snp.makeConstraints { make in
-            make.top.equalTo(cityNameTextField.snp.bottom).offset(kTopMargin)
-            make.left.right.bottom.equalToSuperview()
-        }
-    }
-}
-
-extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.cityInfoArray.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath as IndexPath)
-        cell.textLabel?.text = viewModel.cityInfoArray[indexPath.row].city
-        return cell
-    }
-
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cityInfoToSend = viewModel.cityInfoArray[indexPath.row]
-        showWeather(cityInfo: cityInfoToSend)
+        viewModel.textChanged(searchTerm: searchView.cityNameTextField.text ?? "")
     }
 }
 
@@ -89,13 +40,27 @@ extension SearchViewController: SearchViewModelDelegate {
 
     func reloadCityNames() {
         DispatchQueue.main.async {
-            self.cityNamesTableView.reloadData()
+            self.searchView.cityNamesTableView.reloadData()
         }
     }
 
     func showAlert(description: String) {
-        let alert = UIAlertController(title: "Error", message: description, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
-        self.present(alert, animated: true)
+        showCustomAlert(description: description)
+    }
+}
+
+extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return viewModel.cityInfoArray.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.kCellIdentifier, for: indexPath as IndexPath)
+        cell.textLabel?.text = viewModel.cityInfoArray[indexPath.row].city
+        return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        viewModel.cellPressed(index: indexPath.row)
     }
 }

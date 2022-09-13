@@ -5,12 +5,14 @@ protocol SearchViewModelContract {
     var cityInfoArray: [CityInfo] { get }
 
     func textChanged(searchTerm: String)
+    func cellPressed(index: Int)
 }
 
 class SearchViewModel: SearchViewModelContract {
 
     var delegate: SearchViewModelDelegate?
     let apiClient = APIClient.sharedInstance
+    let storageService = StorageService.sharedInstance
 
     var debounceTimer: Timer?
 
@@ -27,7 +29,7 @@ class SearchViewModel: SearchViewModelContract {
                 cityInfoArray = []
                 delegate?.reloadCityNames()
         } else {
-            self.apiClient.searchCities(searchTerm: searchTerm, completion: { [weak self] cityInfo -> Void in
+            apiClient.searchCities(searchTerm: searchTerm, completion: { [weak self] cityInfo -> Void in
                 self?.cityInfoArray = cityInfo
                 self?.delegate?.reloadCityNames()
             }, failure: { weatherError in
@@ -35,6 +37,14 @@ class SearchViewModel: SearchViewModelContract {
             })
         }
 
+    }
+
+    func cellPressed(index: Int) {
+        let cityInfo = cityInfoArray[index]
+        storageService.addRecentlySearchedCity(cityInfo: cityInfo, failure: { [weak self] error -> Void in
+            self?.delegate?.showAlert(description: error.localizedDescription)
+        })
+        delegate?.showWeather(cityInfo: cityInfo)
     }
 
     func validate(searchTerm: String) {
