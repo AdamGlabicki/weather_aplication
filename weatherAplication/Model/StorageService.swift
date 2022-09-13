@@ -1,18 +1,17 @@
 import Foundation
 import RealmSwift
+
 // swiftlint:disable force_try
 final class StorageService {
     private let kLastSearchesKey = "lastSearches"
 
     static let sharedInstance = StorageService()
 
-    let realm = try! Realm()
-    lazy var citiesInfoArray: Results<CityInfoObject> = { self.realm.objects(CityInfoObject.self) }()
+    private let realm = try! Realm()
 
     func getCitiesInfo(failure: @escaping ((Error) -> Void)) -> [CityInfo] {
         var cityInfoArray: [CityInfo] = []
-        citiesInfoArray = citiesInfoArray.distinct(by: ["city"])
-        for index in citiesInfoArray {
+        for index in realm.objects(CityInfoObject.self).distinct(by: ["city"]) {
         let cities = CityInfo(persistedObject: index)
             cityInfoArray.append(cities)
         }
@@ -28,7 +27,5 @@ final class StorageService {
         } catch {
             failure(error)
         }
-        citiesInfoArray = realm.objects(CityInfoObject.self)
-        citiesInfoArray = citiesInfoArray.distinct(by: ["city"])
     }
 }

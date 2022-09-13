@@ -1,4 +1,3 @@
-import RealmSwift
 import UIKit
 
 struct CityInfo: Codable, Hashable {
