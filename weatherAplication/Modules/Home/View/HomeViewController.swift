@@ -1,9 +1,11 @@
+import Combine
 import SnapKit
 import UIKit
 
 class HomeViewController: UIViewController {
     private var viewModel: HomeViewModelContract
     private var homeView = HomeView()
+    private var cancelable: AnyCancellable?
 
     init() {
         viewModel = HomeViewModel()

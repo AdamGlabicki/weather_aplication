@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 protocol ShowWeatherViewModelContract {
@@ -12,6 +13,7 @@ class ShowWeatherViewModel: ShowWeatherViewModelContract {
 
     var delegate: ShowWeatherDelegate?
     let apiClient = APIClient.sharedInstance
+    private var cancellable: AnyCancellable?
 
     var weatherDataArray: [WeatherData] = []
     var dateString: String = ""
@@ -28,13 +30,20 @@ class ShowWeatherViewModel: ShowWeatherViewModelContract {
     }
 
     func getWeather() {
-        apiClient.searchWeather(latitude: latitude, longitude: longitude, completion: { [weak self] weatherInfo, date -> Void in
-            self?.dateString = date
-            self?.weatherDataArray = weatherInfo
-            self?.delegate?.weatherLoaded(weatherInfo: weatherInfo, date: date)
-            }, failure: { weatherError in
-                self.delegate?.showAlert(description: weatherError.localizedDescription)
-            })
+        cancellable = apiClient.searchWeather(latitude: latitude, longitude: longitude)
+            .sink(
+                receiveCompletion: { completion in
+                    switch completion {
+                    case.failure(let error):
+                        self.delegate?.showAlert(description: error.localizedDescription)
+                    case.finished:
+                        print("finished")
+                    }
+                }, receiveValue: {[weak self] weatherInfo, date in
+                    self?.dateString = date
+                    self?.weatherDataArray = weatherInfo
+                    self?.delegate?.weatherLoaded(weatherInfo: weatherInfo, date: date)
+                })
     }
 
 }

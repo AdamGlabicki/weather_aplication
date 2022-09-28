@@ -1,3 +1,4 @@
+import Combine
 import SnapKit
 import UIKit
 
@@ -10,33 +11,26 @@ final class APIClient {
 
     private init() {}
 
-    func searchWeather(latitude: Double, longitude: Double, completion: @escaping (_ result: [WeatherData], _ date: String) -> Void, failure: @escaping ((WeatherError) -> Void)) {
-        guard let queryURL = URL(string: urlOpenMeteoString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,weathercode,surface_pressure,windspeed_10m") else { return }
-        let session = URLSession.shared
+    func searchWeather(latitude: Double, longitude: Double) -> AnyPublisher<([WeatherData], String), WeatherError> {
+        guard let queryURL = URL(string: urlOpenMeteoString + "latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,weathercode,surface_pressure,windspeed_10m") else { return Fail(error: WeatherError.invalidURL).eraseToAnyPublisher() }
 
-        session.dataTask(with: queryURL, completionHandler: { [weak self] data, response, error -> Void in
-
-            if error != nil {
-                failure(WeatherError.invalidConnection)
-            }
-
-            if let httpResponse = response as? HTTPURLResponse {
-                if 200...299 ~= httpResponse.statusCode {
-                    do {
-                        guard let data = data else { return }
-                        let jsonResult = try JSONDecoder().decode(OpenMeteoDecoded.self, from: data)
-                        guard let weatherData = self?.takeDataFromJson(jsonResult: jsonResult) else { return }
-                        completion((weatherData.data), weatherData.date)
-                    } catch {
-                        failure(WeatherError.decoding)
-                    }
+        return URLSession.shared
+            .dataTaskPublisher(for: queryURL)
+            .mapError({ $0 as Error })
+            .tryMap({ data, response in
+                if let response = response as? HTTPURLResponse,
+                   !(200...299).contains(response.statusCode) {
+                    throw WeatherError.invalidConnection
                 }
-            }
-
-        }).resume()
+                return data
+            })
+            .decode(type: OpenMeteoDecoded.self, decoder: JSONDecoder())
+            .map { self.takeDataFromJson(jsonResult: $0) }
+            .mapError { _ in return WeatherError.decoding }
+            .eraseToAnyPublisher()
     }
 
-    func takeDataFromJson(jsonResult: OpenMeteoDecoded) -> (data: [WeatherData], date: String) {
+    func takeDataFromJson(jsonResult: OpenMeteoDecoded) -> ((data: [WeatherData], date: String)) {
         var dataArray: [WeatherData] = []
         var date: String = ""
         let data = jsonResult.hourly
@@ -56,34 +50,28 @@ final class APIClient {
         return (dataArray, date)
     }
 
-    func searchCities(searchTerm: String, completion: @escaping (_ result: [CityInfo]) -> Void, failure: @escaping ((WeatherError) -> Void)) {
-        guard let queryURL = URL(string: urlGeoDBString + "&namePrefix=" + searchTerm + "&sort=-population") else { return }
-        let session = URLSession.shared
-
-        session.dataTask(with: queryURL, completionHandler: { data, response, error -> Void in
-
-            if error != nil {
-                failure(WeatherError.invalidConnection)
-            }
-
-            if let httpResponse = response as? HTTPURLResponse {
-                if 200...299 ~= httpResponse.statusCode {
-                    do {
-                        guard let data = data else { return }
-                        let jsonResult = try JSONDecoder().decode(GeoDBDecoded.self, from: data)
-                        completion(jsonResult.data.map { $0 })
-                    } catch {
-                        failure(WeatherError.decoding)
-                    }
+    func searchCity(searchTerm: String) -> AnyPublisher<[CityInfo], WeatherError> {
+        guard let queryURL = URL(string: urlGeoDBString + "&namePrefix=" + searchTerm + "&sort=-population") else { return Fail(error: WeatherError.invalidURL).eraseToAnyPublisher() }
+        return URLSession.shared
+            .dataTaskPublisher(for: queryURL)
+            .mapError({ $0 as Error })
+            .tryMap({ data, response in
+                if let response = response as? HTTPURLResponse,
+                   !(200...299).contains(response.statusCode) {
+                    throw WeatherError.invalidConnection
                 }
-            }
-        }).resume()
+                return data
+            })
+            .decode(type: GeoDBDecoded.self, decoder: JSONDecoder())
+            .map { $0.data.map { $0 } }
+            .mapError { _ in return WeatherError.decoding }
+            .eraseToAnyPublisher()
     }
 
 }
 
 enum WeatherError: Error {
-    case invalidConnection, decoding
+    case invalidConnection, invalidURL, decoding
 }
 
 enum WeatherCodes: Int {
