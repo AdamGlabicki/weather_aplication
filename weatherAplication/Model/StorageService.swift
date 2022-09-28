@@ -1,35 +1,31 @@
 import Foundation
+import RealmSwift
 
+// swiftlint:disable force_try
 final class StorageService {
     private let kLastSearchesKey = "lastSearches"
 
     static let sharedInstance = StorageService()
 
+    private let realm = try! Realm()
+
     func getCitiesInfo(failure: @escaping ((Error) -> Void)) -> [CityInfo] {
-        var citiesInfoArray: [CityInfo] = []
-        if let data = UserDefaults.standard.data(forKey: kLastSearchesKey) {
-            do {
-                citiesInfoArray = try PropertyListDecoder().decode([CityInfo].self, from: data)
-            } catch {
-                failure(error)
-            }
+        var cityInfoArray: [CityInfo] = []
+        for index in realm.objects(CityInfoObject.self).distinct(by: ["city"]) {
+        let cities = CityInfo(persistedObject: index)
+            cityInfoArray.append(cities)
         }
-        citiesInfoArray = Array(Set(citiesInfoArray))
-        return citiesInfoArray
+        return cityInfoArray
     }
 
     func addRecentlySearchedCity(cityInfo: CityInfo, failure: @escaping ((Error) -> Void)) {
-        var citiesInfoArray: [CityInfo] = []
-        if let dataReceived = UserDefaults.standard.data(forKey: kLastSearchesKey) {
-            do {
-                citiesInfoArray = try PropertyListDecoder().decode([CityInfo].self, from: dataReceived)
-            } catch {
-                failure(error)
+        do {
+            try realm.write {
+                let city = cityInfo.persistedObject()
+                realm.add(city)
             }
-            citiesInfoArray.append(cityInfo)
-        }
-        if let dataToSend = try? PropertyListEncoder().encode(citiesInfoArray) {
-            UserDefaults.standard.set(dataToSend, forKey: kLastSearchesKey)
+        } catch {
+            failure(error)
         }
     }
 }
