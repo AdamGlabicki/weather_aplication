@@ -1,3 +1,4 @@
+import Combine
 import Foundation
 
 protocol SearchViewModelContract {
@@ -13,6 +14,7 @@ class SearchViewModel: SearchViewModelContract {
     var delegate: SearchViewModelDelegate?
     let apiClient = APIClient.sharedInstance
     let storageService = StorageService.sharedInstance
+    private var cancellable: AnyCancellable?
 
     var debounceTimer: Timer?
 
@@ -29,12 +31,20 @@ class SearchViewModel: SearchViewModelContract {
                 cityInfoArray = []
                 delegate?.reloadCityNames()
         } else {
-            apiClient.searchCities(searchTerm: searchTerm, completion: { [weak self] cityInfo -> Void in
-                self?.cityInfoArray = cityInfo
-                self?.delegate?.reloadCityNames()
-            }, failure: { weatherError in
-                self.delegate?.showAlert(description: weatherError.localizedDescription)
-            })
+            cancellable = apiClient.searchCity(searchTerm: searchTerm)
+                .sink(
+                    receiveCompletion: { completion in
+                        switch completion {
+                        case.failure(let error):
+                            self.delegate?.showAlert(description: error.localizedDescription)
+                        case.finished:
+                            print("finished")
+                        }
+                    }, receiveValue: {[weak self] cityInfo in
+                        self?.cityInfoArray = cityInfo
+                        self?.delegate?.reloadCityNames()
+                    })
+
         }
 
     }
